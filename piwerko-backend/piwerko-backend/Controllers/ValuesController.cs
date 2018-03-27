@@ -9,13 +9,28 @@ namespace piwerko_backend.Controllers
     [Route("api/[controller]")]
     public class ValuesController : Controller
     {
+
+        // GET api/values
+        [HttpGet]
+        public List<string> Get()
+        {
+            var cos = new UserService();
+            List<string> tmp = new List<string>();
+            foreach (var var in cos.cos())
+            {
+                tmp.Add(var["username"]);
+            }
+            return tmp;
+        }
+
+        /*
         // GET api/values
         [HttpGet]
         public IEnumerable<string> Get()
         {
             return new string[] { "value1", "value2", "value3" };
         }
-
+        */
         // GET api/values/5
         [HttpGet("{id}")]
         public string Get(int id)
