@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
 using Jdforsythe.MySQLConnection;
 using Piwerko.Data.DbModels;
@@ -22,11 +23,11 @@ namespace Piwerko.Services.Services
         {
             try
             {
-                sql = new MySQLConn(connectionString2);
+                sql = new MySQLConn(connectionString2); Debug.WriteLine("makarena");
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
+                Debug.WriteLine(e);
             }
         }
 
