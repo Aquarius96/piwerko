@@ -3,17 +3,23 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-
+using Piwerko.Services.Services;
 namespace piwerko_backend.Controllers
 {
     [Route("api/[controller]")]
     public class ValuesController : Controller
     {
         // GET api/values
-        [HttpGet]
+        /*[HttpGet]
         public IEnumerable<string> Get()
         {
             return new string[] { "value1", "value2" };
+        }*/
+        [HttpGet]
+        public String Get()
+        {
+            var con = new UserService();
+            return con.GetAllUsers()[1].GG();
         }
 
         // GET api/values/5

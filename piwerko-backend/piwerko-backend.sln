@@ -3,7 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27428.2005
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "piwerko-backend", "piwerko-backend\piwerko-backend.csproj", "{8F53A53F-CBD3-43FF-9A20-275420E3CE4E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Piwerko.Api", "piwerko-backend\Piwerko.Api.csproj", "{8F53A53F-CBD3-43FF-9A20-275420E3CE4E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Piwerko.Data", "Piwerko.Data\Piwerko.Data.csproj", "{74536806-906D-4665-AA56-A8B6CAC60562}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Piwerko.Repo", "Piwerko.Repo\Piwerko.Repo.csproj", "{5E6C8587-ACF0-4D2C-A125-DBF3AA00D3CA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Piwerko.Services", "Piwerko.Services\Piwerko.Services.csproj", "{3EB5B1D4-D70E-4AC4-B026-4A764B89C77A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Piwerko.Test", "Piwerko.Test\Piwerko.Test.csproj", "{810EBBCA-0B20-43C1-96F1-352226FE052F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +23,22 @@ Global
 		{8F53A53F-CBD3-43FF-9A20-275420E3CE4E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8F53A53F-CBD3-43FF-9A20-275420E3CE4E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8F53A53F-CBD3-43FF-9A20-275420E3CE4E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{74536806-906D-4665-AA56-A8B6CAC60562}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{74536806-906D-4665-AA56-A8B6CAC60562}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{74536806-906D-4665-AA56-A8B6CAC60562}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{74536806-906D-4665-AA56-A8B6CAC60562}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5E6C8587-ACF0-4D2C-A125-DBF3AA00D3CA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5E6C8587-ACF0-4D2C-A125-DBF3AA00D3CA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5E6C8587-ACF0-4D2C-A125-DBF3AA00D3CA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5E6C8587-ACF0-4D2C-A125-DBF3AA00D3CA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3EB5B1D4-D70E-4AC4-B026-4A764B89C77A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3EB5B1D4-D70E-4AC4-B026-4A764B89C77A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3EB5B1D4-D70E-4AC4-B026-4A764B89C77A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3EB5B1D4-D70E-4AC4-B026-4A764B89C77A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{810EBBCA-0B20-43C1-96F1-352226FE052F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{810EBBCA-0B20-43C1-96F1-352226FE052F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{810EBBCA-0B20-43C1-96F1-352226FE052F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{810EBBCA-0B20-43C1-96F1-352226FE052F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
