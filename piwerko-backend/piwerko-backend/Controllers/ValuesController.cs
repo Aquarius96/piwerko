@@ -12,15 +12,10 @@ namespace piwerko_backend.Controllers
 
         // GET api/values
         [HttpGet]
-        public List<string> Get()
+        public String Get()
         {
-            var cos = new UserService();
-            List<string> tmp = new List<string>();
-            foreach (var var in cos.cos())
-            {
-                tmp.Add(var["username"]);
-            }
-            return tmp;
+            var con = new UserService();
+            return con.GetAllUsers()[1].GG();
         }
 
         /*

@@ -45,5 +45,9 @@ namespace piwerko_backend
             this.phone = phone_;
             this.avatar = avatar_;
         }
+        public string GG()
+        {
+            return this.username;
+        }
     }
 }
