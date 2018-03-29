@@ -8,9 +8,7 @@ namespace piwerko_backend
 {
     public class UserService
     {
-        private string ConnectionString = @"Data Source=localhost; Database:billenium; User ID=root; Password=''";
 
-        static string connectionString2 = "server=127.0.0.1; uid=root; pwd=''; database=billenium;";
 
         private MySQLConn sql;
 
@@ -22,7 +20,7 @@ namespace piwerko_backend
         {
             try
             {
-                sql = new MySQLConn(connectionString2);
+                sql = new MySQLConn(DefaultConnection);
             }
             catch (Exception e)
             {
