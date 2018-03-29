@@ -2,14 +2,11 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Piwerko.Data.DbModels
+namespace Piwerko.Data.Models
 {
-    public class User : Entity
+    public class LoginModel
     {
         public string Username { get; set; }
-        public string Email { get; set; }
         public string Password { get; set; }
-
-        
     }
 }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Piwerko.Services.Services;
+using Piwerko.Data.Services;
 namespace piwerko_backend.Controllers
 {
     [Route("api/[controller]")]
@@ -18,7 +18,7 @@ namespace piwerko_backend.Controllers
         [HttpGet]
         public String Get()
         {
-            var con = new UserService();
+            var con = new TestService();
             return con.GetAllUsers()[1].GG();
         }
 

@@ -10,7 +10,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Piwerko.Data\Piwerko.Data.csproj" />
-    <ProjectReference Include="..\Piwerko.Repo\Piwerko.Repo.csproj" />
   </ItemGroup>
 
 </Project>
