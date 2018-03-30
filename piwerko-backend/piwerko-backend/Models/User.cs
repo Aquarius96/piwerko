@@ -7,14 +7,16 @@ namespace Piwerko.Api.Models
 {
     public class User
     {
-        private int id { get; set; }
-        private string username { get; set; }
-        private string password { get; set; }
-        private string firstname { get; set; }
-        private string lastname { get; set; }
-        private string email { get; set; }
-        private string phone { get; set; }
-        private string avatar { get; set; }
+        public int id { get; set; }
+        public string username { get; set; }
+        public string password { get; set; }
+        public string firstname { get; set; }
+        public string lastname { get; set; }
+        public string email { get; set; }
+        public string phone { get; set; }
+        public string avatar_URL { get; set; }
+        public bool isAdmin { get; set; }
+        public bool isConfirmed { get; set; }
 
         public User()
         {
@@ -23,6 +25,8 @@ namespace Piwerko.Api.Models
         public User(int id_)
         {
             this.id = id_;
+            this.isAdmin = false;
+            this.isConfirmed = false;
         }
         public User(int id_, string username_, string password_, string firstname_, string lastname_, string email_, string phone_)
         {
@@ -33,6 +37,8 @@ namespace Piwerko.Api.Models
             this.lastname = lastname_;
             this.email = email_;
             this.phone = phone_;
+            this.isAdmin = false;
+            this.isConfirmed = false;
         }
         public User(int id_, string username_, string password_, string firstname_, string lastname_, string email_, string phone_, string avatar_)
         {
@@ -43,11 +49,10 @@ namespace Piwerko.Api.Models
             this.lastname = lastname_;
             this.email = email_;
             this.phone = phone_;
-            this.avatar = avatar_;
+            this.avatar_URL = avatar_;
+            this.isAdmin = false;
+            this.isConfirmed = false;
         }
-        public string GG()
-        {
-            return this.username;
-        }
+
     }
 }

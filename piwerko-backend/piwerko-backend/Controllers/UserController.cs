@@ -14,25 +14,18 @@ namespace Piwerko.Api.Controllers
     {
         // GET api/User
         [HttpGet]
-        public string Gett()
+        public string Get()
         {
             var var = new UserService();
-            return var.GetAllUsers()[1].GG();
+            return var.GetUserToken(0);
         }
-        /*
-        // GET: api/User
-        [HttpGet]
-        public IEnumerable<string> Get()
-        {
-            return new string[] { "value1", "value2" };
-        }
-        */
 
         // GET: api/User/5
         [HttpGet("{id}", Name = "Get")]
         public string Get(int id)
         {
-            return "value";
+            var var = new UserService();
+            return var.GetUserToken(id);
         }
         
         // POST: api/User
