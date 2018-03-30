@@ -1,20 +1,21 @@
 ﻿using System;
 using Jdforsythe.MySQLConnection;
 
-namespace MySqlConnector.Performance
+namespace Piwerko.Api
 {
-    public class AppDb : IDisposable
+    public class AppDb
     {
-        public MySqlConnection Connection;
+        public MySQLConn Connection;
 
         public AppDb()
         {
-            Connection = new MySqlConnection("server=127.0.0.1;user id=root;password='';port=3306;database=blog;");
+            Connection = new MySQLConn("server=127.0.0.1;user id=root;pwd='';database=billenium;");
         }
 
-        public void Dispose()
+        public MySQLConn sQLConn()
         {
-            Connection.Close();
+            return Connection;
         }
+
     }
 }

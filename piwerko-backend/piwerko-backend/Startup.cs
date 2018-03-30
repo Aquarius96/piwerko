@@ -9,7 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
-namespace piwerko_backend
+namespace Piwerko.Api
 {
     public class Startup
     {
