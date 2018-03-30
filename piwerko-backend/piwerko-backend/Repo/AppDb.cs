@@ -1,7 +1,7 @@
 ﻿using System;
 using Jdforsythe.MySQLConnection;
 
-namespace Piwerko.Api
+namespace Piwerko.Api.Repo
 {
     public class AppDb
     {

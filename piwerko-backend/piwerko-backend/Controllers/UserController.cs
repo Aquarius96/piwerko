@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Piwerko.Api.Services;
 
 namespace Piwerko.Api.Controllers
 {
@@ -11,12 +12,21 @@ namespace Piwerko.Api.Controllers
     [Route("api/User")]
     public class UserController : Controller
     {
+        // GET api/User
+        [HttpGet]
+        public string Gett()
+        {
+            var var = new UserService();
+            return var.GetAllUsers()[1].GG();
+        }
+        /*
         // GET: api/User
         [HttpGet]
         public IEnumerable<string> Get()
         {
             return new string[] { "value1", "value2" };
         }
+        */
 
         // GET: api/User/5
         [HttpGet("{id}", Name = "Get")]

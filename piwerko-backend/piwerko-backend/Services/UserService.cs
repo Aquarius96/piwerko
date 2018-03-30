@@ -4,8 +4,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Piwerko.Api.Models;
+using Piwerko.Api.Repo;
 
-namespace Piwerko.Api
+namespace Piwerko.Api.Services
 {
     public class UserService
     {
@@ -50,6 +51,7 @@ namespace Piwerko.Api
             }
             return users;
         }
+
 
     }
 }
