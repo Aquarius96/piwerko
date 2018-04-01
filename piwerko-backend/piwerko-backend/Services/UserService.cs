@@ -27,7 +27,7 @@ namespace Piwerko.Api.Services
         {
             try
             {
-                sql = appDb.Connection;
+                sql = appDb.ConnectionMysql;
                 GetDictionary();
             }
             catch (Exception e)
@@ -38,7 +38,7 @@ namespace Piwerko.Api.Services
 
         private User DicToUser(Dictionary<string, string> slownik)
         {
-            return new User(int.Parse(slownik["id"]), slownik["username"], slownik["password"], slownik["firstname"], slownik["lastname"], slownik["email"], slownik["phone"], slownik["avatar"]);
+            return new User { id = int.Parse(slownik["id"]),username = slownik["username"],password =  slownik["password"],firstname =  slownik["firstname"], lastname= slownik["lastname"],email= slownik["email"],phone= slownik["phone"],avatar_URL= slownik["avatar"] };
         }
 
         public void GetDictionary()
@@ -47,10 +47,6 @@ namespace Piwerko.Api.Services
             tableRows = sql.selectQuery();
         }
 
-        public String AddUser(User user)
-        {
-
-        }
         public List<User> GetAllUsers()
         {
             users = new List<User>();
