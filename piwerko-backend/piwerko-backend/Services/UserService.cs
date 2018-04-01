@@ -47,10 +47,10 @@ namespace Piwerko.Api.Services
             tableRows = sql.selectQuery();
         }
 
-        public String AddUser(User user)
+        /*public String AddUser(User user)
         {
 
-        }
+        }*/
         public List<User> GetAllUsers()
         {
             users = new List<User>();
