@@ -1,10 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Security.Claims;
+using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Piwerko.Api.Services;
+using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
+using Piwerko.Api.Models;
+using Piwerko.Api.Repo;
 
 namespace Piwerko.Api.Controllers
 {
@@ -12,38 +18,262 @@ namespace Piwerko.Api.Controllers
     [Route("api/User")]
     public class UserController : Controller
     {
-        // GET api/User
-        [HttpGet]
-        public string Get()
+
+        private readonly DataContext _context;
+
+        public UserController(DataContext context)
         {
-            var var = new UserService();
-            return var.GetUserToken(0);
+            _context = context;
+
+            if (_context.Users.Count() == 0)
+            {
+                _context.Users.Add(new User { username = "Admin",isAdmin=true,isConfirmed=true,password="zaqwsx" });
+                _context.SaveChanges();
+            }
+        }
+        
+        [HttpGet]
+        public IEnumerable<User> GetAll()
+        {
+            return _context.Users.ToList();
         }
 
-        // GET: api/User/5
-        [HttpGet("{id}", Name = "Get")]
-        public string Get(int id)
+        [HttpGet("{id}", Name = "GetId")]
+        public IActionResult GetById(long id)
         {
-            var var = new UserService();
-            return var.GetUserToken(id);
+            var item = _context.Users.FirstOrDefault(x => x.id == id);
+            if (item == null)
+            {
+                return NotFound();
+            }
+            return new ObjectResult(item);
         }
-        
-        // POST: api/User
+
         [HttpPost]
-        public void Post([FromBody]string value)
+        public IActionResult Create([FromBody] User user)
         {
+            if (user == null)
+            {
+                return BadRequest();
+            }
+
+            _context.Users.Add(user);
+            _context.SaveChanges();
+
+            return CreatedAtRoute("GetUser", new { id = user.id }, user);
         }
-        
-        // PUT: api/User/5
+
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody]string value)
+        public IActionResult Update(long id, [FromBody] User user)
         {
+            if (user == null || user.id != id)
+            {
+                return BadRequest();
+            }
+
+            var updated = _context.Users.FirstOrDefault(t => t.id == id);
+            if (updated == null)
+            {
+                return NotFound();
+            }
+
+            updated = user;
+
+            _context.Users.Update(updated);
+            _context.SaveChanges();
+            return new NoContentResult();
         }
-        
-        // DELETE: api/ApiWithActions/5
+
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public IActionResult Delete(long id)
         {
+            var user = _context.Users.FirstOrDefault(t => t.id == id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            _context.Users.Remove(user);
+            _context.SaveChanges();
+            return new NoContentResult();
         }
+
+        //// GET: api/User
+        //[HttpGet]
+        //public IEnumerable<string> Get()
+        //{
+        //    return new string[] { "value1", "value2" };
+        //}
+
+        //// GET: api/User/5
+        //[HttpGet("{id}", Name = "Get")]
+        //public string Get(int id)
+        //{
+        //    return "value";
+        //}
+
+        //// POST: api/User
+        //[HttpPost]
+        //public void Post([FromBody]string value)
+        //{
+        //}
+
+        //// PUT: api/User/5
+        //[HttpPut("{id}")]
+        //public void Put(int id, [FromBody]string value)
+        //{
+        //}
+
+        //// DELETE: api/ApiWithActions/5
+        //[HttpDelete("{id}")]
+        //public void Delete(int id)
+        //{
+        //}
+
+        
+
     }
 }
+//using System;
+//using System.Collections.Generic;
+//using System.IdentityModel.Tokens.Jwt;
+//using System.Linq;
+//using System.Security.Claims;
+//using System.Text;
+//using System.Threading.Tasks;
+//using Microsoft.AspNetCore.Http;
+//using Microsoft.AspNetCore.Mvc;
+//using Microsoft.Extensions.Configuration;
+//using Microsoft.IdentityModel.Tokens;
+//using Piwerko.Api.Models;
+//using Piwerko.Api.Repo;
+
+//namespace Piwerko.Api.Controllers
+//{
+//    [Produces("application/json")]
+//    [Route("api/User")]
+//    public class UserController : Controller
+//    {
+
+//        private readonly DataContext _context;
+//        private JWT jwt = new JWT();
+
+//        public UserController(DataContext context)
+//        {
+//            _context = context;
+
+//            if (_context.Users.Count() == 0)
+//            {
+//                _context.Users.Add(new User { username = "Admin", isAdmin = true, isConfirmed = true, password = "zaqwsx" });
+//                _context.SaveChanges();
+//            }
+//        }
+
+//        [HttpGet]
+//        public string[] GetAll()
+//        {
+//            List<string> result = new List<string>();
+//            var list = _context.Users.ToList();
+//            foreach (var var in list)
+//            {
+//                result.Add(jwt.BuildUserToken(var));
+//            }
+//            return result.ToArray();
+//        }
+
+//        [HttpGet("{id}", Name = "GetId")]
+//        public string GetById(long id)
+//        {
+//            var user = _context.Users.FirstOrDefault(x => x.id == id);
+//            if (user == null)
+//            {
+//                return "NotFound()";
+//            }
+//            return jwt.BuildUserToken(user);
+//        }
+
+//        [HttpPost]
+//        public string Create([FromBody] User user)
+//        {
+//            if (user == null)
+//            {
+//                return "BadRequest()";
+//            }
+
+//            _context.Users.Add(user);
+//            _context.SaveChanges();
+
+//            return jwt.BuildUserToken(user);
+//        }
+
+//        [HttpPut("{id}")]
+//        public string Update(long id, [FromBody] User user)
+//        {
+//            if (user == null || user.id != id)
+//            {
+//                return "BadRequest()";
+//            }
+
+//            var updated = _context.Users.FirstOrDefault(t => t.id == id);
+//            if (updated == null)
+//            {
+//                return "NotFound()";
+//            }
+
+//            updated = user;
+
+//            _context.Users.Update(updated);
+//            _context.SaveChanges();
+//            return jwt.BuildUserToken(updated);
+//        }
+
+//        [HttpDelete("{id}")]
+//        public string Delete(long id)
+//        {
+//            var user = _context.Users.FirstOrDefault(t => t.id == id);
+//            if (user == null)
+//            {
+//                return "NotFound()";
+//            }
+
+//            _context.Users.Remove(user);
+//            _context.SaveChanges();
+//            return "Successful()";
+//        }
+
+//        //// GET: api/User
+//        //[HttpGet]
+//        //public IEnumerable<string> Get()
+//        //{
+//        //    return new string[] { "value1", "value2" };
+//        //}
+
+//        //// GET: api/User/5
+//        //[HttpGet("{id}", Name = "Get")]
+//        //public string Get(int id)
+//        //{
+//        //    return "value";
+//        //}
+
+//        //// POST: api/User
+//        //[HttpPost]
+//        //public void Post([FromBody]string value)
+//        //{
+//        //}
+
+//        //// PUT: api/User/5
+//        //[HttpPut("{id}")]
+//        //public void Put(int id, [FromBody]string value)
+//        //{
+//        //}
+
+//        //// DELETE: api/ApiWithActions/5
+//        //[HttpDelete("{id}")]
+//        //public void Delete(int id)
+//        //{
+//        //}
+
+
+
+//    }
+//}

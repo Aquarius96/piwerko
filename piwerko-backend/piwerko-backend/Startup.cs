@@ -1,29 +1,28 @@
-﻿using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Piwerko.Api.Repo;
-
+using Microsoft.EntityFrameworkCore;
 
 namespace Piwerko.Api
 {
     public class Startup
     {
-        private AppDb appdb;
+        private IConfiguration Configuration;
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
-            appdb = new AppDb();
         }
-
-        public IConfiguration Configuration { get; }
+        
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             
-            services.AddDbContext<DataContext>(options => options.UseSqlServer(appdb.ConnectionString));
+            services.AddDbContext<DataContext>(options => options.UseSqlServer(Configuration["ConnectionStrings:Default"]));
+            services.AddSingleton<IConfiguration>(Configuration);
             services.AddMvc();
         }
 
