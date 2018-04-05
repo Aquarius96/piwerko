@@ -4,6 +4,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Piwerko.Api.Repo;
 using Microsoft.EntityFrameworkCore;
+using Piwerko.Api.Interfaces;
+using Piwerko.Api.Services;
 
 namespace Piwerko.Api
 {
@@ -23,6 +25,8 @@ namespace Piwerko.Api
             
             services.AddDbContext<DataContext>(options => options.UseSqlServer(Configuration["ConnectionStrings:Default"]));
             services.AddSingleton<IConfiguration>(Configuration);
+            services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IUserRepository, UserRepository>();
             services.AddMvc();
         }
 
