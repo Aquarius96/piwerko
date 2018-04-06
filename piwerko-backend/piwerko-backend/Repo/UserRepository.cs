@@ -1,10 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Piwerko.Api.Interfaces;
+﻿using Piwerko.Api.Interfaces;
 using Piwerko.Api.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace Piwerko.Api.Repo
 {
@@ -42,6 +40,13 @@ namespace Piwerko.Api.Repo
             return user;
         }
 
+        public User GetUserByEmail(string email)
+        {
+            var user = _context.Users.SingleOrDefault(x => x.email == email);
+
+            return user;
+        }
+
         public User GetUser(string username)
         {
             var user = _context.Users.SingleOrDefault(x => x.username == username);
@@ -53,6 +58,13 @@ namespace Piwerko.Api.Repo
         public bool CheckLogin(string username)
         {
             var user = _context.Users.Any(x => x.username == username);
+
+            return user;
+        }
+
+        public bool CheckEmail(string email)
+        {
+            var user = _context.Users.Any(x => x.email == email);
 
             return user;
         }

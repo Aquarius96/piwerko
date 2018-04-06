@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Piwerko.Api.Interfaces;
 using Piwerko.Api.Models;
 
@@ -21,7 +16,7 @@ namespace Piwerko.Api.Controllers
         }
 
 
-        [HttpPost("{userId}")]
+        [HttpPost("/update/{userId}")]
         public User Post(int userId, [FromBody]User value)
         {
             if (value == _userService.GetUserById(userId))

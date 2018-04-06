@@ -1,5 +1,4 @@
-﻿using Microsoft.Extensions.Configuration;
-using Microsoft.IdentityModel.Tokens;
+﻿using Microsoft.IdentityModel.Tokens;
 using Piwerko.Api.Models;
 using System;
 using System.IdentityModel.Tokens.Jwt;
@@ -7,7 +6,8 @@ using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace Piwerko.Api
+namespace Piwerko.Api.Helpers
+
 {
     public class JWT
     {

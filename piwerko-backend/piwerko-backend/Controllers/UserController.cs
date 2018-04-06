@@ -1,16 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
-using System.Security.Claims;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
-using Microsoft.IdentityModel.Tokens;
-using Piwerko.Api.Models;
-using Piwerko.Api.Repo;
+using Piwerko.Api.Helpers;
+using Piwerko.Api.Interfaces;
 
 namespace Piwerko.Api.Controllers
 {
@@ -18,85 +9,132 @@ namespace Piwerko.Api.Controllers
     [Route("api/User")]
     public class UserController : Controller
     {
+        private readonly IUserService _userService;
+        private JWT jwt;
 
-        private readonly DataContext _context;
-
-        public UserController(DataContext context)
+        public UserController(IUserService userService)
         {
-            _context = context;
-
-            if (_context.Users.Count() == 0)
-            {
-                _context.Users.Add(new User { username = "Admin",isAdmin=true,isConfirmed=true,password="zaqwsx" });
-                _context.SaveChanges();
-            }
-        }
-        
-        [HttpGet]
-        public IEnumerable<User> GetAll()
-        {
-            return _context.Users.ToList();
+            _userService = userService;
+            jwt = new JWT();
         }
 
-        [HttpGet("{id}", Name = "GetId")]
-        public IActionResult GetById(long id)
+        [HttpGet("/get/{userId}")]
+        public string GetById(int userId)
         {
-            var item = _context.Users.FirstOrDefault(x => x.id == id);
-            if (item == null)
-            {
-                return NotFound();
-            }
-            return new ObjectResult(item);
+            var user = _userService.GetUserById(userId);
+
+            return jwt.BuildUserToken(user);
         }
 
-        [HttpPost]
-        public IActionResult Create([FromBody] User user)
+        [AllowAnonymous]  //nie wiem co to robi ale ktos tam to mial i chyba potrzebne
+        [HttpGet("confirm/{userId}/{key}")]
+        public IActionResult ConfirmEmail(int userId, string key)
         {
-            if (user == null)
+            var user = _userService.GetUserById(userId);
+
+            if (user.ConfirmationCode == key)
             {
-                return BadRequest();
+                user.isConfirmed = true;
+                user.ConfirmationCode = null;
+                _userService.Update(user);
+                return Ok();
             }
-
-            _context.Users.Add(user);
-            _context.SaveChanges();
-
-            return CreatedAtRoute("GetUser", new { id = user.id }, user);
+            return BadRequest();
         }
 
-        [HttpPut("{id}")]
-        public IActionResult Update(long id, [FromBody] User user)
+        [AllowAnonymous]  //nie wiem co to robi ale ktos tam to mial i chyba potrzebne
+        [HttpGet("changepwd/{userId}/{key}")]
+        public IActionResult ChangePassword(int userId, string key)
         {
-            if (user == null || user.id != id)
+            var user = _userService.GetUserById(userId);
+
+            if (user.ConfirmationCode == key)
             {
-                return BadRequest();
+                user.ConfirmationCode = null;
+                _userService.Update(user);
+                return Ok();
             }
-
-            var updated = _context.Users.FirstOrDefault(t => t.id == id);
-            if (updated == null)
-            {
-                return NotFound();
-            }
-
-            updated = user;
-
-            _context.Users.Update(updated);
-            _context.SaveChanges();
-            return new NoContentResult();
+            return BadRequest();
         }
 
-        [HttpDelete("{id}")]
-        public IActionResult Delete(long id)
-        {
-            var user = _context.Users.FirstOrDefault(t => t.id == id);
-            if (user == null)
-            {
-                return NotFound();
-            }
+        //private readonly DataContext _context;
 
-            _context.Users.Remove(user);
-            _context.SaveChanges();
-            return new NoContentResult();
-        }
+        //public UserController(DataContext context)
+        //{
+        //    _context = context;
+
+        //    if (_context.Users.Count() == 0)
+        //    {
+        //        _context.Users.Add(new User { username = "Admin",isAdmin=true,isConfirmed=true,password="zaqwsx" });
+        //        _context.SaveChanges();
+        //    }
+        //}
+
+        //[HttpGet]
+        //public IEnumerable<User> GetAll()
+        //{
+        //    return _context.Users.ToList();
+        //}
+
+        //[HttpGet("{id}", Name = "GetId")]
+        //public IActionResult GetById(long id)
+        //{
+        //    var item = _context.Users.FirstOrDefault(x => x.id == id);
+        //    if (item == null)
+        //    {
+        //        return NotFound();
+        //    }
+        //    return new ObjectResult(item);
+        //}
+
+        //[HttpPost]
+        //public IActionResult Create([FromBody] User user)
+        //{
+        //    if (user == null)
+        //    {
+        //        return BadRequest();
+        //    }
+
+        //    _context.Users.Add(user);
+        //    _context.SaveChanges();
+
+        //    return CreatedAtRoute("GetUser", new { id = user.id }, user);
+        //}
+
+        //[HttpPut("{id}")]
+        //public IActionResult Update(long id, [FromBody] User user)
+        //{
+        //    if (user == null || user.id != id)
+        //    {
+        //        return BadRequest();
+        //    }
+
+        //    var updated = _context.Users.FirstOrDefault(t => t.id == id);
+        //    if (updated == null)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    updated = user;
+
+        //    _context.Users.Update(updated);
+        //    _context.SaveChanges();
+        //    return new NoContentResult();
+        //}
+
+        //[HttpDelete("{id}")]
+        //public IActionResult Delete(long id)
+        //{
+        //    var user = _context.Users.FirstOrDefault(t => t.id == id);
+        //    if (user == null)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    _context.Users.Remove(user);
+        //    _context.SaveChanges();
+        //    return new NoContentResult();
+        //}
 
         //// GET: api/User
         //[HttpGet]
@@ -130,7 +168,7 @@ namespace Piwerko.Api.Controllers
         //{
         //}
 
-        
+
 
     }
 }

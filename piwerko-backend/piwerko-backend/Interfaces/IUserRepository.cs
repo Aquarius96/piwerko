@@ -1,8 +1,5 @@
 ﻿using Piwerko.Api.Models;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Piwerko.Api.Interfaces
 {
@@ -13,5 +10,10 @@ namespace Piwerko.Api.Interfaces
         void CreateUser(User user);
         void Save();
         User GetUser(string username);
+        IEnumerable<User> GetAll();
+        void UpdateUser(User user);
+        bool Delete(long id);
+        bool CheckEmail(string email);
+        User GetUserByEmail(string email_);
     }
 }
