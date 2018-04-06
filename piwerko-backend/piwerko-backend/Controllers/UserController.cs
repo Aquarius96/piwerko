@@ -72,7 +72,19 @@ namespace Piwerko.Api.Controllers
             }
             return BadRequest();
         }
+        [Route("regi")]
+        [HttpPost]
+        public IActionResult Register([FromBody] User user)
+        {
+            if (user == null)
+            {
+                return BadRequest();
+            }
 
+            _userService.Register(user);
+
+            return CreatedAtRoute("GetUser", new { id = user.id }, user);
+        }
         //private readonly DataContext _context;
 
         //public UserController(DataContext context)
