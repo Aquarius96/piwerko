@@ -25,9 +25,9 @@ namespace Piwerko.Api.Controllers
         {
             var user =  _userService.GetUserById(userId);
 
-            return jwt.BuildUserToken(new User {id = 9,username="za",firstname="pa",lastname="dka",email="zapadka",avatar_URL="brak",password="zaq",phone="332" });
+            return jwt.BuildUserToken(user);
         }
-
+        
         [AllowAnonymous]  //nie wiem co to robi ale ktos tam to mial i chyba potrzebne
         [HttpGet("confirm/{userId}/{key}")]
         public IActionResult ConfirmEmail(int userId, string key)
