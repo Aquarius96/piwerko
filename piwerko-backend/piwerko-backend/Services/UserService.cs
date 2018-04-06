@@ -81,8 +81,6 @@ namespace Piwerko.Api.Services
         public User Register(User user)
         {
 
-            if (_userRepository.CheckLogin(user.username))
-                throw new Exception("Username " + user.username + " is already taken");
 
             if (_userRepository.CheckEmail(user.email))
                 throw new Exception("Email " + user.email + " is already taken");
@@ -98,9 +96,6 @@ namespace Piwerko.Api.Services
 
         public User Create(User user)
         {
-
-            if (_userRepository.CheckLogin(user.username))
-                throw new Exception("Username " + user.username + " is already taken");
 
             if (_userRepository.CheckEmail(user.email))
                 throw new Exception("Email " + user.email + " is already taken");
