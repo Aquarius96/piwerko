@@ -27,7 +27,21 @@ namespace Piwerko.Api.Controllers
 
             return jwt.BuildUserToken(user);
         }
-        
+
+        [Route("regi")]
+        [HttpPost]
+        public string Register([FromBody] User user)
+        {
+            if (user == null)
+            {
+                return "BadRequest()";
+            }
+
+            _userService.Register(user);
+
+            return "CreatedAtRoute(GetUser, new { id = user.id }, user)";
+        }
+
         [AllowAnonymous]  //nie wiem co to robi ale ktos tam to mial i chyba potrzebne
         [HttpGet("confirm/{userId}/{key}")]
         public IActionResult ConfirmEmail(int userId, string key)
