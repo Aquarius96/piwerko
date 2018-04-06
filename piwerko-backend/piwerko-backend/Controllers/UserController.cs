@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Mvc;
 using Piwerko.Api.Helpers;
 using Piwerko.Api.Interfaces;
+using Piwerko.Api.Models;
+using System.Linq;
 
 namespace Piwerko.Api.Controllers
 {
@@ -17,13 +19,13 @@ namespace Piwerko.Api.Controllers
             _userService = userService;
             jwt = new JWT();
         }
-
-        [HttpGet("/get/{userId}")]
+        
+        [HttpGet("get/{userId}")]
         public string GetById(int userId)
         {
-            var user = _userService.GetUserById(userId);
+            var user =  _userService.GetUserById(userId);
 
-            return jwt.BuildUserToken(user);
+            return jwt.BuildUserToken(new User {id = 9,username="za",firstname="pa",lastname="dka",email="zapadka",avatar_URL="brak",password="zaq",phone="332" });
         }
 
         [AllowAnonymous]  //nie wiem co to robi ale ktos tam to mial i chyba potrzebne

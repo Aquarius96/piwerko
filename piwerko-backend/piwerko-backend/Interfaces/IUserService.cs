@@ -1,4 +1,5 @@
 ﻿using Piwerko.Api.Models;
+using System.Collections.Generic;
 
 namespace Piwerko.Api.Interfaces
 {
@@ -8,6 +9,8 @@ namespace Piwerko.Api.Interfaces
         User Register(User user);
         User GetUserById(int userId);
         void Update(User user_);
+        IEnumerable<User> GetAll();
+        User Create(User user);
 
 
     }

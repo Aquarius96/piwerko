@@ -96,6 +96,23 @@ namespace Piwerko.Api.Services
             return user;
         }
 
+        public User Create(User user)
+        {
+
+            if (_userRepository.CheckLogin(user.username))
+                throw new Exception("Username " + user.username + " is already taken");
+
+            if (_userRepository.CheckEmail(user.email))
+                throw new Exception("Email " + user.email + " is already taken");
+            
+            _userRepository.CreateUser(user);
+            _userRepository.Save();
+            
+
+            return user;
+        }
+
+
         private bool SendActivationEmail(User user)
         {
             try
