@@ -11,8 +11,8 @@ namespace Piwerko.Api.Helpers
 {
     public class JWT
     {
-        private static string Issuer_ = "http://localhost:50977";
-        private static string Audience_ = "http://localhost:50977";
+        private static string Issuer_ = "http://localhost:49635";
+        private static string Audience_ = "http://localhost:49635";
         private static string Key_ = "VisualStudioDajeRakaTakBardzo!";
 
         public JWT()
