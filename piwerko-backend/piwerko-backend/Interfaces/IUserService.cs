@@ -11,6 +11,8 @@ namespace Piwerko.Api.Interfaces
         void Update(User user_);
         IEnumerable<User> GetAll();
         User Create(User user);
+        bool DeleteA(int id);
+        bool Delete(int id, User user);
 
 
     }

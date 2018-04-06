@@ -19,7 +19,14 @@ namespace Piwerko.Api.Controllers
             _userService = userService;
             jwt = new JWT();
         }
-        
+
+        [HttpGet("del/{userId}")] //tymczasowe usuwanie
+        public bool delbyadmin(int userId)
+        {
+            return _userService.DeleteA(userId);
+        }
+
+
         [HttpGet("get/{userId}")]
         public string GetById(int userId)
         {

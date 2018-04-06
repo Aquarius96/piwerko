@@ -31,7 +31,7 @@ namespace Piwerko.Api.Services
 
         }
 
-        public bool ForgotPassword(string email_)
+        public bool ForgotPassword(string email_) //to trzeba dorobic gdy bedzie front
         {
             var user = _userRepository.GetUserByEmail(email_);
 
@@ -93,7 +93,7 @@ namespace Piwerko.Api.Services
             return user;
         }
 
-        public User Create(User user)
+        public User Create(User user) // sluzy do celow nie wiadomo jakich
         {
 
             if (_userRepository.CheckLogin(user.username))
@@ -170,6 +170,10 @@ namespace Piwerko.Api.Services
         public bool Delete(int id,User user)
         {
             if (_userRepository.GetUserById(id) != user) return false;
+            return _userRepository.Delete(id);
+        }
+        public bool DeleteA(int id)
+        {
             return _userRepository.Delete(id);
         }
     }
