@@ -80,7 +80,7 @@ namespace Piwerko.Api.Services
 
         public User Register(User user)
         {
-            
+
             if (_userRepository.CheckEmail(user.email))
                 throw new Exception("Email " + user.email + " is already taken");
 
