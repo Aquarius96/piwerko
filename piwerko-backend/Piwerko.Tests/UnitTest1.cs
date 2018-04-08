@@ -56,7 +56,7 @@ namespace Piwerko.Tests
             userRepository.Setup(e => e.GetUserById(It.IsAny<int>())).Returns(registeredUser);
             var userController = new UserController(userService);
             var result = userController.ConfirmEmail(int.Parse((registeredUser.id).ToString()), registeredUser.ConfirmationCode);
-            Assert.IsType<OkResult>(result);
+            Assert.Equal("Ok()", result);
         }
 
 
@@ -69,8 +69,9 @@ namespace Piwerko.Tests
             var repo = new Mock<IUserRepository>();
             var service = new UserService(repo.Object);
             var con = new UserController(service);
+            repo.Setup(e => e.GetUserById(It.IsAny<int>())).Returns(user);
             var result = con.GetById(2);
-            repo.Setup(e => e.GetUserById(It.IsAny<int>())).Returns(new User()); // marcin popraw to XD
+             // marcin popraw to XD
 
 
             Assert.Equal(jwt.BuildUserToken(user), result);
