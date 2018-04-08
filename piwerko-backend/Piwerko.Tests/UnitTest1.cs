@@ -11,6 +11,8 @@ using Piwerko.Api.Models;
 using Piwerko.Api.Services;
 using System;
 using Xunit;
+using Piwerko.Api.Repo;
+using Piwerko.Api.Helpers;
 
 namespace Piwerko.Tests
 {
@@ -55,6 +57,24 @@ namespace Piwerko.Tests
             var userController = new UserController(userService);
             var result = userController.ConfirmEmail(int.Parse((registeredUser.id).ToString()), registeredUser.ConfirmationCode);
             Assert.IsType<OkResult>(result);
+        }
+
+
+        [Fact]
+        public void Test4() //getJWT
+        {
+            var jwt = new JWT();
+            var user = new User { id = 2, username = "marcinXD", password = "zaq", firstname = "zaq", lastname = "zaq", email = "zaq", phone = "zaq", avatar_URL = "zaq", isAdmin = false, isConfirmed = false, };
+            
+            var repo = new Mock<IUserRepository>();
+            var service = new UserService(repo.Object);
+            var con = new UserController(service);
+            var result = con.GetById(2);
+            repo.Setup(e => e.GetUserById(It.IsAny<int>())).Returns(new User()); // marcin popraw to XD
+
+
+            Assert.Equal(jwt.BuildUserToken(user), result);
+
         }
     }
 }
