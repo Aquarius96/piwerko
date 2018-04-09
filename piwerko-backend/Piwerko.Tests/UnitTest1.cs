@@ -19,7 +19,7 @@ namespace Piwerko.Tests
     public class UnitTest1
     {
         [Fact]
-        public void Test1()
+        public void Test1() //forgot password
         {
             var user = new User { username = "User", email = "marzap96@wp.pl", password = "asdsdasd" };
             var userRepository = new Mock<IUserRepository>();
@@ -32,7 +32,7 @@ namespace Piwerko.Tests
         }
 
         [Fact]
-        public void Test2()
+        public void Test2() //register
         {
             var user = new User { email = "marzap96@wp.pl", password = "asdsdasd" };
             var userRepository = new Mock<IUserRepository>();
@@ -45,7 +45,7 @@ namespace Piwerko.Tests
         }
 
         [Fact]
-        public void Test3()
+        public void Test3() //confirm email
         {
             var user = new User { email = "marzap96@wp.pl", password = "asdsdasd" };
             var userRepository = new Mock<IUserRepository>();
@@ -75,6 +75,11 @@ namespace Piwerko.Tests
 
 
             Assert.Equal(jwt.BuildUserToken(user), result);
+
+        }
+        [Fact]
+        public void Test5()
+        {
 
         }
     }
