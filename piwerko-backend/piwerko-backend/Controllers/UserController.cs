@@ -37,7 +37,7 @@ namespace Piwerko.Api.Controllers
         
         [AllowAnonymous]  //nie wiem co to robi ale ktos tam to mial i chyba potrzebne
         [HttpGet("confirm/{userId}/{key}")]
-        public string ConfirmEmail(int userId, string key)
+        public IActionResult ConfirmEmail(int userId, string key)
         {
             var user = _userService.GetUserById(userId);
 
@@ -46,14 +46,14 @@ namespace Piwerko.Api.Controllers
                 user.isConfirmed = true;
                 user.ConfirmationCode = null;
                 _userService.Update(user);
-                return "Ok()";
+                return Ok();
             }
-            return "BadRequest()";
+            return BadRequest();
         }
 
         [AllowAnonymous]  //nie wiem co to robi ale ktos tam to mial i chyba potrzebne
         [HttpGet("changepwd/{userId}/{key}")]
-        public string ChangePassword(int userId, string key)
+        public IActionResult ChangePassword(int userId, string key)
         {
             var user = _userService.GetUserById(userId);
 
@@ -61,24 +61,33 @@ namespace Piwerko.Api.Controllers
             {
                 user.ConfirmationCode = null;
                 _userService.Update(user);
-                return "Ok()";
+                return Ok();
             }
-            return "BadRequest()";
+            return BadRequest();
         }
 
         [Route("regi")]
         [HttpPost]
-        public string Register([FromBody] User user)
+        public IActionResult Register([FromBody] User user)
         {
             if (user == null)
             {
-                return "BadRequest()";
+                return BadRequest();
             }
 
-            _userService.Register(user);
+            try
+            {
+                _userService.Register(user);
+                return Ok();
+            }
+            catch (AppException ex)
+            {
+                return BadRequest(ex.Message);
+            }
 
-            return "CreatedAtRoute(GetUse, new { id = user.id }, user)";
         }
+
+        
         //private readonly DataContext _context;
 
         //public UserController(DataContext context)
