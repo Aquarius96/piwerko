@@ -11,15 +11,54 @@ namespace Piwerko.Api.Helpers
 {
     public class JWT
     {
-        private static string Issuer_ = "http://localhost:49635";
-        private static string Audience_ = "http://localhost:49635";
+        private static string Issuer_ = "http://localhost:8080";
+        private static string Audience_ = "http://localhost:8080";
         private static string Key_ = "VisualStudioDajeRakaTakBardzo!";
 
         public JWT()
         {
         }
 
-        public string BuildUserToken(User user, string Key=null, string issuer=null, string audience=null, DateTime? expirationDate = null)
+        public string BuildUserNotFullToken(User user, string Key = null, string issuer = null, string audience = null, DateTime? expirationDate = null)
+        {
+            if (Key == null)
+            {
+                Key = Key_;
+            }
+            if (issuer == null)
+            {
+                issuer = Issuer_;
+            }
+            if (audience == null)
+            {
+                audience = Audience_;
+            }
+
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Key));
+            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+            var claims = new[]
+            {
+                new Claim("id", user.id.ToString()),
+                new Claim("password", user.password),
+                new Claim("email", user.email),
+                new Claim("avatar_URL", user.avatar_URL),
+                new Claim("ConfirmationCode", user.ConfirmationCode),
+                new Claim("isAdmin", user.isAdmin.ToString()),
+                new Claim("isConfirmed", user.isConfirmed.ToString()),
+
+            };
+
+            var token = new JwtSecurityToken(
+                issuer,
+                audience,
+                claims,
+                expires: expirationDate,
+                signingCredentials: creds);
+
+            return new JwtSecurityTokenHandler().WriteToken(token);
+        }
+
+        public string BuildFullUserToken(User user, string Key=null, string issuer=null, string audience=null, DateTime? expirationDate = null)
         {
             if (Key == null)
             {
