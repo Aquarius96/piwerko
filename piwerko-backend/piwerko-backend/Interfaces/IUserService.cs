@@ -5,14 +5,16 @@ namespace Piwerko.Api.Interfaces
 {
     public interface IUserService
     {
-        User LogIn(User user_);
+        int LogIn(User user_);
         User Register(User user);
         User GetUserById(int userId);
         void Update(User user_);
         IEnumerable<User> GetAll();
         User Create(User user);
-        bool DeleteA(int id);
-        bool Delete(int id, User user);
+        bool Delete(int id);
+        bool LoginExist(string username);
+        bool ForgotPassword(string email_);
+        bool EmailExist(string email);
 
 
     }

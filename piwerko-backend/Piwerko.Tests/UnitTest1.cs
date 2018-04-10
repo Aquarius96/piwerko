@@ -74,7 +74,7 @@ namespace Piwerko.Tests
              // marcin popraw to XD
 
 
-            Assert.Equal(jwt.BuildUserToken(user), result);
+            Assert.Equal(jwt.BuildFullUserToken(user), result);
 
         }
         [Fact]

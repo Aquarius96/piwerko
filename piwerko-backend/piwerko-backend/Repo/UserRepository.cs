@@ -71,6 +71,9 @@ namespace Piwerko.Api.Repo
 
         public void CreateUser(User user)
         {
+            user.isAdmin = false;
+            user.isConfirmed = false;
+            user.avatar_URL = "https://i.pinimg.com/originals/f7/61/b3/f761b3ae57801975e0a605e805626279.png";
             _context.Users.Add(user);
         }
 

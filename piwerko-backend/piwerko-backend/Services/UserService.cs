@@ -30,14 +30,20 @@ namespace Piwerko.Api.Services
             return _userRepository.GetUserByEmail(email_);
 
         }
-
+        public bool EmailExist (string email)
+        {
+            return _userRepository.CheckEmail(email);
+        }
+        public bool LoginExist (string username)
+        {
+            return _userRepository.CheckLogin(username);
+        }
         public bool ForgotPassword(string email_) //to trzeba dorobic gdy bedzie front
         {
             var user = _userRepository.GetUserByEmail(email_);
-
+            if (user == null) return false;
             user.ConfirmationCode = Guid.NewGuid().ToString();
             _userRepository.UpdateUser(user);
-
             return SendForgotEmail(user);
         }
 
@@ -65,7 +71,7 @@ namespace Piwerko.Api.Services
                     message.From = new MailAddress("piwerkobuissnes@gmail.com");
                     message.Subject = "Przywracanie hasla";
                     message.Body = "jakis tam linku do frontu rzeby przekazac id i code sprawdzic itd ide sapc";
-                    //message.Body = "http://localhost:50977/api/User/changepwd/" + user.id + "/" + user.ConfirmationCode + "<br />Przywroc haslo<br />Klucz : " + user.ConfirmationCode + "<br />UserId : " + user.id;
+                    //message.Body = "http://localhost:8080/api/User/changepwd/" + user.id + "/" + user.ConfirmationCode + "<br />Przywroc haslo<br />Klucz : " + user.ConfirmationCode + "<br />UserId : " + user.id;
                     message.IsBodyHtml = true;
 
                     client.Send(message);
@@ -133,7 +139,7 @@ namespace Piwerko.Api.Services
                     message.To.Add(new MailAddress(user.email));
                     message.From = new MailAddress("piwerkobuissnes@gmail.com");
                     message.Subject = "Link aktywacyjny";   //obecnei rzucam do tylu pozniej mozna bd przerobic na front
-                    message.Body = "http://localhost:50977/api/User/confirm/" + user.id + "/" + user.ConfirmationCode + "<br />Link aktywacyjny<br />Klucz : " + user.ConfirmationCode + "<br />UserId : " + user.id;
+                    message.Body = "http://localhost:8080/api/User/confirm/" + user.id + "/" + user.ConfirmationCode + "<br />Link aktywacyjny<br />Klucz : " + user.ConfirmationCode + "<br />UserId : " + user.id;
                     message.IsBodyHtml = true;
 
                     client.Send(message);
@@ -151,30 +157,29 @@ namespace Piwerko.Api.Services
             _userRepository.UpdateUser(user_);
         }
 
-        public User LogIn(User user_)
+        public int LogIn(User user_)
         {
-            if (string.IsNullOrEmpty(user_.username) || string.IsNullOrEmpty(user_.password))
-                return null;
+            if (String.IsNullOrWhiteSpace(user_.password))
+                return -1;
 
-            var user = _userRepository.GetUser(user_.username);
+            User user = null;
 
+            if (String.IsNullOrWhiteSpace(user_.username)) user = _userRepository.GetUserByEmail(user_.email);
+            else user = _userRepository.GetUser(user_.username);
+            
             if (user == null)
-                return null;
+                return -2;
 
             if (user.password != user_.password)
-                return null;
+                return -3;
 
-            return user;
+            return Convert.ToInt32(user_.id);
         }
 
-        public bool Delete(int id,User user)
-        {
-            if (_userRepository.GetUserById(id) != user) return false;
-            return _userRepository.Delete(id);
-        }
-        public bool DeleteA(int id)
+        public bool Delete(int id)
         {
             return _userRepository.Delete(id);
         }
+
     }
 }

@@ -1,8 +1,11 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Piwerko.Api.Dto;
 using Piwerko.Api.Helpers;
 using Piwerko.Api.Interfaces;
 using Piwerko.Api.Models;
+using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Piwerko.Api.Controllers
@@ -20,40 +23,143 @@ namespace Piwerko.Api.Controllers
             jwt = new JWT();
         }
 
-        [HttpGet("del/{userId}")] //tymczasowe usuwanie
+        [HttpGet("delA/{userId}")] //tymczasowe usuwanie dla testow
         public bool delbyadmin(int userId)
         {
-            return _userService.DeleteA(userId);
+            return _userService.Delete(userId);
+        }
+
+        [AllowAnonymous]  //tymmczasowe sprawdzenia dla testow poki nie ma frontu
+        [HttpGet("confirm/{userId}/{key}")]
+        public IActionResult COnfirmeD(int userId, string key)
+        {
+            var user = _userService.GetUserById(userId);
+            user.isConfirmed = true;
+            user.ConfirmationCode = null;
+            _userService.Update(user);
+            return Ok(user);
         }
 
 
-        [HttpGet("get/{userId}")]
+
+        //===========================================================================================================================================
+
+
+        [HttpPost("forgotpwd")] // fromt dostaje maila z id i key; pobiera ConfirmationCode dzieki id porownuje go z kluczem i zwraca id oraz nowe haslo
+        public IActionResult ConfirmNewPwd([FromBody] User user)
+        {
+            var user_ = _userService.GetUserById(Convert.ToInt32(user.id));
+            if (user_ == null) return BadRequest("Brak usera o danym id");
+
+            if (user_.password == user.password) return BadRequest("Nowe haslo nie moze byc takie same jak stare...");
+
+            user_.password = user.password;
+            user_.ConfirmationCode = null;
+
+            return Ok(user);
+        }
+
+
+        [HttpGet("forgotpwd/{email}")]
+        public IActionResult SendForgotPassword(string email)
+        {
+            var result = _userService.ForgotPassword(email);
+
+            if (result) return Ok("Na wskazanego maila: " + email + " wyslano link do zresetowania haslo");
+            return BadRequest("Zly email albo cos z polaczeniem jest nie tak");
+        }
+
+        [HttpPost("code")]
+        public IActionResult GetConfirmationCodeById([FromBody] Index index)
+        {
+            var user = _userService.GetUserById(index.value);
+
+            if (user == null) return BadRequest("Brak usera o danym id");
+            return Ok(user.ConfirmationCode);
+        }
+
+        [HttpPost("signin")]
+        public IActionResult SignIn([FromBody] User user) //    email/username & haslo
+        {
+            if (user == null)
+            {
+                return BadRequest("Błedny user");
+            }
+
+            var var = _userService.LogIn(user);
+            if (var == -1) return BadRequest("Puste haslo");
+            else if (var == -2) return BadRequest("Bledny login/email");
+            else if (var == -3) return BadRequest("Zle haslo");
+            else return Ok(jwt.BuildFullUserToken(_userService.GetUserById(var)));
+
+
+        }
+        [HttpPost("delete")]
+        public IActionResult Delete([FromBody] Index index)
+        {
+            _userService.Delete(index.value);
+            return Ok();
+        }
+
+        [HttpPost("uptade")]
+        public IActionResult Uptade(User user)
+        {
+            if (_userService.LoginExist(user.username)) return BadRequest("Login zajety");
+            if (_userService.EmailExist(user.email)) return BadRequest("Email zajety");
+            _userService.Update(user);
+            return Ok(user);
+        }
+
+        [HttpGet("getall")]
+        public List<string> GetAll()
+        {
+            var result = new List<string>();
+            foreach (var var in _userService.GetAll())
+            {
+                if (var.isConfirmed) result.Add(jwt.BuildFullUserToken(var));
+                else result.Add(jwt.BuildUserNotFullToken(var));
+            }
+            return result;
+        }
+
+        [HttpGet("getfull/{userId}")]
         public string GetById(int userId)
         {
             var user =  _userService.GetUserById(userId);
 
-            return jwt.BuildUserToken(user);
+            return jwt.BuildFullUserToken(user);
         }
-        
-        [AllowAnonymous]  //nie wiem co to robi ale ktos tam to mial i chyba potrzebne
-        [HttpGet("confirm/{userId}/{key}")]
-        public string ConfirmEmail(int userId, string key)
+
+        [HttpGet("getnotfull/{userId}")]
+        public string GetByIdNotFull(int userId)
         {
             var user = _userService.GetUserById(userId);
 
-            if (user.ConfirmationCode == key)
-            {
-                user.isConfirmed = true;
-                user.ConfirmationCode = null;
-                _userService.Update(user);
-                return "Ok()";
-            }
-            return "BadRequest()";
+            return jwt.BuildUserNotFullToken(user);
+        }
+
+        
+
+        [AllowAnonymous]  //nie wiem co to robi ale ktos tam to mial i chyba potrzebne
+        [HttpPost("confirm")]
+        public IActionResult ConfirmEmail(User user)
+        {
+            /*
+             * wczesniej wyslany link do frontu zawierajacy id i ConfirmationCode 
+             * front pobiera usera po id
+             * sprawdza ConfirmationCode usera z ConfirmationCode liunku jesli sie zgadza to ok uzytkownik wypelni swoje dane
+             * jesli nei to wyswietlasz zly link czy cos xd
+             * po wykonanym zwraca mi usera do updtae
+             */
+            if (_userService.LoginExist(user.username)) return BadRequest("Login zajety");
+            _userService.Update(user);
+            return Ok(user);
+
         }
 
         [AllowAnonymous]  //nie wiem co to robi ale ktos tam to mial i chyba potrzebne
         [HttpGet("changepwd/{userId}/{key}")]
-        public string ChangePassword(int userId, string key)
+        public IActionResult ChangePassword(int userId, string key)
         {
             var user = _userService.GetUserById(userId);
 
@@ -61,24 +167,32 @@ namespace Piwerko.Api.Controllers
             {
                 user.ConfirmationCode = null;
                 _userService.Update(user);
-                return "Ok()";
+                return Ok(user);
             }
-            return "BadRequest()";
+            return BadRequest();
         }
 
-        [Route("regi")]
-        [HttpPost]
-        public string Register([FromBody] User user)
+        [HttpPost("regi")]
+        public IActionResult Register([FromBody] User user) //email & haslo
         {
             if (user == null)
             {
-                return "BadRequest()";
+                return BadRequest("Bledny user");
             }
 
-            _userService.Register(user);
+            try
+            {
+                _userService.Register(user);
+                return Ok("Wiadomosc wyslano na twojego maila: "+user.email);
+            }
+            catch (AppException ex)
+            {
+                return BadRequest(ex.Message);
+            }
 
-            return "CreatedAtRoute(GetUse, new { id = user.id }, user)";
         }
+
+        
         //private readonly DataContext _context;
 
         //public UserController(DataContext context)
