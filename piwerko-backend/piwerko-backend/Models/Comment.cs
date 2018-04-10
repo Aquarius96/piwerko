@@ -4,9 +4,9 @@
     {
         public long id { get; set; }
         public string content { get; set; }
-        public long userId { get; set; }
-        public long beerId { get; set; }
-        public long breweryId { get; set; }
+        public int userId { get; set; }
+        public int beerId { get; set; }
+        public int breweryId { get; set; }
         public string DateTime { get; set; }
     }
 }
