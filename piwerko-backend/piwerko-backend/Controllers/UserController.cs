@@ -87,6 +87,7 @@ namespace Piwerko.Api.Controllers
             }
 
             var var = _userService.LogIn(user);
+            if (!_userService.GetUserById(Convert.ToInt32(user.id)).isConfirmed) return BadRequest("Uzytkownik nie zostal potwierdzony");
             if (var == -1) return BadRequest("Puste haslo");
             else if (var == -2) return BadRequest("Bledny login/email");
             else if (var == -3) return BadRequest("Zle haslo");
@@ -126,17 +127,17 @@ namespace Piwerko.Api.Controllers
         public string GetById(int userId)
         {
             var user =  _userService.GetUserById(userId);
-
-            return jwt.BuildFullUserToken(user);
+            if (user.isConfirmed) return jwt.BuildFullUserToken(user);
+            else return jwt.BuildUserNotFullToken(user);
         }
 
-        [HttpGet("getnotfull/{userId}")]
-        public string GetByIdNotFull(int userId)
-        {
-            var user = _userService.GetUserById(userId);
+        //[HttpGet("getnotfull/{userId}")]
+        //public string GetByIdNotFull(int userId)
+        //{
+        //    var user = _userService.GetUserById(userId);
 
-            return jwt.BuildUserNotFullToken(user);
-        }
+        //    return jwt.BuildUserNotFullToken(user);
+        //}
 
         
 
@@ -169,7 +170,7 @@ namespace Piwerko.Api.Controllers
                 _userService.Update(user);
                 return Ok(user);
             }
-            return BadRequest();
+            return BadRequest("niepoprawny klucz");
         }
 
         [HttpPost("regi")]
