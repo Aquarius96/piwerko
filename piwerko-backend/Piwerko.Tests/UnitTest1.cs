@@ -56,7 +56,7 @@ namespace Piwerko.Tests
             userRepository.Setup(e => e.GetUserById(It.IsAny<int>())).Returns(registeredUser);
             var userController = new UserController(userService);
             var result = userController.ConfirmEmail(user); // zamieni³em w nawiasie bo visual mi krzyczal ze 2 argumenty to za duzo
-            //Assert.Equal("Ok()", result); <<< wywala siê
+            Assert.IsType<OkObjectResult>(result);
         }
 
 
@@ -64,7 +64,7 @@ namespace Piwerko.Tests
         public void Test4() //getJWT
         {
             var jwt = new JWT();
-            var user = new User { id = 2, username = "marcinXD", password = "zaq", firstname = "zaq", lastname = "zaq", email = "zaq", phone = "zaq", avatar_URL = "zaq", isAdmin = false, isConfirmed = false, };
+            var user = new User { id = 2, username = "marcinXD", password = "zaq", firstname = "zaq", lastname = "zaq", email = "zaq", phone = "zaq", avatar_URL = "zaq", isAdmin = false, isConfirmed = true};
             
             var repo = new Mock<IUserRepository>();
             var service = new UserService(repo.Object);
@@ -78,9 +78,19 @@ namespace Piwerko.Tests
 
         }
         [Fact]
-        public void Test5()
+        public void Test5() //sign in successfully
         {
+            //var loginModel = new User { username = "marcinXD", password = "zaq"};
+            var user = new User { id = 2, username = "marcinXD", password = "zaq", firstname = "zaq", lastname = "zaq", email = "zaq", phone = "zaq", avatar_URL = "zaq", isAdmin = false, isConfirmed = true };
+            var repo = new Mock<IUserRepository>();
+            var service = new UserService(repo.Object);
+            var controller = new UserController(service);
+            repo.Setup(e => e.GetUserByEmail(user.email)).Returns(user);
+            repo.Setup(e => e.GetUser(user.username)).Returns(user);
+            repo.Setup(e => e.GetUserById(Convert.ToInt32(user.id))).Returns(user);
 
+            var result = controller.SignIn(user);
+            Assert.IsType<OkObjectResult>(result);
         }
     }
 }

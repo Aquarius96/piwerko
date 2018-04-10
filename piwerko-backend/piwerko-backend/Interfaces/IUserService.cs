@@ -15,7 +15,5 @@ namespace Piwerko.Api.Interfaces
         bool LoginExist(string username);
         bool ForgotPassword(string email_);
         bool EmailExist(string email);
-
-
     }
 }
