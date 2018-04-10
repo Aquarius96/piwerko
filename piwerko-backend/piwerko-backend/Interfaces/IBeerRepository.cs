@@ -9,7 +9,6 @@ namespace Piwerko.Api.Interfaces
         Beer GetBeerById(int id);
         Beer GetBeerByName(string name);
         IEnumerable<Beer> GetAll();
-        //bool CheckLogin(string username);
         void Add(Beer beer);
         void Save();
 

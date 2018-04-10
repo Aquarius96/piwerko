@@ -48,21 +48,6 @@ namespace Piwerko.Api.Repo
         }
 
 
-
-        /*public bool CheckLogin(string username)
-        {
-            var user = _context.Users.Any(x => x.username == username);
-
-            return user;
-        }
-
-        public bool CheckEmail(string email)
-        {
-            var user = _context.Users.Any(x => x.email == email);
-
-            return user;
-        }*/
-
         public void Add(Beer beer)
         {
             beer.isConfirmed = false;
