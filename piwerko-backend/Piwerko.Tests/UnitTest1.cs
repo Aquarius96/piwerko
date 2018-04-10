@@ -71,7 +71,7 @@ namespace Piwerko.Tests
             var con = new UserController(service);
             repo.Setup(e => e.GetUserById(It.IsAny<int>())).Returns(user);
             var result = con.GetById(2);
-             // marcin popraw to XD
+            // marcin popraw to XD
 
 
             Assert.Equal(jwt.BuildFullUserToken(user), result);

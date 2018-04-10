@@ -88,7 +88,7 @@ namespace Piwerko.Api.Controllers
 
             var var = _userService.LogIn(user);
             if (!_userService.GetUserById(Convert.ToInt32(user.id)).isConfirmed) return BadRequest("Uzytkownik nie zostal potwierdzony");
-            if (var == -1) return BadRequest("Puste haslo");
+            if (var == -1) return BadRequest("Puste haslo"); //moze front bedzie sprawdzal moze nie
             else if (var == -2) return BadRequest("Bledny login/email");
             else if (var == -3) return BadRequest("Zle haslo");
             else return Ok(jwt.BuildFullUserToken(_userService.GetUserById(var)));

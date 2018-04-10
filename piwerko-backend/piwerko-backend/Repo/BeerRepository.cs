@@ -40,9 +40,9 @@ namespace Piwerko.Api.Repo
             return beer;
         }
 
-        public Beer GetBeerByName(string name)
+        public IEnumerable<Beer> GetBeerByName(string name)
         {
-            var beer = _context.Beers.SingleOrDefault(x => x.name == name);
+            var beer = _context.Beers.Where(x => x.name == name); //SingleOrDefault(x => x.name == name);
 
             return beer;
         }

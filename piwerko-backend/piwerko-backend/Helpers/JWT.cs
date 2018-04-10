@@ -42,7 +42,6 @@ namespace Piwerko.Api.Helpers
                 new Claim("password", user.password),
                 new Claim("email", user.email),
                 new Claim("avatar_URL", user.avatar_URL),
-                new Claim("ConfirmationCode", user.ConfirmationCode),
                 new Claim("isAdmin", user.isAdmin.ToString()),
                 new Claim("isConfirmed", user.isConfirmed.ToString()),
 
