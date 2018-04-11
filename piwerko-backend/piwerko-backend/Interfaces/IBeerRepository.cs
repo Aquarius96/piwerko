@@ -7,7 +7,7 @@ namespace Piwerko.Api.Interfaces
     {
         bool Delete(long id);
         Beer GetBeerById(int id);
-        Beer GetBeerByName(string name);
+        IEnumerable<Beer> GetBeerByName(string name);
         IEnumerable<Beer> GetAll();
         void Add(Beer beer);
         void Save();
