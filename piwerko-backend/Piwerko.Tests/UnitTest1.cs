@@ -56,7 +56,7 @@ namespace Piwerko.Tests
             userRepository.Setup(e => e.GetUserById(It.IsAny<int>())).Returns(registeredUser);
             var userController = new UserController(userService);
             var result = userController.ConfirmEmail(user); // zamieni³em w nawiasie bo visual mi krzyczal ze 2 argumenty to za duzo
-            //Assert.Equal("Ok()", result); <<< wywala siê
+           // Assert.Equal("Ok()", result); <<< wywala siê
         }
 
 
