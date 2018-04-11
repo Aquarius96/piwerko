@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Piwerko.Api.Helpers;
 using Piwerko.Api.Interfaces;
 using Piwerko.Api.Models;
 
@@ -19,45 +20,53 @@ namespace Piwerko.Api.Controllers
         {
             _beerService = beerService;
         }
-        //nie mam pojecia co tutaj powinno byc po tym httpget wiec nie tykam tego
-        [HttpGet("get/{userId}")]
-        public IEnumerable<Beer> GetAll()
+        
+        [HttpGet("getall")]
+        public IActionResult GetAll()
         {
-            return _beerService.GetAll();
+            var result = _beerService.GetAll();
+            if (result == null) return BadRequest("Pusta lista");
+            return Ok(result);
         }
 
         [HttpGet("get/{beerId}")]
-        public Beer GetBeerById(int beerId)
+        public IActionResult GetBeerById(int beerId)
         {
-            return _beerService.GetBeerById(beerId);
+            var result = _beerService.GetBeerById(beerId);
+            if (result == null) return BadRequest("Brak piwa o danym id");
+            return Ok(result);
 
         }
 
         [HttpGet("get/{beerName}")]
-        public IEnumerable<Beer> GetBeerByName(string name_)
+        public IActionResult GetBeerByName(string beerName)
         {
-            return _beerService.GetBeerByName(name_);
-
+            var result = _beerService.GetBeerByName(beerName);
+            if (result == null) return BadRequest("Brak piwa o danej nazwie");
+            return Ok(result);
         }
 
-        [HttpGet("get/{beerName}")]
-        public Beer Add(Beer beer)
+        [HttpPost("add")]
+        public IActionResult Add([FromBody] Beer beer)
         {
-            _beerService.Add(beer);
-
-            return beer;
+            var result = _beerService.Add(beer);
+            if (result == null) return BadRequest("blad przy dodawaniu piwa");
+            return Ok(result);
         }
 
-        [HttpGet("get/{beerName}")]
-        public void Update(Beer beer_)
+        [HttpPost("update")]
+        public IActionResult Update([FromBody] Beer beer_)
         {
             _beerService.Update(beer_);
+
+            return Ok(beer_);
         }
 
-        [HttpGet("get/{beerName}")]
-        public bool Delete(int id)
+        [HttpPost("delete")]
+        public IActionResult Delete([FromBody] Index index)
         {
-            return _beerService.Delete(id);
+            if (_beerService.Delete(index.value)) return Ok();
+            return BadRequest("brak piwa o danym id");
         }
     }
 }

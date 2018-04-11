@@ -33,6 +33,8 @@ namespace Piwerko.Api.Services
 
         public Beer Add(Beer beer)
         {
+
+            beer.isConfirmed = false;
             _beerRepository.Add(beer);
             _beerRepository.Save();
 

@@ -36,9 +36,15 @@ namespace Piwerko.Api.Repo
             }
             return true;
         }
-        public IEnumerable<Rate> GetById(int id)
+        public IEnumerable<Rate> GetById(int beerid)
         {
-            var rates = _context.Rates.Where(x => x.beerId == id);
+            var rates = _context.Rates.Where(x => x.beerId == beerid);
+            return rates;
+        }
+
+        public Rate GetRate(int beerid, int userid)
+        {
+            var rates = _context.Rates.Where(x => x.beerId == beerid && x.userId==userid).SingleOrDefault();
             return rates;
         }
     }

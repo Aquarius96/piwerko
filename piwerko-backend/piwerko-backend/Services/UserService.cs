@@ -91,6 +91,11 @@ namespace Piwerko.Api.Services
                 throw new Exception("Email " + user.email + " is already taken");
 
             user.ConfirmationCode = Guid.NewGuid().ToString();
+            user.isAdmin = false;
+            user.isConfirmed = false;
+            user.avatar_URL = "https://i.pinimg.com/originals/f7/61/b3/f761b3ae57801975e0a605e805626279.png";
+
+
             _userRepository.CreateUser(user);
             _userRepository.Save();
 
@@ -99,21 +104,6 @@ namespace Piwerko.Api.Services
             return user;
         }
 
-        public User Create(User user) // sluzy do celow nie wiadomo jakich
-        {
-
-            if (_userRepository.CheckLogin(user.username))
-                throw new Exception("Username " + user.username + " is already taken");
-
-            if (_userRepository.CheckEmail(user.email))
-                throw new Exception("Email " + user.email + " is already taken");
-            
-            _userRepository.CreateUser(user);
-            _userRepository.Save();
-            
-
-            return user;
-        }
 
 
         private bool SendActivationEmail(User user)
@@ -157,23 +147,23 @@ namespace Piwerko.Api.Services
             _userRepository.UpdateUser(user_);
         }
 
-        public int LogIn(User user_)
+        public int LogIn(User LoginModel)
         {
-            if (String.IsNullOrWhiteSpace(user_.password))
+            if (String.IsNullOrWhiteSpace(LoginModel.password))
                 return -1;
 
             User user = null;
 
-            if (String.IsNullOrWhiteSpace(user_.username)) user = _userRepository.GetUserByEmail(user_.email);
-            else user = _userRepository.GetUser(user_.username);
+            if (String.IsNullOrWhiteSpace(LoginModel.username)) user = _userRepository.GetUserByEmail(LoginModel.email);
+            else user = _userRepository.GetUser(LoginModel.username);
             
             if (user == null)
                 return -2;
 
-            if (user.password != user_.password)
+            if (user.password != LoginModel.password)
                 return -3;
 
-            return Convert.ToInt32(user_.id);
+            return Convert.ToInt32(user.id);
         }
 
         public bool Delete(int id)

@@ -24,9 +24,9 @@ namespace Piwerko.Api.Services
         {
             return _rateRepository.Update(value_,beerid,userid);
         }
-        public double GetById(int id)
+        public double GetById(int beerid)
         {
-            var all = _rateRepository.GetById(id).ToList();
+            var all = _rateRepository.GetById(beerid).ToList();
 
             double suma = 0;
 
@@ -38,6 +38,12 @@ namespace Piwerko.Api.Services
             var result = suma / all.Count;
 
             return result;
+        }
+
+        public double Getrate(int beerid, int userid)
+        {
+            var rate = _rateRepository.GetRate(beerid, userid);
+            return rate.value;
         }
     }
 }
