@@ -5,18 +5,11 @@ namespace Piwerko.Api.Interfaces
 {
     public interface IBeerService
     {
-        //to jeszcze jest źle ale widzicie chyba :D
-        int LogIn(User user_);
-        User Register(User user);
-        User GetUserById(int userId);
-        void Update(User user_);
-        IEnumerable<User> GetAll();
-        User Create(User user);
+        IEnumerable<Beer> GetAll();
+        Beer GetBeerById(int beerId);
+        IEnumerable<Beer> GetBeerByName(string name_);
+        Beer Add(Beer beer);
+        void Update(Beer beer_);
         bool Delete(int id);
-        bool LoginExist(string username);
-        bool ForgotPassword(string email_);
-        bool EmailExist(string email);
-
-
     }
 }
