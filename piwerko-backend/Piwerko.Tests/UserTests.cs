@@ -9,7 +9,6 @@ using Piwerko.Api.Controllers;
 using Piwerko.Api.Interfaces;
 using Piwerko.Api.Models;
 using Piwerko.Api.Services;
-using System;
 using Xunit;
 using Piwerko.Api.Repo;
 using Piwerko.Api.Helpers;

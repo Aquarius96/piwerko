@@ -102,7 +102,7 @@ namespace Piwerko.Api.Controllers
             return Ok();
         }
 
-        [HttpPost("uptade")]
+        [HttpPost("update")]
         public IActionResult Uptade(User user)
         {
             if (_userService.LoginExist(user.username)) return BadRequest("Login zajety");
@@ -170,7 +170,7 @@ namespace Piwerko.Api.Controllers
                 _userService.Update(user);
                 return Ok(user);
             }
-            return BadRequest("niepoprawny klucz");
+            return BadRequest("Niepoprawny klucz");
         }
 
         [HttpPost("regi")]

@@ -20,10 +20,10 @@ namespace Piwerko.Api.Controllers
             _rateService = rateService;
         }
 
-        [HttpGet("get/{userId}")] 
-        public double GetAvg(int Id)
+        [HttpGet("get/{beerId}")] 
+        public double GetAvg(int beerId)
         {
-            return _rateService.GetById(Id);
+            return _rateService.GetById(beerId);
         }
 
         [HttpPost("update")]
@@ -38,6 +38,19 @@ namespace Piwerko.Api.Controllers
         {
             if (_rateService.Add(rate.value, rate.beerId, rate.userId)) return Ok(_rateService.GetById(rate.beerId));
             return BadRequest("Blad w polaczeniu");
+        }
+
+        [HttpPost("getrate")]
+        public IActionResult Get([FromBody] Rate rate)
+        {
+            if (_rateService.Add(rate.value, rate.beerId, rate.userId)) return Ok(_rateService.GetById(rate.beerId));
+            return BadRequest("Blad w polaczeniu");
+        }
+
+        [HttpPost("get")]
+        public double GetSinglerate([FromBody] Rate rate)
+        {
+            return _rateService.Getrate(rate.beerId, rate.userId);
         }
     }
 }

@@ -10,7 +10,6 @@ namespace Piwerko.Api.Interfaces
         User GetUserById(int userId);
         void Update(User user_);
         IEnumerable<User> GetAll();
-        User Create(User user);
         bool Delete(int id);
         bool LoginExist(string username);
         bool ForgotPassword(string email_);
