@@ -103,7 +103,7 @@ namespace Piwerko.Api.Controllers
         }
 
         [HttpPost("update")]
-        public IActionResult Uptade(User user)
+        public IActionResult Update(User user)
         {
             if (_userService.LoginExist(user.username)) return BadRequest("Login zajety");
             if (_userService.EmailExist(user.email)) return BadRequest("Email zajety");
