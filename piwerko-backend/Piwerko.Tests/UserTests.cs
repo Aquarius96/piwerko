@@ -16,7 +16,7 @@ using Piwerko.Api.Helpers;
 
 namespace Piwerko.Tests
 {
-    public class UnitTest1
+    public class UserTests
     {
         [Fact]
         public void Test1() //forgot password
@@ -80,17 +80,51 @@ namespace Piwerko.Tests
         [Fact]
         public void Test5() //sign in successfully
         {
-            //var loginModel = new User { username = "marcinXD", password = "zaq"};
+            var loginModel = new User { id = 2, username = "marcinXD", password = "zaq"};
             var user = new User { id = 2, username = "marcinXD", password = "zaq", firstname = "zaq", lastname = "zaq", email = "zaq", phone = "zaq", avatar_URL = "zaq", isAdmin = false, isConfirmed = true };
             var repo = new Mock<IUserRepository>();
             var service = new UserService(repo.Object);
             var controller = new UserController(service);
-            repo.Setup(e => e.GetUserByEmail(user.email)).Returns(user);
-            repo.Setup(e => e.GetUser(user.username)).Returns(user);
-            repo.Setup(e => e.GetUserById(Convert.ToInt32(user.id))).Returns(user);
+            repo.Setup(e => e.GetUserByEmail(loginModel.email)).Returns(user);
+            repo.Setup(e => e.GetUser(loginModel.username)).Returns(user);
+            repo.Setup(e => e.GetUserById(Convert.ToInt32(loginModel.id))).Returns(user);
 
-            var result = controller.SignIn(user);
+            var result = controller.SignIn(loginModel);
             Assert.IsType<OkObjectResult>(result);
+        }
+
+        [Fact]
+        public void Test6() //sign with with wrong password
+        {
+            var loginModel = new User { id = 2, username = "marcinXD", password = "zaqWSX" };
+            var user = new User { id = 2, username = "marcinXD", password = "zaq", firstname = "zaq", lastname = "zaq", email = "zaq", phone = "zaq", avatar_URL = "zaq", isAdmin = false, isConfirmed = true };
+            var repo = new Mock<IUserRepository>();
+            var service = new UserService(repo.Object);
+            var controller = new UserController(service);
+            repo.Setup(e => e.GetUserByEmail(loginModel.email)).Returns(user);
+            repo.Setup(e => e.GetUser(loginModel.username)).Returns(user);
+            repo.Setup(e => e.GetUserById(Convert.ToInt32(loginModel.id))).Returns(user);
+
+            var result = controller.SignIn(loginModel);
+            var badRequest = Assert.IsType<BadRequestObjectResult>(result);
+            Assert.Equal("Zle haslo",badRequest.Value);
+        }
+
+        [Fact]
+        public void Test7() //sign with with wrong email/username
+        {
+            var loginModel = new User { id = 2, username = "badlogin", password = "zaq" };
+            var user = new User { id = 2, username = "marcinXD", password = "zaq", firstname = "zaq", lastname = "zaq", email = "zaq", phone = "zaq", avatar_URL = "zaq", isAdmin = false, isConfirmed = true };
+            var repo = new Mock<IUserRepository>();
+            var service = new UserService(repo.Object);
+            var controller = new UserController(service);
+            repo.Setup(e => e.GetUserByEmail(loginModel.email)).Returns((User)null);
+            repo.Setup(e => e.GetUser(loginModel.username)).Returns((User)null);
+            repo.Setup(e => e.GetUserById(Convert.ToInt32(loginModel.id))).Returns(user);
+
+            var result = controller.SignIn(loginModel);
+            var badRequest = Assert.IsType<BadRequestObjectResult>(result);
+            Assert.Equal("Bledny login/email", badRequest.Value);
         }
     }
 }

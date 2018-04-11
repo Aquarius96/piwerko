@@ -173,7 +173,7 @@ namespace Piwerko.Api.Services
             if (user.password != user_.password)
                 return -3;
 
-            return Convert.ToInt32(user_.id);
+            return Convert.ToInt32(user.id);
         }
 
         public bool Delete(int id)
