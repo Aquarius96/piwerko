@@ -24,11 +24,6 @@ namespace Piwerko.Api.Controllers
             jwt = new JWT();
         }
 
-        [HttpGet("delA/{userId}")] //tymczasowe usuwanie dla testow
-        public bool delbyadmin(int userId)
-        {
-            return _userService.Delete(userId);
-        }
 
         [AllowAnonymous]  //tymmczasowe sprawdzenia dla testow poki nie ma frontu
         [HttpGet("confirm/{userId}/{key}")]
@@ -62,7 +57,7 @@ namespace Piwerko.Api.Controllers
 
 
         [HttpGet("forgotpwd/{email}")]
-        public IActionResult SendForgotPassword(string email)
+        public IActionResult SendForgotPassword(string email) //do dorobienia 
         {
             var result = _userService.ForgotPassword(email);
 
@@ -71,7 +66,7 @@ namespace Piwerko.Api.Controllers
         }
 
         [HttpPost("code")]
-        public IActionResult GetConfirmationCodeById([FromBody]JObject data)
+        public IActionResult GetConfirmationCodeById([FromBody]JObject data) //id
         {
             int index = data["id"].ToObject<Int32>();
             var user = _userService.GetUserById(index);
@@ -81,13 +76,8 @@ namespace Piwerko.Api.Controllers
         }
 
         [HttpPost("signin")]
-        public IActionResult SignIn([FromBody] User user) //    email/username & haslo
+        public IActionResult SignIn([FromBody] User user) // email/username & haslo
         {
-            if (user == null)
-            {
-                return BadRequest("Błedny user");
-            }
-
             var var = _userService.LogIn(user);
             if (!_userService.GetUserById(Convert.ToInt32(user.id)).isConfirmed) return BadRequest("Uzytkownik nie zostal potwierdzony");
             if (var == -1) return BadRequest("Puste haslo"); //moze front bedzie sprawdzal moze nie
@@ -98,10 +88,26 @@ namespace Piwerko.Api.Controllers
 
         }
         [HttpPost("delete")]
-        public IActionResult Delete([FromBody]JObject data) //loggeduser - id - isAdmin && toremove - id
+        public IActionResult Delete([FromBody]JObject data) //loggeduser -> id & isAdmin && toremove -> id
         {
             User logged = data["loggedData"].ToObject<User>();
             User toremove = data["toremoveData"].ToObject<User>();
+
+        /*
+        {
+	        "loggedData" :
+	        {
+		        "id" : 5,
+		        "isAdmin" : false
+	        },
+	        "toremoveData" : 
+	        {
+		        "id" : 5
+		
+	        }
+        } 
+        */
+
             if (logged.isAdmin)
             {
                 _userService.Delete(Convert.ToInt32(toremove.id));
@@ -146,15 +152,6 @@ namespace Piwerko.Api.Controllers
             if (user.isConfirmed) return jwt.BuildFullUserToken(user);
             else return jwt.BuildUserNotFullToken(user);
         }
-
-        //[HttpGet("getnotfull/{userId}")]
-        //public string GetByIdNotFull(int userId)
-        //{
-        //    var user = _userService.GetUserById(userId);
-
-        //    return jwt.BuildUserNotFullToken(user);
-        //}
-
         
 
         [AllowAnonymous]  //nie wiem co to robi ale ktos tam to mial i chyba potrzebne
@@ -174,7 +171,7 @@ namespace Piwerko.Api.Controllers
 
         }
 
-        [AllowAnonymous]  //nie wiem co to robi ale ktos tam to mial i chyba potrzebne
+        [AllowAnonymous]
         [HttpGet("changepwd/{userId}/{key}")]
         public IActionResult ChangePassword(int userId, string key)
         {
@@ -192,11 +189,6 @@ namespace Piwerko.Api.Controllers
         [HttpPost("regi")]
         public IActionResult Register([FromBody] User user) //email & haslo
         {
-            if (user == null)
-            {
-                return BadRequest("Bledny user");
-            }
-
             try
             {
                 _userService.Register(user);
@@ -208,263 +200,5 @@ namespace Piwerko.Api.Controllers
             }
 
         }
-
-        
-        //private readonly DataContext _context;
-
-        //public UserController(DataContext context)
-        //{
-        //    _context = context;
-
-        //    if (_context.Users.Count() == 0)
-        //    {
-        //        _context.Users.Add(new User { username = "Admin",isAdmin=true,isConfirmed=true,password="zaqwsx" });
-        //        _context.SaveChanges();
-        //    }
-        //}
-
-        //[HttpGet]
-        //public IEnumerable<User> GetAll()
-        //{
-        //    return _context.Users.ToList();
-        //}
-
-        //[HttpGet("{id}", Name = "GetId")]
-        //public IActionResult GetById(long id)
-        //{
-        //    var item = _context.Users.FirstOrDefault(x => x.id == id);
-        //    if (item == null)
-        //    {
-        //        return NotFound();
-        //    }
-        //    return new ObjectResult(item);
-        //}
-
-        //[HttpPost]
-        //public IActionResult Create([FromBody] User user)
-        //{
-        //    if (user == null)
-        //    {
-        //        return BadRequest();
-        //    }
-
-        //    _context.Users.Add(user);
-        //    _context.SaveChanges();
-
-        //    return CreatedAtRoute("GetUser", new { id = user.id }, user);
-        //}
-
-        //[HttpPut("{id}")]
-        //public IActionResult Update(long id, [FromBody] User user)
-        //{
-        //    if (user == null || user.id != id)
-        //    {
-        //        return BadRequest();
-        //    }
-
-        //    var updated = _context.Users.FirstOrDefault(t => t.id == id);
-        //    if (updated == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    updated = user;
-
-        //    _context.Users.Update(updated);
-        //    _context.SaveChanges();
-        //    return new NoContentResult();
-        //}
-
-        //[HttpDelete("{id}")]
-        //public IActionResult Delete(long id)
-        //{
-        //    var user = _context.Users.FirstOrDefault(t => t.id == id);
-        //    if (user == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    _context.Users.Remove(user);
-        //    _context.SaveChanges();
-        //    return new NoContentResult();
-        //}
-
-        //// GET: api/User
-        //[HttpGet]
-        //public IEnumerable<string> Get()
-        //{
-        //    return new string[] { "value1", "value2" };
-        //}
-
-        //// GET: api/User/5
-        //[HttpGet("{id}", Name = "Get")]
-        //public string Get(int id)
-        //{
-        //    return "value";
-        //}
-
-        //// POST: api/User
-        //[HttpPost]
-        //public void Post([FromBody]string value)
-        //{
-        //}
-
-        //// PUT: api/User/5
-        //[HttpPut("{id}")]
-        //public void Put(int id, [FromBody]string value)
-        //{
-        //}
-
-        //// DELETE: api/ApiWithActions/5
-        //[HttpDelete("{id}")]
-        //public void Delete(int id)
-        //{
-        //}
-
-
-
     }
 }
-//using System;
-//using System.Collections.Generic;
-//using System.IdentityModel.Tokens.Jwt;
-//using System.Linq;
-//using System.Security.Claims;
-//using System.Text;
-//using System.Threading.Tasks;
-//using Microsoft.AspNetCore.Http;
-//using Microsoft.AspNetCore.Mvc;
-//using Microsoft.Extensions.Configuration;
-//using Microsoft.IdentityModel.Tokens;
-//using Piwerko.Api.Models;
-//using Piwerko.Api.Repo;
-
-//namespace Piwerko.Api.Controllers
-//{
-//    [Produces("application/json")]
-//    [Route("api/User")]
-//    public class UserController : Controller
-//    {
-
-//        private readonly DataContext _context;
-//        private JWT jwt = new JWT();
-
-//        public UserController(DataContext context)
-//        {
-//            _context = context;
-
-//            if (_context.Users.Count() == 0)
-//            {
-//                _context.Users.Add(new User { username = "Admin", isAdmin = true, isConfirmed = true, password = "zaqwsx" });
-//                _context.SaveChanges();
-//            }
-//        }
-
-//        [HttpGet]
-//        public string[] GetAll()
-//        {
-//            List<string> result = new List<string>();
-//            var list = _context.Users.ToList();
-//            foreach (var var in list)
-//            {
-//                result.Add(jwt.BuildUserToken(var));
-//            }
-//            return result.ToArray();
-//        }
-
-//        [HttpGet("{id}", Name = "GetId")]
-//        public string GetById(long id)
-//        {
-//            var user = _context.Users.FirstOrDefault(x => x.id == id);
-//            if (user == null)
-//            {
-//                return "NotFound()";
-//            }
-//            return jwt.BuildUserToken(user);
-//        }
-
-//        [HttpPost]
-//        public string Create([FromBody] User user)
-//        {
-//            if (user == null)
-//            {
-//                return "BadRequest()";
-//            }
-
-//            _context.Users.Add(user);
-//            _context.SaveChanges();
-
-//            return jwt.BuildUserToken(user);
-//        }
-
-//        [HttpPut("{id}")]
-//        public string Update(long id, [FromBody] User user)
-//        {
-//            if (user == null || user.id != id)
-//            {
-//                return "BadRequest()";
-//            }
-
-//            var updated = _context.Users.FirstOrDefault(t => t.id == id);
-//            if (updated == null)
-//            {
-//                return "NotFound()";
-//            }
-
-//            updated = user;
-
-//            _context.Users.Update(updated);
-//            _context.SaveChanges();
-//            return jwt.BuildUserToken(updated);
-//        }
-
-//        [HttpDelete("{id}")]
-//        public string Delete(long id)
-//        {
-//            var user = _context.Users.FirstOrDefault(t => t.id == id);
-//            if (user == null)
-//            {
-//                return "NotFound()";
-//            }
-
-//            _context.Users.Remove(user);
-//            _context.SaveChanges();
-//            return "Successful()";
-//        }
-
-//        //// GET: api/User
-//        //[HttpGet]
-//        //public IEnumerable<string> Get()
-//        //{
-//        //    return new string[] { "value1", "value2" };
-//        //}
-
-//        //// GET: api/User/5
-//        //[HttpGet("{id}", Name = "Get")]
-//        //public string Get(int id)
-//        //{
-//        //    return "value";
-//        //}
-
-//        //// POST: api/User
-//        //[HttpPost]
-//        //public void Post([FromBody]string value)
-//        //{
-//        //}
-
-//        //// PUT: api/User/5
-//        //[HttpPut("{id}")]
-//        //public void Put(int id, [FromBody]string value)
-//        //{
-//        //}
-
-//        //// DELETE: api/ApiWithActions/5
-//        //[HttpDelete("{id}")]
-//        //public void Delete(int id)
-//        //{
-//        //}
-
-
-
-//    }
-//}

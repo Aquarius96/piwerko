@@ -25,6 +25,8 @@ namespace Piwerko.Api
             
             services.AddDbContext<DataContext>(options => options.UseSqlServer(Configuration["ConnectionStrings:Default"]));
             services.AddSingleton<IConfiguration>(Configuration);
+
+
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IBeerRepository, BeerRepository>();

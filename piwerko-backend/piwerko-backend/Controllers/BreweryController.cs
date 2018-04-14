@@ -23,10 +23,10 @@ namespace Piwerko.Api.Controllers
             _breweryService = breweryService;
         }
         
-        [HttpGet("getall")]
-        public IActionResult GetAll()
+        [HttpGet("get/confirmed")]
+        public IActionResult GetBreweryConfirmed()
         {
-            var result = _breweryService.GetAll();
+            var result = _breweryService.GetAll(); // do poprawy - wszystkie potwierdzone ma walic
             if (result == null) return BadRequest("Pusta lista");
             return Ok(result);
         }
@@ -65,9 +65,14 @@ namespace Piwerko.Api.Controllers
         }
 
         [HttpPost("addbyadmin")]
-        public IActionResult AddByAdmin([FromBody] Brewery brewery)
+        public IActionResult AddByAdmin([FromBody]JObject data)
         {
-            var result = _breweryService.AddByAdmin(brewery);
+            User user = data["userData"].ToObject<User>();
+            Brewery brewery = data["brewerData"].ToObject<Brewery>();
+
+            if (!user.isAdmin) return BadRequest("nie jestes adminem ");
+            brewery.isConfirmed = true;
+            var result = _breweryService.Add(brewery); // marcin przerob - usun add by admin i w browarach tez
             if (result == null) return BadRequest("blad przy dodawaniu browaru");
             return Ok(result);
         }

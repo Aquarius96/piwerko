@@ -40,13 +40,6 @@ namespace Piwerko.Api.Controllers
             return BadRequest("Blad w polaczeniu");
         }
 
-        [HttpPost("getrate")]
-        public IActionResult Get([FromBody] Rate rate)
-        {
-            if (_rateService.Add(rate.value, rate.beerId, rate.userId)) return Ok(_rateService.GetById(rate.beerId));
-            return BadRequest("Blad w polaczeniu");
-        }
-
         [HttpPost("get")]
         public double GetSinglerate([FromBody] Rate rate)
         {
