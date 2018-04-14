@@ -28,7 +28,7 @@ namespace Piwerko.Api
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IBeerRepository, BeerRepository>();
-            // beerservice
+            services.AddScoped<IBeerService, BeerService>();
             //services.AddScoped<IRateRepository, RateRepository>();
             services.AddMvc();
         }

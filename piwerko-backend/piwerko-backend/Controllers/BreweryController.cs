@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json.Linq;
 using Piwerko.Api.Helpers;
 using Piwerko.Api.Interfaces;
 using Piwerko.Api.Models;
@@ -90,9 +91,10 @@ namespace Piwerko.Api.Controllers
         }
 
         [HttpPost("delete")]
-        public IActionResult Delete([FromBody] Index index)
+        public IActionResult Delete([FromBody]JObject data)
         {
-            if (_breweryService.Delete(index.value)) return Ok();
+            int index = data["id"].ToObject<Int32>();
+            if (_breweryService.Delete(index)) return Ok();
             return BadRequest("brak browaru o danym id");
         }
     }

@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json.Linq;
 using Piwerko.Api.Helpers;
 using Piwerko.Api.Interfaces;
 using Piwerko.Api.Models;
@@ -64,8 +65,31 @@ namespace Piwerko.Api.Controllers
         }
 
         [HttpPost("addbyadmin")]
-        public IActionResult AddByAdmin([FromBody] Beer beer)
+        public IActionResult AddByAdmin([FromBody]JObject data)
+        /*
         {
+	        "userData" :
+	        {
+		        "isAdmin" : true
+	        },
+	        "beerData" : 
+	        {
+		        "name" : "harnas",
+		        "alcohol" : 3,
+		        "ibu" : 2,
+		        "breweryId" : 3,
+		        "servingTemp" : 4,
+		        "type" : "gownowarte",
+		        "description" : "dla biedakow"
+		
+	        }
+        }
+        */
+        {
+            User user = data["userData"].ToObject<User>();
+            Beer beer = data["beerData"].ToObject<Beer>();
+
+            if (!user.isAdmin) return BadRequest("Podany user nie jest adminem");
             var result = _beerService.AddByAdmin(beer);
             if (result == null) return BadRequest("blad przy dodawaniu piwa");
             return Ok(result);
@@ -90,9 +114,10 @@ namespace Piwerko.Api.Controllers
         }
 
         [HttpPost("delete")]
-        public IActionResult Delete([FromBody] Index index)
+        public IActionResult Delete([FromBody]JObject data)
         {
-            if (_beerService.Delete(index.value)) return Ok();
+            int index = data["id"].ToObject<Int32>();
+            if (_beerService.Delete(index)) return Ok();
             return BadRequest("brak piwa o danym id");
         }
     }

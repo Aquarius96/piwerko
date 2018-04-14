@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json.Linq;
 using Piwerko.Api.Dto;
 using Piwerko.Api.Helpers;
 using Piwerko.Api.Interfaces;
@@ -70,9 +71,10 @@ namespace Piwerko.Api.Controllers
         }
 
         [HttpPost("code")]
-        public IActionResult GetConfirmationCodeById([FromBody] Index index)
+        public IActionResult GetConfirmationCodeById([FromBody]JObject data)
         {
-            var user = _userService.GetUserById(index.value);
+            int index = data["id"].ToObject<Int32>();
+            var user = _userService.GetUserById(index);
 
             if (user == null) return BadRequest("Brak usera o danym id");
             return Ok(user.ConfirmationCode);
@@ -96,10 +98,24 @@ namespace Piwerko.Api.Controllers
 
         }
         [HttpPost("delete")]
-        public IActionResult Delete([FromBody] Index index)
+        public IActionResult Delete([FromBody]JObject data) //loggeduser - id - isAdmin && toremove - id
         {
-            _userService.Delete(index.value);
-            return Ok();
+            User logged = data["loggedData"].ToObject<User>();
+            User toremove = data["toremoveData"].ToObject<User>();
+            if (logged.isAdmin)
+            {
+                _userService.Delete(Convert.ToInt32(toremove.id));
+                return Ok("Admin usunal");
+            }
+            else
+            {
+                if (logged.id == toremove.id)
+                {
+                    _userService.Delete(Convert.ToInt32(toremove.id));
+                    return Ok("Sam sie usuanles :)");
+                }
+            }
+            return BadRequest("Ups cos poszlo nie tak");
         }
 
         [HttpPost("update")]
