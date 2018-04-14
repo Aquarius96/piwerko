@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Piwerko.Api.Helpers;
@@ -46,12 +47,38 @@ namespace Piwerko.Api.Controllers
             return Ok(result);
         }
 
+        [HttpGet("get/unconfirmed")]
+        public IActionResult GetBeerUnconfirmed()
+        {
+            var result = _beerService.GetBeerUnconfirmed();
+            if (result == null) return BadRequest("Brak niepotwierdzonych piw");
+            return Ok(result);
+        }
+
         [HttpPost("add")]
         public IActionResult Add([FromBody] Beer beer)
         {
             var result = _beerService.Add(beer);
             if (result == null) return BadRequest("blad przy dodawaniu piwa");
             return Ok(result);
+        }
+
+        [HttpPost("addbyadmin")]
+        public IActionResult AddByAdmin([FromBody] Beer beer)
+        {
+            var result = _beerService.AddByAdmin(beer);
+            if (result == null) return BadRequest("blad przy dodawaniu piwa");
+            return Ok(result);
+        }
+
+        [AllowAnonymous]
+        [HttpGet("confirm/{beerId}")]
+        public IActionResult Confirm(int beerId)
+        {
+            var beer = _beerService.GetBeerById(beerId);
+            beer.isConfirmed = true;
+            _beerService.Update(beer);
+            return Ok(beer);
         }
 
         [HttpPost("update")]

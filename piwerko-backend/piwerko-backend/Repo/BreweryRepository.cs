@@ -47,6 +47,13 @@ namespace Piwerko.Api.Repo
             return brewery;
         }
 
+        public IEnumerable<Brewery> GetBreweryUnconfirmed()
+        {
+            var brewery = _context.Breweries.Where(x => x.isConfirmed == false); //SingleOrDefault(x => x.name == name);
+
+            return brewery;
+        }
+
 
         public void Add(Brewery brewery)
         {
