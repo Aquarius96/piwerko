@@ -41,15 +41,7 @@ namespace Piwerko.Api.Services
 
         public Brewery Add(Brewery brewery)
         {
-            brewery.isConfirmed = false;
-            _breweryRepository.Add(brewery);
-            _breweryRepository.Save();
-
-            return brewery;
-        }
-        public Brewery AddByAdmin(Brewery brewery)
-        {
-            brewery.isConfirmed = true;
+            
             _breweryRepository.Add(brewery);
             _breweryRepository.Save();
 

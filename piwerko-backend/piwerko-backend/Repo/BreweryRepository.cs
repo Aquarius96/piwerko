@@ -30,7 +30,8 @@ namespace Piwerko.Api.Repo
 
         public IEnumerable<Brewery> GetAll()
         {
-            return _context.Breweries.ToList();
+            var brewery = _context.Breweries.Where(x => x.isConfirmed == true);
+            return brewery;
         }
 
         public Brewery GetBreweryById(int id)

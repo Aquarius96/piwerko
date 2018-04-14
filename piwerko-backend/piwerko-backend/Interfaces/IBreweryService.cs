@@ -10,7 +10,6 @@ namespace Piwerko.Api.Interfaces
         IEnumerable<Brewery> GetBreweryByName(string name_);
         IEnumerable<Brewery> GetBreweryUnconfirmed();
         Brewery Add(Brewery brewery);
-        Brewery AddByAdmin(Brewery brewery);
         void Update(Brewery brewery_);
         bool Delete(int id);
     }

@@ -23,7 +23,7 @@ namespace Piwerko.Api.Controllers
             _beerService = beerService;
         }
         
-        [HttpGet("getall")]
+        [HttpGet("get/confirmed")]
         public IActionResult GetAll()
         {
             var result = _beerService.GetAll();
@@ -59,6 +59,7 @@ namespace Piwerko.Api.Controllers
         [HttpPost("add")]
         public IActionResult Add([FromBody] Beer beer)
         {
+            beer.isConfirmed = false;
             var result = _beerService.Add(beer);
             if (result == null) return BadRequest("blad przy dodawaniu piwa");
             return Ok(result);
@@ -91,6 +92,7 @@ namespace Piwerko.Api.Controllers
 
             if (!user.isAdmin) return BadRequest("Podany user nie jest adminem");
             var result = _beerService.AddByAdmin(beer);
+            beer.isConfirmed = true;
             if (result == null) return BadRequest("blad przy dodawaniu piwa");
             return Ok(result);
         }

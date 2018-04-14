@@ -26,7 +26,7 @@ namespace Piwerko.Api.Controllers
         [HttpGet("get/confirmed")]
         public IActionResult GetBreweryConfirmed()
         {
-            var result = _breweryService.GetAll(); // do poprawy - wszystkie potwierdzone ma walic
+            var result = _breweryService.GetAll();
             if (result == null) return BadRequest("Pusta lista");
             return Ok(result);
         }
@@ -59,6 +59,7 @@ namespace Piwerko.Api.Controllers
         [HttpPost("add")]
         public IActionResult Add([FromBody] Brewery brewery)
         {
+            brewery.isConfirmed = false;
             var result = _breweryService.Add(brewery);
             if (result == null) return BadRequest("blad przy dodawaniu browaru");
             return Ok(result);
