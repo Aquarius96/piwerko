@@ -12,6 +12,7 @@ using Piwerko.Api.Services;
 using Xunit;
 using Piwerko.Api.Repo;
 using Piwerko.Api.Helpers;
+using System.Data.Entity;
 
 namespace Piwerko.Tests
 {
@@ -124,6 +125,34 @@ namespace Piwerko.Tests
             var result = controller.SignIn(loginModel);
             var badRequest = Assert.IsType<BadRequestObjectResult>(result);
             Assert.Equal("Bledny login/email", badRequest.Value);
+        }
+
+        [Fact]
+        public void Test8() //sign in with user not confirmed
+        {
+            var loginModel = new User { id = 2, username = "marcinXD", password = "zaq" };
+            var user = new User { id = 2, username = "marcinXD", password = "zaq", firstname = "zaq", lastname = "zaq", email = "zaq", phone = "zaq", avatar_URL = "zaq", isAdmin = false, isConfirmed = false };
+            var repo = new Mock<IUserRepository>();
+            var service = new UserService(repo.Object);
+            var controller = new UserController(service);
+            repo.Setup(e => e.GetUserByEmail(loginModel.email)).Returns(user);
+            repo.Setup(e => e.GetUser(loginModel.username)).Returns(user);
+            repo.Setup(e => e.GetUserById(Convert.ToInt32(loginModel.id))).Returns(user);
+
+            var result = controller.SignIn(loginModel);
+            var badRequest = Assert.IsType<BadRequestObjectResult>(result);
+            Assert.Equal("Uzytkownik nie zostal potwierdzony", badRequest.Value);
+        }
+
+        [Fact]
+        public void Test9()
+        {
+            
+            var context = new Mock<DataContext>();
+            var repo = new UserRepository(context.Object);
+            var service = new UserService(repo);
+            var controller = new UserController(service);
+
         }
     }
 }
