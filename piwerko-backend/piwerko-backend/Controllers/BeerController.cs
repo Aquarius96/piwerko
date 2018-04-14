@@ -31,7 +31,7 @@ namespace Piwerko.Api.Controllers
             return Ok(result);
         }
 
-        [HttpGet("get/{beerId}")]
+        [HttpGet("getbyid/{beerId}")]
         public IActionResult GetBeerById(int beerId)
         {
             var result = _beerService.GetBeerById(beerId);
@@ -40,7 +40,7 @@ namespace Piwerko.Api.Controllers
 
         }
 
-        [HttpGet("get/{beerName}")]
+        [HttpGet("getbyname/{beerName}")]
         public IActionResult GetBeerByName(string beerName)
         {
             var result = _beerService.GetBeerByName(beerName);
@@ -91,8 +91,8 @@ namespace Piwerko.Api.Controllers
             Beer beer = data["beerData"].ToObject<Beer>();
 
             if (!user.isAdmin) return BadRequest("Podany user nie jest adminem");
-            var result = _beerService.AddByAdmin(beer);
             beer.isConfirmed = true;
+            var result = _beerService.Add(beer);
             if (result == null) return BadRequest("blad przy dodawaniu piwa");
             return Ok(result);
         }
@@ -119,7 +119,7 @@ namespace Piwerko.Api.Controllers
         public IActionResult Delete([FromBody]JObject data)
         {
             int index = data["id"].ToObject<Int32>();
-            if (_beerService.Delete(index)) return Ok();
+            if (_beerService.Delete(index)) return Ok("Pomyslnie usunieto.");
             return BadRequest("brak piwa o danym id");
         }
     }

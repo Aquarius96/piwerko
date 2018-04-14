@@ -58,7 +58,6 @@ namespace Piwerko.Api.Repo
 
         public void Add(Brewery brewery)
         {
-            brewery.isConfirmed = false;
             _context.Breweries.Add(brewery);
         }
 

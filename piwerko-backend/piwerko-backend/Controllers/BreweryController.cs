@@ -31,7 +31,7 @@ namespace Piwerko.Api.Controllers
             return Ok(result);
         }
 
-        [HttpGet("get/{breweryId}")]
+        [HttpGet("getbyid/{breweryId}")]
         public IActionResult GetBreweryById(int breweryId)
         {
             var result = _breweryService.GetBreweryById(breweryId);
@@ -40,7 +40,7 @@ namespace Piwerko.Api.Controllers
 
         }
 
-        [HttpGet("get/{breweryName}")]
+        [HttpGet("getbyname/{breweryName}")]
         public IActionResult GetBreweryByName(string breweryName)
         {
             var result = _breweryService.GetBreweryByName(breweryName);
@@ -69,7 +69,7 @@ namespace Piwerko.Api.Controllers
         public IActionResult AddByAdmin([FromBody]JObject data)
         {
             User user = data["userData"].ToObject<User>();
-            Brewery brewery = data["brewerData"].ToObject<Brewery>();
+            Brewery brewery = data["breweryData"].ToObject<Brewery>();
 
             if (!user.isAdmin) return BadRequest("nie jestes adminem ");
             brewery.isConfirmed = true;

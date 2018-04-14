@@ -9,7 +9,6 @@ namespace Piwerko.Api.Interfaces
         Beer GetBeerById(int beerId);
         IEnumerable<Beer> GetBeerByName(string name_);
         IEnumerable<Beer> GetBeerUnconfirmed();
-        Beer AddByAdmin(Beer beer);
         Beer Add(Beer beer);
         void Update(Beer beer_);
         bool Delete(int id);
