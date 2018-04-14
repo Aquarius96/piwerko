@@ -20,19 +20,36 @@ namespace Piwerko.Api.Services
         {
             return _breweryRepository.GetAll();
         }
+
         public Brewery GetBreweryById(int breweryId)
         {
             return _breweryRepository.GetBreweryById(breweryId);
             
         }
+
         public IEnumerable<Brewery> GetBreweryByName(string name_)
         {
             return _breweryRepository.GetBreweryByName(name_);
 
         }
 
+        public IEnumerable<Brewery> GetBreweryUnconfirmed()
+        {
+            return _breweryRepository.GetBreweryUnconfirmed();
+
+        }
+
         public Brewery Add(Brewery brewery)
         {
+            brewery.isConfirmed = false;
+            _breweryRepository.Add(brewery);
+            _breweryRepository.Save();
+
+            return brewery;
+        }
+        public Brewery AddByAdmin(Brewery brewery)
+        {
+            brewery.isConfirmed = true;
             _breweryRepository.Add(brewery);
             _breweryRepository.Save();
 

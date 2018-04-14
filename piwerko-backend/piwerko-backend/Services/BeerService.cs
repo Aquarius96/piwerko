@@ -20,14 +20,22 @@ namespace Piwerko.Api.Services
         {
             return _beerRepository.GetAll();
         }
+
         public Beer GetBeerById(int beerId)
         {
             return _beerRepository.GetBeerById(beerId);
             
         }
+
         public IEnumerable<Beer> GetBeerByName(string name_)
         {
             return _beerRepository.GetBeerByName(name_);
+
+        }
+
+        public IEnumerable<Beer> GetBeerUnconfirmed()
+        {
+            return _beerRepository.GetBeerUnconfirmed();
 
         }
 
@@ -35,6 +43,16 @@ namespace Piwerko.Api.Services
         {
 
             beer.isConfirmed = false;
+            _beerRepository.Add(beer);
+            _beerRepository.Save();
+
+            return beer;
+        }
+
+        public Beer AddByAdmin(Beer beer)
+        {
+
+            beer.isConfirmed = true;
             _beerRepository.Add(beer);
             _beerRepository.Save();
 
