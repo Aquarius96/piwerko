@@ -108,6 +108,7 @@ namespace Piwerko.Api.Services
 
         private bool SendActivationEmail(User user)
         {
+            var callbackUrl = "http://localhost:8080/api/User/confirm/" + user.id + "/" + user.ConfirmationCode;
             try
             {
 
@@ -128,8 +129,8 @@ namespace Piwerko.Api.Services
 
                     message.To.Add(new MailAddress(user.email));
                     message.From = new MailAddress("piwerkobuissnes@gmail.com");
-                    message.Subject = "Link aktywacyjny";   //obecnei rzucam do tylu pozniej mozna bd przerobic na front
-                    message.Body = "http://localhost:8080/api/User/confirm/" + user.id + "/" + user.ConfirmationCode + "<br />Link aktywacyjny<br />Klucz : " + user.ConfirmationCode + "<br />UserId : " + user.id;
+                    message.Subject = "Witamy w Piwerku!";
+                    message.Body = "W celu zakonczenia procesu rejestracji prosimy o potwierdzenie maila klikajac w ten link: <a href=\"" + callbackUrl + "\">Link aktywacyjny</a> <br> Klucz : " + user.ConfirmationCode + "<br />UserId : " + user.id; 
                     message.IsBodyHtml = true;
 
                     client.Send(message);
