@@ -15,6 +15,7 @@ namespace Piwerko.Api.Repo
         public DbSet<Beer> Beers { get; set; }
         public DbSet<Brewery> Breweries { get; set; }
         public DbSet<Rate> Rates { get; set; }
+        public DbSet<Comment> Comments { get; set; }
 
     }
 }

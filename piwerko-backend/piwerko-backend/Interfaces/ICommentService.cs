@@ -1,11 +1,16 @@
-﻿using System;
+﻿using Piwerko.Api.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace Piwerko.Api.Interfaces
 {
-    interface ICommentService
+    public interface ICommentService
     {
+        Comment Add(Comment comment);
+        Comment Update(Comment comment);
+        IEnumerable<Comment> GetByBeerId(int beerid);
+        bool Delete(int id);
     }
 }

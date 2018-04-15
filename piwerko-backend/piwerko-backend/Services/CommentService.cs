@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Piwerko.Api.Services
 {
-    public class CommentService
+    public class CommentService : ICommentService
     {
         private readonly ICommentRepository _commentRepository;
 
@@ -19,6 +19,7 @@ namespace Piwerko.Api.Services
         public Comment Add(Comment comment)
         {
             _commentRepository.Add(comment);
+            _commentRepository.Save();
             return comment;
         }
         public Comment Update(Comment comment)
@@ -26,27 +27,15 @@ namespace Piwerko.Api.Services
             _commentRepository.Update(comment);
             return comment;
         }
-        public Comment GetByBeerId(int beerid)
+        public IEnumerable<Comment> GetByBeerId(int beerid)
         {
-            var all = _commentRepository.GetByBeerId(beerid).ToList();
-
-            double suma = 0;
-
-            foreach (var var in all)
-            {
-                suma += var.value;
-            }
-
-            var result = suma / all.Count;
-
-            return result;
+            return _commentRepository.GetByBeerId(beerid).ToList();
         }
 
-        public double Getrate(int beerid, int userid)
+        public bool Delete(int id)
         {
-            var rate = _commentRepository.GetRate(beerid, userid);
-            return rate.value;
+            return _commentRepository.Delete(id);
         }
     }
 }
-}
+

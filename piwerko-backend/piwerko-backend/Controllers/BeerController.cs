@@ -66,7 +66,7 @@ namespace Piwerko.Api.Controllers
         }
 
         [HttpPost("addbyadmin")]
-        public IActionResult AddByAdmin([FromBody]JObject data)
+        public IActionResult AddByAdmin([FromBody]JObject data) // do zaminny na model komunikacji
         /*
         {
 	        "userData" :
@@ -96,11 +96,11 @@ namespace Piwerko.Api.Controllers
             if (result == null) return BadRequest("blad przy dodawaniu piwa");
             return Ok(result);
         }
-
-        [AllowAnonymous]
-        [HttpGet("confirm/{beerId}")]
-        public IActionResult Confirm(int beerId)
+        
+        [HttpPost("confirm")]
+        public IActionResult Confirm([FromBody]JObject data)
         {
+            int beerId = data["id"].ToObject<Int32>();
             var beer = _beerService.GetBeerById(beerId);
             beer.isConfirmed = true;
             _beerService.Update(beer);

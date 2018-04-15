@@ -66,7 +66,7 @@ namespace Piwerko.Api.Controllers
         }
 
         [HttpPost("addbyadmin")]
-        public IActionResult AddByAdmin([FromBody]JObject data)
+        public IActionResult AddByAdmin([FromBody]JObject data) //do zamiany na modele komunikacji
         {
             User user = data["userData"].ToObject<User>();
             Brewery brewery = data["breweryData"].ToObject<Brewery>();
@@ -77,11 +77,11 @@ namespace Piwerko.Api.Controllers
             if (result == null) return BadRequest("blad przy dodawaniu browaru");
             return Ok(result);
         }
-
-        [AllowAnonymous]
-        [HttpGet("confirm/{breweryId}")]
-        public IActionResult Confirm(int breweryId)
+            
+        [HttpPost("confirm")]
+        public IActionResult Confirm([FromBody]JObject data)
         {
+            int breweryId = data["id"].ToObject<Int32>();
             var brewery = _breweryService.GetBreweryById(breweryId);
             brewery.isConfirmed = true;
             _breweryService.Update(brewery);

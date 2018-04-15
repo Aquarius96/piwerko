@@ -88,7 +88,7 @@ namespace Piwerko.Api.Controllers
 
         }
         [HttpPost("delete")]
-        public IActionResult Delete([FromBody]JObject data) //loggeduser -> id & isAdmin && toremove -> id
+        public IActionResult Delete([FromBody]JObject data) //loggeduser -> id & isAdmin && toremove -> id / do przerobienia na model komunikacji
         {
             User logged = data["loggedData"].ToObject<User>();
             User toremove = data["toremoveData"].ToObject<User>();

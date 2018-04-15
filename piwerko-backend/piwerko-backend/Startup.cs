@@ -33,7 +33,12 @@ namespace Piwerko.Api
             services.AddScoped<IBeerService, BeerService>();
             services.AddScoped<IBreweryService, BreweryService>();
             services.AddScoped<IBreweryRepository, BreweryRepository>();
-            //services.AddScoped<IRateRepository, RateRepository>();
+            services.AddScoped<IRateRepository, RateRepository>();
+            services.AddScoped<IRateService, RateService>();
+            services.AddScoped<ICommentRepository, CommentRepository>();
+            services.AddScoped<ICommentService, CommentService>();
+
+
             services.AddMvc();
         }
 
