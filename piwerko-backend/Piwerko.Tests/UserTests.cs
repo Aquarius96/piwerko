@@ -31,7 +31,7 @@ namespace Piwerko.Tests
         {
             var user = new User { email = "marzap96@wp.pl", password = "asdsdasd" };
             var userRepository = new Mock<IUserRepository>();
-            userRepository.Setup(e => e.CheckEmail(user.email)).Returns(false);
+            userRepository.Setup(e => e.EmailExist(user.email)).Returns(false);
             var userService = new UserService(userRepository.Object);
             //var result = userController.
             //var userController = new UserController(userService);
@@ -44,7 +44,7 @@ namespace Piwerko.Tests
         {
             var user = new User { email = "marzap96@wp.pl", password = "asdsdasd" };
             var userRepository = new Mock<IUserRepository>();
-            userRepository.Setup(e => e.CheckEmail(user.email)).Returns(false);
+            userRepository.Setup(e => e.EmailExist(user.email)).Returns(false);
             
             var userService = new UserService(userRepository.Object);
             var registeredUser = userService.Register(user);

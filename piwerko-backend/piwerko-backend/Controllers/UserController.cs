@@ -115,8 +115,8 @@ namespace Piwerko.Api.Controllers
         [HttpPost("update")]
         public IActionResult Update(User user)
         {
-            if (_userService.LoginExist(user.username)) return BadRequest("Login zajety"); // todo sprawdzania username i mail czy istnieje gdzies indziej 
-            if (_userService.EmailExist(user.email)) return BadRequest("Email zajety");
+            if (_userService.CheckLogin(user.username,Convert.ToInt32(user.id))) return BadRequest("Login zajety"); // todo sprawdzania username i mail czy istnieje gdzies indziej 
+            if (_userService.CheckEmail(user.email, Convert.ToInt32(user.id))) return BadRequest("Email zajety");
             _userService.Update(user);
             return Ok(user);
         }
@@ -175,7 +175,7 @@ namespace Piwerko.Api.Controllers
         }
 
         [HttpPost("regi")]
-        public IActionResult Register([FromBody] User user) //email & haslo
+        public IActionResult Register([FromBody] RegisterModel user) //email & haslo
         {
             try
             {

@@ -7,7 +7,7 @@ namespace Piwerko.Api.Interfaces
     public interface IUserService
     {
         int LogIn(LoginModel user_);
-        User Register(User user);
+        User Register(RegisterModel user);
         User GetUserById(int userId);
         void Update(User user_);
         IEnumerable<User> GetAll();
@@ -15,5 +15,7 @@ namespace Piwerko.Api.Interfaces
         bool LoginExist(string username);
         bool ForgotPassword(string email_);
         bool EmailExist(string email);
+        bool CheckLogin(string username, int id);
+        bool CheckEmail(string username, int id);
     }
 }

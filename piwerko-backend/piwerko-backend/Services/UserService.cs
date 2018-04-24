@@ -31,13 +31,21 @@ namespace Piwerko.Api.Services
             return _userRepository.GetUserByEmail(email_);
 
         }
+        public bool CheckLogin(string username, int id)
+        {
+            return _userRepository.CheckLogin(username, id);
+        }
+        public bool CheckEmail(string username, int id)
+        {
+            return _userRepository.CheckEmail(username, id);
+        }
         public bool EmailExist (string email)
         {
-            return _userRepository.CheckEmail(email);
+            return _userRepository.EmailExist(email);
         }
         public bool LoginExist (string username)
         {
-            return _userRepository.CheckLogin(username);
+            return _userRepository.LoginExist(username);
         }
         public bool ForgotPassword(string email_) //to trzeba dorobic gdy bedzie front
         {
@@ -85,12 +93,13 @@ namespace Piwerko.Api.Services
             return true;
         }
 
-        public User Register(User user)
+        public User Register(RegisterModel _user)
         {
 
-            if (_userRepository.CheckEmail(user.email))
-                throw new Exception("Email " + user.email + " is already taken");
+            if (_userRepository.EmailExist(_user.email))
+                throw new Exception("Email " + _user.email + " is already taken");
 
+            var user = new User { email = _user.email, password = _user.password };
             user.ConfirmationCode = Guid.NewGuid().ToString();
             user.isAdmin = false;
             user.isConfirmed = false;

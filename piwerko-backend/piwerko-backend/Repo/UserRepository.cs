@@ -55,17 +55,29 @@ namespace Piwerko.Api.Repo
         }
 
 
-        public bool CheckLogin(string username)
+        public bool LoginExist(string username)
         {
             var user = _context.Users.Any(x => x.username == username);
 
             return user;
         }
 
-        public bool CheckEmail(string email)
+        public bool EmailExist(string email)
         {
             var user = _context.Users.Any(x => x.email == email);
 
+            return user;
+        }
+
+        public bool CheckLogin(string username, int id)
+        {
+            var user = _context.Users.Any(x => x.username == username && x.id != id);
+            return user;
+        }
+
+        public bool CheckEmail(string email, int id)
+        {
+            var user = _context.Users.Any(x => x.email == email && x.id != id);
             return user;
         }
 
