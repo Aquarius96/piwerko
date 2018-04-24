@@ -65,7 +65,7 @@ namespace Piwerko.Api.Controllers
         }
 
         [HttpPost("addbyadmin")]
-        public IActionResult AddByAdmin([FromBody]Beer_add_admin data) // do zaminny na model komunikacji
+        public IActionResult AddByAdmin([FromBody]BeerModel data) // do zaminny na model komunikacji
         
         {
             User user = _userService.GetUserById(data.user_id);

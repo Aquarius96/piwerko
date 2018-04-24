@@ -89,25 +89,12 @@ namespace Piwerko.Api.Controllers
 
         }
         [HttpPost("delete")]
-        public IActionResult Delete([FromBody]JObject data) //loggeduser -> id & isAdmin && toremove -> id / do przerobienia na model komunikacji
+        public IActionResult Delete([FromBody]RemoveModel data) //loggeduser -> id & isAdmin && toremove -> id / do przerobienia na model komunikacji
         {
-            User logged = data["loggedData"].ToObject<User>();
-            User toremove = data["toremoveData"].ToObject<User>();
+            User logged = _userService.GetUserById(data.logged_id);
+            User toremove = _userService.GetUserById(data.remove_id);
 
-        /*
-        {
-	        "loggedData" :
-	        {
-		        "id" : 5,
-		        "isAdmin" : false
-	        },
-	        "toremoveData" : 
-	        {
-		        "id" : 5
-		
-	        }
-        } 
-        */
+            if (toremove.isAdmin) return BadRequest("Nie mozna usunac admina");
 
             if (logged.isAdmin)
             {
@@ -128,7 +115,7 @@ namespace Piwerko.Api.Controllers
         [HttpPost("update")]
         public IActionResult Update(User user)
         {
-            if (_userService.LoginExist(user.username)) return BadRequest("Login zajety");
+            if (_userService.LoginExist(user.username)) return BadRequest("Login zajety"); // todo sprawdzania username i mail czy istnieje gdzies indziej 
             if (_userService.EmailExist(user.email)) return BadRequest("Email zajety");
             _userService.Update(user);
             return Ok(user);

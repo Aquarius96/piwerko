@@ -63,7 +63,7 @@ namespace Piwerko.Api.Controllers
         }
 
         [HttpPost("addbyadmin")]
-        public IActionResult AddByAdmin([FromBody]Brewery_add_admin data) //do zamiany na modele komunikacji
+        public IActionResult AddByAdmin([FromBody]BreweryModel data) //do zamiany na modele komunikacji
         {
             User user = _userService.GetUserById(data.user_id);
             if (user == null) return BadRequest("Brak usera o danym id");

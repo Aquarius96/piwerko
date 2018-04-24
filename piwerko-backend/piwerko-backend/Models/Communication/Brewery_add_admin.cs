@@ -2,7 +2,7 @@
 
 namespace Piwerko.Api.Models.Communication
 {
-    public class Brewery_add_admin
+    public class BreweryModel
     {
         public int user_id { get; set; }
 
