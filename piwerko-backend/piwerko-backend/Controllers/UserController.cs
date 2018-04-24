@@ -4,6 +4,7 @@ using Newtonsoft.Json.Linq;
 using Piwerko.Api.Dto;
 using Piwerko.Api.Helpers;
 using Piwerko.Api.Interfaces;
+using Piwerko.Api.Models.Communication;
 using Piwerko.Api.Models.DB;
 using System;
 using System.Collections.Generic;
@@ -76,10 +77,10 @@ namespace Piwerko.Api.Controllers
         }
 
         [HttpPost("signin")]
-        public IActionResult SignIn([FromBody] User user) // email/username & haslo
+        public IActionResult SignIn([FromBody]LoginModel loginmodel) // email/username & haslo
         {
-            var var = _userService.LogIn(user);
-            if (!_userService.GetUserById(Convert.ToInt32(user.id)).isConfirmed) return BadRequest("Uzytkownik nie zostal potwierdzony");
+            var var = _userService.LogIn(loginmodel);
+            if (!_userService.GetUserById(var).isConfirmed) return BadRequest("Uzytkownik nie zostal potwierdzony");
             if (var == -1) return BadRequest("Puste haslo"); //moze front bedzie sprawdzal moze nie
             else if (var == -2) return BadRequest("Bledny login/email");
             else if (var == -3) return BadRequest("Zle haslo");

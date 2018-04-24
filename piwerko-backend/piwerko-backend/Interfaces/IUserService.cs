@@ -1,11 +1,12 @@
-﻿using Piwerko.Api.Models.DB;
+﻿using Piwerko.Api.Models.Communication;
+using Piwerko.Api.Models.DB;
 using System.Collections.Generic;
 
 namespace Piwerko.Api.Interfaces
 {
     public interface IUserService
     {
-        int LogIn(User user_);
+        int LogIn(LoginModel user_);
         User Register(User user);
         User GetUserById(int userId);
         void Update(User user_);

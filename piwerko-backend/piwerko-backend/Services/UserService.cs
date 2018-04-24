@@ -1,4 +1,5 @@
 ﻿using Piwerko.Api.Interfaces;
+using Piwerko.Api.Models.Communication;
 using Piwerko.Api.Models.DB;
 using System;
 using System.Collections.Generic;
@@ -148,20 +149,20 @@ namespace Piwerko.Api.Services
             _userRepository.UpdateUser(user_);
         }
 
-        public int LogIn(User LoginModel)
+        public int LogIn(LoginModel loginModel)
         {
-            if (String.IsNullOrWhiteSpace(LoginModel.password))
+            if (String.IsNullOrWhiteSpace(loginModel.password))
                 return -1;
 
             User user = null;
 
-            if (String.IsNullOrWhiteSpace(LoginModel.username)) user = _userRepository.GetUserByEmail(LoginModel.email);
-            else user = _userRepository.GetUser(LoginModel.username);
+            if (String.IsNullOrWhiteSpace(loginModel.username)) user = _userRepository.GetUserByEmail(loginModel.email);
+            else user = _userRepository.GetUser(loginModel.username);
             
             if (user == null)
                 return -2;
 
-            if (user.password != LoginModel.password)
+            if (user.password != loginModel.password)
                 return -3;
 
             return Convert.ToInt32(user.id);
