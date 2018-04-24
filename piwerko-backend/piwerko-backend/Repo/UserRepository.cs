@@ -1,5 +1,5 @@
 ﻿using Piwerko.Api.Interfaces;
-using Piwerko.Api.Models;
+using Piwerko.Api.Models.DB;
 using System;
 using System.Collections.Generic;
 using System.Linq;

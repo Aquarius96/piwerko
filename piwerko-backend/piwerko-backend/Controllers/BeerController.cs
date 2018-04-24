@@ -1,28 +1,27 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Linq;
-using Piwerko.Api.Helpers;
 using Piwerko.Api.Interfaces;
-using Piwerko.Api.Models;
+using Piwerko.Api.Models.DB;
+using Piwerko.Api.Models.Communication;
 
 namespace Piwerko.Api.Controllers
 {
     [Produces("application/json")]
     [Route("api/Beer")]
+
     public class BeerController : Controller
     {
         private readonly IBeerService _beerService;
+        private readonly IUserService _userService;
 
-        public BeerController(IBeerService beerService)
+        public BeerController(IBeerService beerService, IUserService userService)
         {
             _beerService = beerService;
+            _userService = userService;
         }
-        
+
+
         [HttpGet("get/confirmed")]
         public IActionResult GetAll()
         {
@@ -66,32 +65,14 @@ namespace Piwerko.Api.Controllers
         }
 
         [HttpPost("addbyadmin")]
-        public IActionResult AddByAdmin([FromBody]JObject data) // do zaminny na model komunikacji
-        /*
+        public IActionResult AddByAdmin([FromBody]Beer_add_admin data) // do zaminny na model komunikacji
+        
         {
-	        "userData" :
-	        {
-		        "isAdmin" : true
-	        },
-	        "beerData" : 
-	        {
-		        "name" : "harnas",
-		        "alcohol" : 3,
-		        "ibu" : 2,
-		        "breweryId" : 3,
-		        "servingTemp" : 4,
-		        "type" : "gownowarte",
-		        "description" : "dla biedakow"
-		
-	        }
-        }
-        */
-        {
-            User user = data["userData"].ToObject<User>();
-            Beer beer = data["beerData"].ToObject<Beer>();
+            User user = _userService.GetUserById(data.user_id);
+            if (user == null) return BadRequest("Brak usera o danym id");
+            Beer beer = data.GetBeer();//isConfirmed = Tru -> juz ustawione
 
             if (!user.isAdmin) return BadRequest("Podany user nie jest adminem");
-            beer.isConfirmed = true;
             var result = _beerService.Add(beer);
             if (result == null) return BadRequest("blad przy dodawaniu piwa");
             return Ok(result);

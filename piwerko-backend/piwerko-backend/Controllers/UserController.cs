@@ -4,7 +4,7 @@ using Newtonsoft.Json.Linq;
 using Piwerko.Api.Dto;
 using Piwerko.Api.Helpers;
 using Piwerko.Api.Interfaces;
-using Piwerko.Api.Models;
+using Piwerko.Api.Models.DB;
 using System;
 using System.Collections.Generic;
 using System.Linq;

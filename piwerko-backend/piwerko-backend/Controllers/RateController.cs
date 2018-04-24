@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Piwerko.Api.Interfaces;
-using Piwerko.Api.Models;
+using Piwerko.Api.Models.DB;
 
 namespace Piwerko.Api.Controllers
 {

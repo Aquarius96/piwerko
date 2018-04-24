@@ -1,4 +1,4 @@
-﻿namespace Piwerko.Api.Models
+﻿namespace Piwerko.Api.Models.DB
 {
     public class Rate
     {

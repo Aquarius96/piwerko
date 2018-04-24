@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Linq;
 using Piwerko.Api.Interfaces;
-using Piwerko.Api.Models;
+using Piwerko.Api.Models.DB;
 
 namespace Piwerko.Api.Controllers
 {

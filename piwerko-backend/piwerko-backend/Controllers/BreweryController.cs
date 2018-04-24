@@ -1,14 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Linq;
-using Piwerko.Api.Helpers;
 using Piwerko.Api.Interfaces;
-using Piwerko.Api.Models;
+using Piwerko.Api.Models.Communication;
+using Piwerko.Api.Models.DB;
 
 namespace Piwerko.Api.Controllers
 {
@@ -17,10 +12,12 @@ namespace Piwerko.Api.Controllers
     public class BreweryController : Controller
     {
         private readonly IBreweryService _breweryService;
+        private readonly IUserService _userService;
 
-        public BreweryController(IBreweryService breweryService)
+        public BreweryController(IBreweryService breweryService, IUserService userService)
         {
             _breweryService = breweryService;
+            _userService = _userService;
         }
         
         [HttpGet("get/confirmed")]
@@ -66,14 +63,14 @@ namespace Piwerko.Api.Controllers
         }
 
         [HttpPost("addbyadmin")]
-        public IActionResult AddByAdmin([FromBody]JObject data) //do zamiany na modele komunikacji
+        public IActionResult AddByAdmin([FromBody]Brewery_add_admin data) //do zamiany na modele komunikacji
         {
-            User user = data["userData"].ToObject<User>();
-            Brewery brewery = data["breweryData"].ToObject<Brewery>();
+            User user = _userService.GetUserById(data.user_id);
+            if (user == null) return BadRequest("Brak usera o danym id");
+            Brewery brewery = data.GetBrewery(); //isConfirmed = Tru -> juz ustawione
 
             if (!user.isAdmin) return BadRequest("nie jestes adminem ");
-            brewery.isConfirmed = true;
-            var result = _breweryService.Add(brewery); // marcin przerob - usun add by admin i w browarach tez
+            var result = _breweryService.Add(brewery); 
             if (result == null) return BadRequest("blad przy dodawaniu browaru");
             return Ok(result);
         }

@@ -1,18 +1,13 @@
 using System;
-using System.Collections.Generic;
-using System.Security.Claims;
-using System.Security.Cryptography;
-using System.Text;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using Piwerko.Api.Controllers;
 using Piwerko.Api.Interfaces;
-using Piwerko.Api.Models;
+using Piwerko.Api.Models.DB;
 using Piwerko.Api.Services;
 using Xunit;
 using Piwerko.Api.Repo;
 using Piwerko.Api.Helpers;
-using System.Data.Entity;
 
 namespace Piwerko.Tests
 {

@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Piwerko.Api.Models;
+using Piwerko.Api.Models.DB;
 
 namespace Piwerko.Api.Repo
 {
