@@ -10,6 +10,7 @@
         public double servingTemp { get; set; }
         public string type { get; set; }
         public string description { get; set; }
+        public string photo_URL { get; set; }
         public bool isConfirmed { get; set; }
     }
 }

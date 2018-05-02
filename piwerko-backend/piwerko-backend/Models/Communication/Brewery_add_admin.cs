@@ -11,11 +11,12 @@ namespace Piwerko.Api.Models.Communication
         public string street { get; set; }
         public int streetNumber { get; set; }
         public string description { get; set; }
-        public string webUrl { get; set; }
+        public string web_Url { get; set; }
+        public string photo_URL { get; set; }
 
         public Brewery GetBrewery()
         {
-            var brewery = new Brewery { name = name, city = city, street = street, streetNumber = streetNumber, description = description, webUrl = webUrl, isConfirmed = true };
+            var brewery = new Brewery { name = name, city = city, street = street, streetNumber = streetNumber, description = description, web_Url = web_Url, photo_URL = photo_URL, isConfirmed = true };
             return brewery;
         }
     }

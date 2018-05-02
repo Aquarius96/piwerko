@@ -9,7 +9,7 @@ namespace Piwerko.Api.Interfaces
         int LogIn(LoginModel user_);
         User Register(RegisterModel user);
         User GetUserById(int userId);
-        void Update(User user_);
+        void Update(User user_, bool hashuj);
         IEnumerable<User> GetAll();
         bool Delete(int id);
         bool LoginExist(string username);
@@ -17,5 +17,7 @@ namespace Piwerko.Api.Interfaces
         bool EmailExist(string email);
         bool CheckLogin(string username, int id);
         bool CheckEmail(string username, int id);
+        bool CheckPasswd(int id, string passwd);
+        string getHash(string passwd, string salt);
     }
 }

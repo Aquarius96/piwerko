@@ -39,7 +39,6 @@ namespace Piwerko.Api.Helpers
             var claims = new[]
             {
                 new Claim("id", user.id.ToString()),
-                new Claim("password", user.password),
                 new Claim("email", user.email),
                 new Claim("avatar_URL", user.avatar_URL),
                 new Claim("isAdmin", user.isAdmin.ToString()),
@@ -78,7 +77,6 @@ namespace Piwerko.Api.Helpers
             {
                 new Claim("id", user.id.ToString()),
                 new Claim("username", user.username),
-                new Claim("password", user.password),
                 new Claim("firstname", user.firstname),
                 new Claim("lastname", user.lastname),
                 new Claim("email", user.email),

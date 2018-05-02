@@ -33,7 +33,7 @@ namespace Piwerko.Api.Controllers
             var user = _userService.GetUserById(userId);
             user.isConfirmed = true;
             user.ConfirmationCode = null;
-            _userService.Update(user);
+            _userService.Update(user,false);
             return Ok(user);
         }
 
@@ -43,27 +43,43 @@ namespace Piwerko.Api.Controllers
 
 
         [HttpPost("forgotpwd")] // fromt dostaje maila z id i key; pobiera ConfirmationCode dzieki id porownuje go z kluczem i zwraca id oraz nowe haslo
-        public IActionResult ConfirmNewPwd([FromBody] User user)
+        public IActionResult ConfirmNewPwd([FromBody] PasswordModel pass_model)
         {
-            var user_ = _userService.GetUserById(Convert.ToInt32(user.id));
+            var user_ = _userService.GetUserById(Convert.ToInt32(pass_model.id));
             if (user_ == null) return BadRequest("Brak usera o danym id");
-
-            if (user_.password == user.password) return BadRequest("Nowe haslo nie moze byc takie same jak stare...");
-
-            user_.password = user.password;
+            if (_userService.CheckPasswd(pass_model.id,user_.salt)) return BadRequest("Nowe haslo nie moze byc takie same jak stare...");
+            
             user_.ConfirmationCode = null;
+            _userService.Update(user_,true);
 
-            return Ok(user);
+            return Ok(user_);
         }
 
 
         [HttpGet("forgotpwd/{email}")]
-        public IActionResult SendForgotPassword(string email) //do dorobienia 
+        public IActionResult SendForgotPassword(string email) //do dorobienia  jak bd front
         {
             var result = _userService.ForgotPassword(email);
 
             if (result) return Ok("Na wskazanego maila: " + email + " wyslano link do zresetowania haslo");
             return BadRequest("Zly email albo cos z polaczeniem jest nie tak");
+        }
+        
+        [HttpPost("changepwd")] 
+        public IActionResult ChangePassword(PasswordModel passwordModel)
+        {
+            var user = _userService.GetUserById(passwordModel.id);
+            user.password = passwordModel.password;
+            _userService.Update(user, true);
+            return Ok("Pomyslnie zmieniono haslo");
+            
+        }
+
+        [HttpPost("changepwd")]
+        public IActionResult CheckPassword(PasswordModel passwordModel)
+        {
+            return Ok(_userService.CheckPasswd(passwordModel.id, passwordModel.password));
+
         }
 
         [HttpPost("code")]
@@ -117,7 +133,7 @@ namespace Piwerko.Api.Controllers
         {
             if (_userService.CheckLogin(user.username,Convert.ToInt32(user.id))) return BadRequest("Login zajety"); // todo sprawdzania username i mail czy istnieje gdzies indziej 
             if (_userService.CheckEmail(user.email, Convert.ToInt32(user.id))) return BadRequest("Email zajety");
-            _userService.Update(user);
+            _userService.Update(user,true);
             return Ok(user);
         }
 
@@ -154,25 +170,12 @@ namespace Piwerko.Api.Controllers
              * po wykonanym zwraca mi usera do updtae
              */
             if (_userService.LoginExist(user.username)) return BadRequest("Login zajety");
-            _userService.Update(user);
+            _userService.Update(user,false);
             return Ok(user);
 
         }
 
-        [AllowAnonymous]
-        [HttpGet("changepwd/{userId}/{key}")]
-        public IActionResult ChangePassword(int userId, string key)
-        {
-            var user = _userService.GetUserById(userId);
 
-            if (user.ConfirmationCode == key)
-            {
-                user.ConfirmationCode = null;
-                _userService.Update(user);
-                return Ok(user);
-            }
-            return BadRequest("Niepoprawny klucz");
-        }
 
         [HttpPost("regi")]
         public IActionResult Register([FromBody] RegisterModel user) //email & haslo

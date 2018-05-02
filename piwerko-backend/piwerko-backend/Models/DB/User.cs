@@ -13,6 +13,8 @@
         public bool isAdmin { get; set; }
         public bool isConfirmed { get; set; }
 
+        public string salt { get; set; }
+
         public string ConfirmationCode { get; set; }
 
 
