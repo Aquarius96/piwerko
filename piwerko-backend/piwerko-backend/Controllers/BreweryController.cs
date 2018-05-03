@@ -8,7 +8,7 @@ using Piwerko.Api.Models.DB;
 namespace Piwerko.Api.Controllers
 {
     [Produces("application/json")]
-    [Route("api/Brewery")]
+    [Route("api/brewery")]
     public class BreweryController : Controller
     {
         private readonly IBreweryService _breweryService;

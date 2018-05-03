@@ -13,7 +13,7 @@ using System.Linq;
 namespace Piwerko.Api.Controllers
 {
     [Produces("application/json")]
-    [Route("api/User")]
+    [Route("api/user")]
     public class UserController : Controller
     {
         private readonly IUserService _userService;
@@ -28,7 +28,7 @@ namespace Piwerko.Api.Controllers
 
         [AllowAnonymous]  //tymmczasowe sprawdzenia dla testow poki nie ma frontu
         [HttpGet("confirm/{userId}/{key}")]
-        public IActionResult COnfirmeD(int userId, string key)
+        public IActionResult Confirmed(int userId, string key)
         {
             var user = _userService.GetUserById(userId);
             user.isConfirmed = true;
@@ -75,7 +75,7 @@ namespace Piwerko.Api.Controllers
             
         }
 
-        [HttpPost("changepwd")]
+        [HttpPost("checkpwd")]
         public IActionResult CheckPassword(PasswordModel passwordModel)
         {
             return Ok(_userService.CheckPasswd(passwordModel.id, passwordModel.password));
@@ -137,7 +137,7 @@ namespace Piwerko.Api.Controllers
             return Ok(user);
         }
 
-        [HttpGet("getall")]
+        [HttpGet("token")]
         public List<string> GetAll()
         {
             var result = new List<string>();
@@ -149,7 +149,7 @@ namespace Piwerko.Api.Controllers
             return result;
         }
 
-        [HttpGet("getfull/{userId}")]
+        [HttpGet("token/{userId}")]
         public string GetById(int userId)
         {
             var user =  _userService.GetUserById(userId);
@@ -177,7 +177,7 @@ namespace Piwerko.Api.Controllers
 
 
 
-        [HttpPost("regi")]
+        [HttpPost("register")]
         public IActionResult Register([FromBody] RegisterModel user) //email & haslo
         {
             try

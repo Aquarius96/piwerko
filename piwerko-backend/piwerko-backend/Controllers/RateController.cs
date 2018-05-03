@@ -10,7 +10,7 @@ using Piwerko.Api.Models.DB;
 namespace Piwerko.Api.Controllers
 {
     [Produces("application/json")]
-    [Route("api/Rate")]
+    [Route("api/rate")]
     public class RateController : Controller
     {
         private readonly IRateService _rateService;
@@ -20,7 +20,7 @@ namespace Piwerko.Api.Controllers
             _rateService = rateService;
         }
 
-        [HttpGet("get/{beerId}")] 
+        [HttpGet("getbeer/{beerId}")]
         public double GetAvg(int beerId)
         {
             return _rateService.GetById(beerId);
@@ -40,7 +40,7 @@ namespace Piwerko.Api.Controllers
             return BadRequest("Blad w polaczeniu");
         }
 
-        [HttpPost("get")]
+        [HttpPost("getrate")]
         public double GetSinglerate([FromBody] Rate rate)
         {
             return _rateService.Getrate(rate.beerId, rate.userId);
