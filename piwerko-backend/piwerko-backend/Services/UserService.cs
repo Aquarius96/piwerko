@@ -74,7 +74,7 @@ namespace Piwerko.Api.Services
                 {
                     var credential = new NetworkCredential
                     {
-                        UserName = "piwerkobuissnes@gmail.com",
+                        UserName = "piwerko.business@gmail.com",
                         Password = "zaq1@WSX"
                     };
                     client.Credentials = credential;
@@ -86,7 +86,7 @@ namespace Piwerko.Api.Services
                     var message = new MailMessage();
 
                     message.To.Add(new MailAddress(user.email));
-                    message.From = new MailAddress("piwerkobuissnes@gmail.com");
+                    message.From = new MailAddress("piwerko.business@gmail.com");
                     message.Subject = "Przywracanie hasla";
                     message.Body = "jakis tam linku do frontu rzeby przekazac id i code sprawdzic itd ide sapc";
                     //message.Body = "http://localhost:8080/api/User/changepwd/" + user.id + "/" + user.ConfirmationCode + "<br />Przywroc haslo<br />Klucz : " + user.ConfirmationCode + "<br />UserId : " + user.id;
@@ -137,7 +137,7 @@ namespace Piwerko.Api.Services
                 {
                     var credential = new NetworkCredential
                     {
-                        UserName = "piwerkobuissnes@gmail.com",
+                        UserName = "piwerko.business@gmail.com",
                         Password = "zaq1@WSX"
                     };
                     client.Credentials = credential;
@@ -149,7 +149,7 @@ namespace Piwerko.Api.Services
                     var message = new MailMessage();
 
                     message.To.Add(new MailAddress(user.email));
-                    message.From = new MailAddress("piwerkobuissnes@gmail.com");
+                    message.From = new MailAddress("piwerko.business@gmail.com");
                     message.Subject = user.username + " witamy w Piwerku!";
                     message.Body = "W celu zakonczenia procesu rejestracji prosimy o potwierdzenie maila klikajac w ten link: <a href=\"" + callbackUrl + "\">Link aktywacyjny</a> <br> Klucz : " + user.ConfirmationCode + "<br />UserId : " + user.id; 
                     message.IsBodyHtml = true;

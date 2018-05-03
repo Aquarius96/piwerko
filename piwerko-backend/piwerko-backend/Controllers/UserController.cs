@@ -75,12 +75,6 @@ namespace Piwerko.Api.Controllers
             
         }
 
-        [HttpPost("changepwd")]
-        public IActionResult CheckPassword(PasswordModel passwordModel)
-        {
-            return Ok(_userService.CheckPasswd(passwordModel.id, passwordModel.password));
-
-        }
 
         [HttpPost("code")]
         public IActionResult GetConfirmationCodeById([FromBody]JObject data) //id
