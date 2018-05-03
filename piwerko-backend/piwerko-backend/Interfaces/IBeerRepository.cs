@@ -15,6 +15,6 @@ namespace Piwerko.Api.Interfaces
 
         void Update(Beer beer);
 
-        
+        IEnumerable<Beer> GetSimilary(int alco, int temp, int ibu,Beer beer);
     }
 }

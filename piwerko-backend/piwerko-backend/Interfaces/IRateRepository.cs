@@ -12,6 +12,7 @@ namespace Piwerko.Api.Interfaces
         bool Update(double value_, int beerid, int userid);
         IEnumerable<Rate> GetById(int id);
         Rate GetRate(int beerid, int userid);
+        void ClearByUserId(int user_id);
 
     }
 }

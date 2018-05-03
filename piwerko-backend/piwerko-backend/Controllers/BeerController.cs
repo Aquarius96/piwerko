@@ -21,6 +21,13 @@ namespace Piwerko.Api.Controllers
             _userService = userService;
         }
 
+        [HttpPost("get/similary/{id}")]
+        public IActionResult GetSimilary(int id)
+        {
+            var result = _beerService.GetSimilary(id);
+            if (result == null) return BadRequest("Pusta lista");
+            return Ok(result);
+        }
 
         [HttpGet("get/confirmed")]
         public IActionResult GetAll()

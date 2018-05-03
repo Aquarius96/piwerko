@@ -18,9 +18,13 @@ namespace Piwerko.Api.Controllers
     {
         private readonly IUserService _userService;
         private JWT jwt;
+        private readonly IRateService _rateService;
+        private readonly ICommentService _commentService;
 
-        public UserController(IUserService userService)
+        public UserController(IUserService userService, IRateService rateService, ICommentService commentService)
         {
+            _rateService = rateService;
+            _commentService = commentService;
             _userService = userService;
             jwt = new JWT();
         }
@@ -41,6 +45,18 @@ namespace Piwerko.Api.Controllers
 
         //===========================================================================================================================================
 
+        [HttpPost("cleardata")] 
+        public IActionResult ClearData([FromBody] ClearDataModel clearData)
+        {
+            var user_ = _userService.GetUserById(Convert.ToInt32(clearData.id));
+            if (user_ == null) return BadRequest("Brak usera o danym id");
+            if (!_userService.CheckPasswd(clearData.id, user_.salt)) return BadRequest("Podano zle haslo");
+
+            _rateService.ClearByUserId(Convert.ToInt32(user_.id));
+            _commentService.ClearByUserId(Convert.ToInt32(user_.id));
+
+            return Ok("Dane powiny byc usuniete");
+        }
 
         [HttpPost("forgotpwd")] // fromt dostaje maila z id i key; pobiera ConfirmationCode dzieki id porownuje go z kluczem i zwraca id oraz nowe haslo
         public IActionResult ConfirmNewPwd([FromBody] PasswordModel pass_model)
@@ -61,7 +77,7 @@ namespace Piwerko.Api.Controllers
         {
             var result = _userService.ForgotPassword(email);
 
-            if (result) return Ok("Na wskazanego maila: " + email + " wyslano link do zresetowania haslo");
+            if (result) return Ok("Na wskazanego maila: " + email + " wyslano link do zresetowania hasla");
             return BadRequest("Zly email albo cos z polaczeniem jest nie tak");
         }
         
@@ -96,12 +112,11 @@ namespace Piwerko.Api.Controllers
         public IActionResult SignIn([FromBody]LoginModel loginmodel) // email/username & haslo
         {
             var var = _userService.LogIn(loginmodel);
-            if (!_userService.GetUserById(var).isConfirmed) return BadRequest("Uzytkownik nie zostal potwierdzony");
             if (var == -1) return BadRequest("Puste haslo"); //moze front bedzie sprawdzal moze nie
             else if (var == -2) return BadRequest("Bledny login/email");
             else if (var == -3) return BadRequest("Zle haslo");
-            else return Ok(jwt.BuildFullUserToken(_userService.GetUserById(var)));
-
+            else if (!_userService.GetUserById(var).isConfirmed) return BadRequest("Uzytkownik nie zostal potwierdzony");
+            return Ok(jwt.BuildFullUserToken(_userService.GetUserById(var)));
 
         }
         [HttpPost("delete")]
@@ -131,7 +146,7 @@ namespace Piwerko.Api.Controllers
         [HttpPost("update")]
         public IActionResult Update(User user)
         {
-            if (_userService.CheckLogin(user.username,Convert.ToInt32(user.id))) return BadRequest("Login zajety"); // todo sprawdzania username i mail czy istnieje gdzies indziej 
+            if (_userService.CheckLogin(user.username,Convert.ToInt32(user.id))) return BadRequest("Login zajety");  
             if (_userService.CheckEmail(user.email, Convert.ToInt32(user.id))) return BadRequest("Email zajety");
             _userService.Update(user,true);
             return Ok(user);

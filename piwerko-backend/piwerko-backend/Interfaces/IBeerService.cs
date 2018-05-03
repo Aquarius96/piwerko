@@ -12,5 +12,6 @@ namespace Piwerko.Api.Interfaces
         Beer Add(Beer beer);
         void Update(Beer beer_);
         bool Delete(int id);
+        IEnumerable<Beer> GetSimilary(int beerId);
     }
 }

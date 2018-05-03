@@ -47,5 +47,13 @@ namespace Piwerko.Api.Repo
             var rates = _context.Rates.Where(x => x.beerId == beerid && x.userId==userid).SingleOrDefault();
             return rates;
         }
+
+        public void ClearByUserId(int user_id)
+        {
+            foreach (var var in _context.Rates.Where(x => x.userId == user_id).ToList())
+            {
+                _context.Rates.Remove(var);
+            }
+        }
     }
 }

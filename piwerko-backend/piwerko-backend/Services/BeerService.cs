@@ -1,19 +1,24 @@
-﻿using Piwerko.Api.Interfaces;
+﻿using Piwerko.Api.Helpers;
+using Piwerko.Api.Interfaces;
 using Piwerko.Api.Models.DB;
-using System;
 using System.Collections.Generic;
-using System.Net;
-using System.Net.Mail;
 
 namespace Piwerko.Api.Services
 {
     public class BeerService : IBeerService
     {
         private readonly IBeerRepository _beerRepository;
+        private Similary similary;
 
         public BeerService(IBeerRepository beerRepository)
         {
             _beerRepository = beerRepository;
+            similary = new Similary();
+        }
+
+        public IEnumerable<Beer> GetSimilary(int beerId)
+        {
+             return _beerRepository.GetSimilary(similary.alco, similary.temp, similary.ibu, GetBeerById(beerId));
         }
 
         public IEnumerable<Beer> GetAll()

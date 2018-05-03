@@ -36,6 +36,11 @@ namespace Piwerko.Api.Services
         {
             return _commentRepository.Delete(id);
         }
+
+        public void ClearByUserId(int user_id)
+        {
+            _commentRepository.ClearByUserId(user_id);
+        }
     }
 }
 

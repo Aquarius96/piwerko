@@ -45,5 +45,10 @@ namespace Piwerko.Api.Services
             var rate = _rateRepository.GetRate(beerid, userid);
             return rate.value;
         }
+
+        public void ClearByUserId(int user_id)
+        {
+            _rateRepository.ClearByUserId(user_id);
+        }
     }
 }

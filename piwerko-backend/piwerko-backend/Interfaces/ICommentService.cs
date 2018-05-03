@@ -12,5 +12,6 @@ namespace Piwerko.Api.Interfaces
         Comment Update(Comment comment);
         IEnumerable<Comment> GetByBeerId(int beerid);
         bool Delete(int id);
+        void ClearByUserId(int user_id);
     }
 }

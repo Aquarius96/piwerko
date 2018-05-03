@@ -28,6 +28,12 @@ namespace Piwerko.Api.Repo
             return true;
         }
 
+        public IEnumerable<Beer> GetSimilary(int alco, int temp, int ibu, Beer beer)
+        {
+            var result = _context.Beers.Where(x => x.alcohol < beer.alcohol + alco && x.alcohol > beer.alcohol - alco && x.ibu < beer.ibu + ibu && x.ibu > beer.ibu - ibu && x.servingTemp < beer.servingTemp + temp && x.servingTemp > beer.servingTemp - temp && x.isConfirmed == true).ToList();
+            return result;
+        }
+
         public IEnumerable<Beer> GetAll()
         {
             var beer = _context.Beers.Where(x => x.isConfirmed == true);
@@ -73,6 +79,8 @@ namespace Piwerko.Api.Repo
             }
 
         }
+
+
 
         public void Save()
         {

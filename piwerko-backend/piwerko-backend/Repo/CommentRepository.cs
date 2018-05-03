@@ -56,6 +56,13 @@ namespace Piwerko.Api.Repo
 
         }
 
+        public void ClearByUserId(int user_id)
+        {
+            foreach (var var in _context.Comments.Where(x => x.userId == user_id).ToList())
+            {
+                _context.Comments.Remove(var);
+            }
+        }
         public void Save()
         {
             _context.SaveChanges();
