@@ -8,7 +8,7 @@ using Piwerko.Api.Models.Communication;
 namespace Piwerko.Api.Controllers
 {
     [Produces("application/json")]
-    [Route("api/Beer")]
+    [Route("api/beer")]
 
     public class BeerController : Controller
     {

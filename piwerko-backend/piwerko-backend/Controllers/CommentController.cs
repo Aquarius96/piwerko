@@ -11,7 +11,7 @@ using Piwerko.Api.Models.DB;
 namespace Piwerko.Api.Controllers
 {
     [Produces("application/json")]
-    [Route("api/Comment")]
+    [Route("api/comment")]
     public class CommentController : Controller
     {
         private readonly ICommentService _commentService;
