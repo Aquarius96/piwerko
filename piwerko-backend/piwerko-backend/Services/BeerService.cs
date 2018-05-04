@@ -46,7 +46,7 @@ namespace Piwerko.Api.Services
 
         public Beer Add(Beer beer)
         {
-
+            beer.photo_URL = "http://www.uncommonsnyc.com/wp-content/uploads/2015/06/beer-bottle.png";
             _beerRepository.Add(beer);
             _beerRepository.Save();
 
@@ -56,6 +56,7 @@ namespace Piwerko.Api.Services
 
         public void Update(Beer beer_)
         {
+
             _beerRepository.Update(beer_);
         }
 
