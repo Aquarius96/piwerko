@@ -2,6 +2,7 @@
 using Piwerko.Api.Interfaces;
 using Piwerko.Api.Models.DB;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Piwerko.Api.Services
 {
@@ -15,10 +16,25 @@ namespace Piwerko.Api.Services
             _beerRepository = beerRepository;
             similary = new Similary();
         }
-
+        
         public IEnumerable<Beer> GetSimilary(int beerId)
         {
-             return _beerRepository.GetSimilary(similary.alco, similary.temp, similary.ibu, GetBeerById(beerId));
+            var list = _beerRepository.GetSimilary(similary.alco, similary.temp, similary.ibu, GetBeerById(beerId));
+            var points = new List<Similary>();
+            foreach (var var in list)
+            {
+                points.Add(new Similary(var, GetBeerById(beerId)));
+            }
+
+            points.Sort();
+
+            var result = new List<Beer>();
+            foreach (var var in points)
+            {
+                result.Add(var.beer);
+            }
+            
+            return result.Take(5);
         }
 
         public IEnumerable<Beer> GetAll()
