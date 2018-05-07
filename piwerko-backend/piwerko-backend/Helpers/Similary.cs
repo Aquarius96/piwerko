@@ -17,8 +17,8 @@ namespace Piwerko.Api.Helpers
 
         public Similary()
         {
-            this.alco = 5;
-            this.ibu = 5;
+            this.alco = 2;
+            this.ibu = 7;
             this.temp = 5;
         }
 
