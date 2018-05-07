@@ -10,7 +10,14 @@ namespace Piwerko.Api.Controllers
         [HttpPost("sendmail")]
         public IActionResult ConfirmNewPwd([FromBody] ContactUs contactUs)
         {
-            return Ok(contactUs.sendEmail());
+            if (contactUs.sendEmail())
+            {
+                return Ok("Twoje zgłoszenie zostało przyjęte! Zaczekaj na wiadomość od administratora.");
+            }
+            else
+            {
+                return BadRequest("Ups! Coś poszło nie tak. Spróbuj ponownie później.");
+            }
         }
     }
 }
