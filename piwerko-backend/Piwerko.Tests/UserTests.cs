@@ -56,91 +56,111 @@ namespace Piwerko.Tests
               Assert.IsType<OkObjectResult>(result);
           }*/
 
-        /*
+        
     [Fact]
     public void Test4() //getJWT
     {
         var jwt = new JWT();
         var user = new User { id = 2, username = "marcinXD", password = "zaq", firstname = "zaq", lastname = "zaq", email = "zaq", phone = "zaq", avatar_URL = "zaq", isAdmin = false, isConfirmed = true};
 
-        var repo = new Mock<IUserRepository>();
-        var service = new UserService(repo.Object);
-        var con = new UserController(service);
-        repo.Setup(e => e.GetUserById(It.IsAny<int>())).Returns(user);
+        var userRepo = new Mock<IUserRepository>();
+        var rateRepo = new Mock<IRateRepository>();
+        var comRepo = new Mock<ICommentRepository>();
+        var userService = new UserService(userRepo.Object);
+        var rateService = new RateService(rateRepo.Object);
+        var comService = new CommentService(comRepo.Object);
+        var con = new UserController(userService,rateService,comService);
+        userRepo.Setup(e => e.GetUserById(It.IsAny<int>())).Returns(user);
         var result = con.GetById(2);
-        // marcin popraw to XD
+        
 
 
         Assert.Equal(jwt.BuildFullUserToken(user), result);
 
     }
     [Fact]
-    public void Test5() //sign in successfully/ cos jest zle w kontrolerze, chyba nie sprawdza poprawnie czy uzytkownik jest potwierdzony
+    public void Test5() //sign in successfully/ zamiast okObjectResult zwraca badObjectResult
     {
         var loginModel = new LoginModel {username = "marcinXD", password = "zaq"};
         var user = new User { id = 2, username = "marcinXD", password = "zaq", firstname = "zaq", lastname = "zaq", email = "zaq", phone = "zaq", avatar_URL = "zaq", isAdmin = false, isConfirmed = true };
-        var repo = new Mock<IUserRepository>();
-        var service = new UserService(repo.Object);
-        var controller = new UserController(service);
-        repo.Setup(e => e.GetUserByEmail(loginModel.email)).Returns(user);
-        repo.Setup(e => e.GetUser(loginModel.username)).Returns(user);
-        repo.Setup(e => e.GetUserById(Convert.ToInt32(user.id))).Returns(user);
+            var userRepo = new Mock<IUserRepository>();
+            var rateRepo = new Mock<IRateRepository>();
+            var comRepo = new Mock<ICommentRepository>();
+            var userService = new UserService(userRepo.Object);
+            var rateService = new RateService(rateRepo.Object);
+            var comService = new CommentService(comRepo.Object);
+            var con = new UserController(userService, rateService, comService);
+            userRepo.Setup(e => e.GetUserByEmail(loginModel.email)).Returns(user);
+            userRepo.Setup(e => e.GetUser(loginModel.username)).Returns(user);
+            userRepo.Setup(e => e.GetUserById(Convert.ToInt32(user.id))).Returns(user);
 
-        var result = controller.SignIn(loginModel);
+        var result = con.SignIn(loginModel);
         Assert.IsType<OkObjectResult>(result);
     }
 
     [Fact]
-    public void Test6() //sign with with wrong password/ cos jest zle w kontrolerze, chyba nie sprawdza poprawnie czy uzytkownik jest potwierdzony
+    public void Test6() //sign with with wrong password/ 
     {
         var loginModel = new LoginModel {username = "marcinXD", password = "zaqWSX" };
         var user = new User { id = 2, username = "marcinXD", password = "zaq", firstname = "zaq", lastname = "zaq", email = "zaq", phone = "zaq", avatar_URL = "zaq", isAdmin = false, isConfirmed = true };
-        var repo = new Mock<IUserRepository>();
-        var service = new UserService(repo.Object);
-        var controller = new UserController(service);
-        repo.Setup(e => e.GetUserByEmail(loginModel.email)).Returns(user);
-        repo.Setup(e => e.GetUser(loginModel.username)).Returns(user);
-        repo.Setup(e => e.GetUserById(Convert.ToInt32(user.id))).Returns(user);
+        var userRepo = new Mock<IUserRepository>();
+        var rateRepo = new Mock<IRateRepository>();
+        var comRepo = new Mock<ICommentRepository>();
+        var userService = new UserService(userRepo.Object);
+        var rateService = new RateService(rateRepo.Object);
+        var comService = new CommentService(comRepo.Object);
+        var con = new UserController(userService, rateService, comService);
+        userRepo.Setup(e => e.GetUserByEmail(loginModel.email)).Returns(user);
+        userRepo.Setup(e => e.GetUser(loginModel.username)).Returns(user);
+        userRepo.Setup(e => e.GetUserById(Convert.ToInt32(user.id))).Returns(user);
 
-        var result = controller.SignIn(loginModel);
+        var result = con.SignIn(loginModel);
         var badRequest = Assert.IsType<BadRequestObjectResult>(result);
         Assert.Equal("Zle haslo",badRequest.Value);
     }
-
+    
     [Fact]
-    public void Test7() //sign with with wrong email/username / cos jest zle w kontrolerze, chyba nie sprawdza poprawnie czy uzytkownik jest potwierdzony
+    public void Test7() //sign with with wrong email/username /
     {
         var loginModel = new LoginModel { username = "badlogin", password = "zaq" };
         var user = new User { id = 2, username = "marcinXD", password = "zaq", firstname = "zaq", lastname = "zaq", email = "zaq", phone = "zaq", avatar_URL = "zaq", isAdmin = false, isConfirmed = true };
-        var repo = new Mock<IUserRepository>();
-        var service = new UserService(repo.Object);
-        var controller = new UserController(service);
-        repo.Setup(e => e.GetUserByEmail(loginModel.email)).Returns((User)null);
-        repo.Setup(e => e.GetUser(loginModel.username)).Returns((User)null);
-        repo.Setup(e => e.GetUserById(Convert.ToInt32(user.id))).Returns(user);
+            var userRepo = new Mock<IUserRepository>();
+            var rateRepo = new Mock<IRateRepository>();
+            var comRepo = new Mock<ICommentRepository>();
+            var userService = new UserService(userRepo.Object);
+            var rateService = new RateService(rateRepo.Object);
+            var comService = new CommentService(comRepo.Object);
+            var con = new UserController(userService, rateService, comService);
+            userRepo.Setup(e => e.GetUserByEmail(loginModel.email)).Returns((User)null);
+            userRepo.Setup(e => e.GetUser(loginModel.username)).Returns((User)null);
+            userRepo.Setup(e => e.GetUserById(Convert.ToInt32(user.id))).Returns(user);
 
-        var result = controller.SignIn(loginModel);
+        var result = con.SignIn(loginModel);
         var badRequest = Assert.IsType<BadRequestObjectResult>(result);
         Assert.Equal("Bledny login/email", badRequest.Value);
     }
-
+        
     [Fact]
-    public void Test8() //sign in with user not confirmed/ cos jest zle w kontrolerze, chyba nie sprawdza poprawnie czy uzytkownik jest potwierdzony
+    public void Test8() //sign in with user not confirmed/ zamiast informacji o niepotwierdzonym u¿ytkowniku wyskakuje "Z³e has³o"
     {
         var loginModel = new LoginModel { username = "marcinXD", password = "zaq" };
         var user = new User { id = 2, username = "marcinXD", password = "zaq", firstname = "zaq", lastname = "zaq", email = "zaq", phone = "zaq", avatar_URL = "zaq", isAdmin = false, isConfirmed = true };
-        var repo = new Mock<IUserRepository>();
-        var service = new UserService(repo.Object);
-        var controller = new UserController(service);
-        repo.Setup(e => e.GetUserByEmail(loginModel.email)).Returns(user);
-        repo.Setup(e => e.GetUser(loginModel.username)).Returns(user);
-        repo.Setup(e => e.GetUserById(Convert.ToInt32(user.id))).Returns(user);
+            var userRepo = new Mock<IUserRepository>();
+            var rateRepo = new Mock<IRateRepository>();
+            var comRepo = new Mock<ICommentRepository>();
+            var userService = new UserService(userRepo.Object);
+            var rateService = new RateService(rateRepo.Object);
+            var comService = new CommentService(comRepo.Object);
+            var con = new UserController(userService, rateService, comService);
+            userRepo.Setup(e => e.GetUserByEmail(loginModel.email)).Returns(user);
+            userRepo.Setup(e => e.GetUser(loginModel.username)).Returns(user);
+            userRepo.Setup(e => e.GetUserById(Convert.ToInt32(user.id))).Returns(user);
 
-        var result = controller.SignIn(loginModel);
+        var result = con.SignIn(loginModel);
         var badRequest = Assert.IsType<BadRequestObjectResult>(result);
         Assert.Equal("Uzytkownik nie zostal potwierdzony", badRequest.Value);
     }
-
+/*
     [Fact]
     public void Test9()
     {
