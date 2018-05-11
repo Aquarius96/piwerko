@@ -50,12 +50,12 @@ namespace Piwerko.Api.Controllers
         {
             var user_ = _userService.GetUserById(Convert.ToInt32(clearData.id));
             if (user_ == null) return BadRequest("Brak usera o danym id");
-            if (!_userService.CheckPasswd(clearData.id, user_.salt)) return BadRequest("Podano zle haslo");
+            if (!_userService.CheckPasswd(clearData.id, user_.salt)) return BadRequest("Podano złe hasło");
 
             _rateService.ClearByUserId(Convert.ToInt32(user_.id));
             _commentService.ClearByUserId(Convert.ToInt32(user_.id));
 
-            return Ok("Dane powiny byc usuniete");
+            return Ok("Dane powinny być usunięte");
         }
 
         [HttpPost("forgotpwd")] // fromt dostaje maila z id i key; pobiera ConfirmationCode dzieki id porownuje go z kluczem i zwraca id oraz nowe haslo
@@ -63,7 +63,7 @@ namespace Piwerko.Api.Controllers
         {
             var user_ = _userService.GetUserById(Convert.ToInt32(pass_model.id));
             if (user_ == null) return BadRequest("Brak usera o danym id");
-            if (_userService.CheckPasswd(pass_model.id,user_.salt)) return BadRequest("Nowe haslo nie moze byc takie same jak stare...");
+            if (_userService.CheckPasswd(pass_model.id,user_.salt)) return BadRequest("Nowe hasło nie moze byc takie same jak stare...");
             
             user_.ConfirmationCode = null;
             _userService.Update(user_,true);
@@ -77,8 +77,8 @@ namespace Piwerko.Api.Controllers
         {
             var result = _userService.ForgotPassword(email);
 
-            if (result) return Ok("Na wskazanego maila: " + email + " wyslano link do zresetowania hasla");
-            return BadRequest("Zly email albo cos z polaczeniem jest nie tak");
+            if (result) return Ok("Na wskazanego maila: " + email + " wysłano link do zresetowania hasła");
+            return BadRequest("Zły email albo coś z połączeniem jest nie tak");
         }
         
         [HttpPost("changepwd")] 
@@ -87,7 +87,7 @@ namespace Piwerko.Api.Controllers
             var user = _userService.GetUserById(passwordModel.id);
             user.password = passwordModel.password;
             _userService.Update(user, true);
-            return Ok("Pomyslnie zmieniono haslo");
+            return Ok("Pomyślnie zmieniono hasło");
             
         }
 
@@ -112,10 +112,10 @@ namespace Piwerko.Api.Controllers
         public IActionResult SignIn([FromBody]LoginModel loginmodel) // email/username & haslo
         {
             var var = _userService.LogIn(loginmodel);
-            if (var == -1) return BadRequest("Puste haslo"); //moze front bedzie sprawdzal moze nie
-            else if (var == -2) return BadRequest("Bledny login/email");
-            else if (var == -3) return BadRequest("Zle haslo");
-            else if (!_userService.GetUserById(var).isConfirmed) return BadRequest("Uzytkownik nie zostal potwierdzony");
+            if (var == -1) return BadRequest("Puste hasło"); //moze front bedzie sprawdzal moze nie
+            else if (var == -2) return BadRequest("Błedny login/email");
+            else if (var == -3) return BadRequest("Złe haslo");
+            else if (!_userService.GetUserById(var).isConfirmed) return BadRequest("Użytkownik nie został potwierdzony");
             return Ok(jwt.BuildFullUserToken(_userService.GetUserById(var)));
 
         }
@@ -125,29 +125,29 @@ namespace Piwerko.Api.Controllers
             User logged = _userService.GetUserById(data.logged_id);
             User toremove = _userService.GetUserById(data.remove_id);
 
-            if (toremove.isAdmin) return BadRequest("Nie mozna usunac admina");
+            if (toremove.isAdmin) return BadRequest("Nie można usunżć admina");
 
             if (logged.isAdmin)
             {
                 _userService.Delete(Convert.ToInt32(toremove.id));
-                return Ok("Admin usunal");
+                return Ok("Admin usunął");
             }
             else
             {
                 if (logged.id == toremove.id)
                 {
                     _userService.Delete(Convert.ToInt32(toremove.id));
-                    return Ok("Sam sie usuanles :)");
+                    return Ok("Sam się usunąłeś :)");
                 }
             }
-            return BadRequest("Ups cos poszlo nie tak");
+            return BadRequest("Ups cos poszło nie tak");
         }
 
         [HttpPost("update")]
         public IActionResult Update(User user)
         {
-            if (_userService.CheckLogin(user.username,Convert.ToInt32(user.id))) return BadRequest("Login zajety");  
-            if (_userService.CheckEmail(user.email, Convert.ToInt32(user.id))) return BadRequest("Email zajety");
+            if (_userService.CheckLogin(user.username,Convert.ToInt32(user.id))) return BadRequest("Login zajęty");  
+            if (_userService.CheckEmail(user.email, Convert.ToInt32(user.id))) return BadRequest("Email zajęty");
             _userService.Update(user,true);
             return Ok(user);
         }
@@ -184,7 +184,7 @@ namespace Piwerko.Api.Controllers
              * jesli nei to wyswietlasz zly link czy cos xd
              * po wykonanym zwraca mi usera do updtae
              */
-            if (_userService.LoginExist(user.username)) return BadRequest("Login zajety");
+            if (_userService.LoginExist(user.username)) return BadRequest("Login zajęty");
             _userService.Update(user,false);
             return Ok(user);
 
@@ -198,7 +198,7 @@ namespace Piwerko.Api.Controllers
             try
             {
                 _userService.Register(user);
-                return Ok("Wiadomosc wyslano na twojego maila: "+user.email);
+                return Ok("Wiadomosc wysłano na Twojego maila: "+user.email);
             }
             catch (AppException ex)
             {
