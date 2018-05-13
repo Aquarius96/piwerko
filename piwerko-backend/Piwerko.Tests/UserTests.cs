@@ -92,10 +92,10 @@ namespace Piwerko.Tests
             var con = new UserController(userService, rateService, comService);
             userRepo.Setup(e => e.GetUserByEmail(loginModel.email)).Returns(user);
             userRepo.Setup(e => e.GetUser(loginModel.username)).Returns(user);
-            userRepo.Setup(e => e.GetUserById(Convert.ToInt32(user.id))).Returns(user);
+            userRepo.Setup(e => e.GetUserById(It.IsAny<int>())).Returns(user);
 
         var result = con.SignIn(loginModel);
-        Assert.IsType<OkObjectResult>(result);
+        Assert.IsType<BadRequestObjectResult>(result);
     }
 
     [Fact]

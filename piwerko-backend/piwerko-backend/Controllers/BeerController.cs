@@ -20,6 +20,14 @@ namespace Piwerko.Api.Controllers
             _beerService = beerService;
             _userService = userService;
         }
+        
+        [HttpPost]
+        public IActionResult Get([FromHeader(Name = "id")] string data, [FromBody]JObject dat)
+        {
+            var c = dat["id"].ToObject<Int32>();
+            return Ok(data + c);
+        }
+
 
         [HttpPost("get/similary/{id}")]
         public IActionResult GetSimilary(int id)
@@ -28,6 +36,7 @@ namespace Piwerko.Api.Controllers
             if (result == null) return BadRequest("Pusta lista");
             return Ok(result);
         }
+
 
         [HttpGet("get/confirmed")]
         public IActionResult GetAll()
