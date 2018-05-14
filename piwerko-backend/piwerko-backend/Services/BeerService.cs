@@ -1,8 +1,13 @@
-﻿using Piwerko.Api.Helpers;
+﻿using Microsoft.AspNetCore.Http;
+using Piwerko.Api.Helpers;
 using Piwerko.Api.Interfaces;
+using Piwerko.Api.Models;
 using Piwerko.Api.Models.DB;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Piwerko.Api.Services
 {
@@ -69,6 +74,23 @@ namespace Piwerko.Api.Services
             return beer;
         }
 
+
+        public async Task UploadPhoto(int beerId, IFormFile file, string uploadsFolderPath)
+        {
+            if (!Directory.Exists(uploadsFolderPath)) Directory.CreateDirectory(uploadsFolderPath);
+            var fileName = Guid.NewGuid() + Path.GetExtension(file.FileName);
+            var filePath = Path.Combine(uploadsFolderPath, fileName);
+            using (var stream = new FileStream(filePath, FileMode.Create))
+            {
+                await file.CopyToAsync(stream);
+            }
+
+            var beer = _beerRepository.GetBeerById(beerId);
+            beer.photo_URL = $"{fileName}";
+            _beerRepository.Update(beer);
+
+
+        }
 
         public void Update(Beer beer_)
         {

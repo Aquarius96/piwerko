@@ -16,9 +16,15 @@ namespace Piwerko.Api.Models.Communication
         public string photo_URL { get; set; }
 
 
-        public Beer GetBeer()
+        public Beer GetBeer_Admin()
         {
             var beer = new Beer { name = name, alcohol = alcohol, ibu = ibu, breweryId = breweryId, servingTemp = servingTemp, type = type, description = description,photo_URL=photo_URL, isConfirmed = true };
+            return beer;
+        }
+
+        public Beer GetBeer()
+        {
+            var beer = new Beer { name = name, alcohol = alcohol, ibu = ibu, breweryId = breweryId, servingTemp = servingTemp, type = type, description = description, photo_URL = photo_URL, isConfirmed = false};
             return beer;
         }
     }

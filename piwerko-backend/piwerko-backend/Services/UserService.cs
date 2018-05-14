@@ -28,6 +28,24 @@ namespace Piwerko.Api.Services
             return _userRepository.GetUserById(userId);
             
         }
+
+        public bool isAdmin(int id)
+        {
+            var user = GetUserById(id);
+            return user.isAdmin;
+        }
+
+        public bool isAdmin(string username)
+        {
+            var user = _userRepository.GetUser(username);
+            return user.isAdmin;
+        }
+        public User GetUserByUsername(string username)
+        {
+            return _userRepository.GetUser(username);
+
+        }
+
         public User GetUserByEmail(string email_)
         {
             return _userRepository.GetUserByEmail(email_);

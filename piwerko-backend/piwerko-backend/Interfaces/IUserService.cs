@@ -18,6 +18,9 @@ namespace Piwerko.Api.Interfaces
         bool CheckLogin(string username, int id);
         bool CheckEmail(string username, int id);
         bool CheckPasswd(int id, string passwd);
+        bool isAdmin(int id);
+        bool isAdmin(string username);
         string getHash(string passwd, string salt);
+        User GetUserByUsername(string username);
     }
 }
