@@ -85,7 +85,7 @@ namespace Piwerko.Api.Controllers
             return Ok(brewery);
         }
 
-        [HttpPost("update")]
+        [HttpPut("update")]
         public IActionResult Update([FromBody] Brewery brewery_)
         {
             _breweryService.Update(brewery_);

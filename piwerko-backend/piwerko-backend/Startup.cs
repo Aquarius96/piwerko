@@ -6,6 +6,7 @@ using Piwerko.Api.Repo;
 using Microsoft.EntityFrameworkCore;
 using Piwerko.Api.Interfaces;
 using Piwerko.Api.Services;
+using Piwerko.Api.Helpers;
 
 namespace Piwerko.Api
 {
@@ -24,6 +25,7 @@ namespace Piwerko.Api
         {
             services.AddCors();
             services.AddDbContext<DataContext>(options => options.UseSqlServer(Configuration["ConnectionStrings:Default"]));
+            services.Configure<PhotoSettings>(Configuration.GetSection("PhotoSettings"));
             services.AddSingleton<IConfiguration>(Configuration);
 
 
