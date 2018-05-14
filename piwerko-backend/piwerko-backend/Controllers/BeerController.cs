@@ -4,6 +4,7 @@ using Newtonsoft.Json.Linq;
 using Piwerko.Api.Interfaces;
 using Piwerko.Api.Models.DB;
 using Piwerko.Api.Models.Communication;
+using Microsoft.AspNetCore.Http;
 
 namespace Piwerko.Api.Controllers
 {
@@ -118,6 +119,16 @@ namespace Piwerko.Api.Controllers
             int index = data["id"].ToObject<Int32>();
             if (_beerService.Delete(index)) return Ok("Pomyslnie usunieto.");
             return BadRequest("brak piwa o danym id");
+        }
+
+        [HttpPost("gowno")]
+        public IActionResult Index(IFormFile file)
+        {
+            Console.WriteLine("file is " + file);
+            Console.WriteLine("file is " + file.Name);
+            Console.WriteLine("file is " + file.FileName);
+            if (file != null) return Ok();
+            return BadRequest("bad file");
         }
     }
 }
