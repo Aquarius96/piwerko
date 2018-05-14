@@ -26,7 +26,7 @@ namespace Piwerko.Api.Controllers
             return _rateService.GetById(beerId);
         }
 
-        [HttpPost("update")]
+        [HttpPut("update")]
         public IActionResult Update([FromBody] Rate rate)
         {
             if (_rateService.Update(rate.value, rate.beerId, rate.userId)) return Ok(_rateService.GetById(rate.beerId));

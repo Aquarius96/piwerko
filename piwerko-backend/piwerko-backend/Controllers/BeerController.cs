@@ -21,14 +21,6 @@ namespace Piwerko.Api.Controllers
             _beerService = beerService;
             _userService = userService;
         }
-        
-        [HttpPost]
-        public IActionResult Get([FromHeader(Name = "id")] string data, [FromBody]JObject dat)
-        {
-            var c = dat["id"].ToObject<Int32>();
-            return Ok(data + c);
-        }
-
 
         [HttpPost("get/similary/{id}")]
         public IActionResult GetSimilary(int id)
@@ -105,7 +97,7 @@ namespace Piwerko.Api.Controllers
             return Ok(beer);
         }
 
-        [HttpPost("update")]
+        [HttpPut("update")]
         public IActionResult Update([FromBody] Beer beer_)
         {
             _beerService.Update(beer_);

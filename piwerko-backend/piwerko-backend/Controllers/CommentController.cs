@@ -22,7 +22,7 @@ namespace Piwerko.Api.Controllers
         }
 
 
-        [HttpPost("update")]
+        [HttpPut("update")]
         public IActionResult Update([FromBody] Comment comment)
         {
             var result = _commentService.Update(comment);
