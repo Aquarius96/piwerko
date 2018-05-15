@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
+﻿using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace Piwerko.Api.Helpers
 {
@@ -10,10 +7,14 @@ namespace Piwerko.Api.Helpers
     {
         public int MaxBytes { get; set; }
         public string[] AcceptedFileTypes { get; set; }
+        public string DefaultBeerPhotoUrl { get; set; }
+        public string DefaultBreweryPhotoUrl { get; set; }
 
         public bool IsSupported(string fileName)
         {
             return AcceptedFileTypes.Any(s => s == Path.GetExtension(fileName).ToLower());
         }
+        
+        
     }
 }

@@ -24,17 +24,21 @@ namespace Piwerko.Api.Controllers
         private readonly IHostingEnvironment _host;
         private readonly PhotoSettings _photoSettings;
 
-        public BeerController(IBeerService beerService, IUserService userService, IHostingEnvironment host, IOptions<PhotoSettings> options)
+        private readonly IPhotoService _photoService;
+
+        public BeerController(IBeerService beerService, IUserService userService, IPhotoService photoService, IHostingEnvironment host, IOptions<PhotoSettings> options)
         {
             _beerService = beerService;
             _userService = userService;
             _photoSettings = options.Value;
             _host = host;
+
+            _photoService = photoService;
         }
 
         [HttpPost]
         [Route("{beerId}/photo")]
-        public async Task<IActionResult> UploadPhoto(int beerId,[FromHeader(Name = "username")] string username, IFormFile file)
+        public async Task<IActionResult> ReUploadPhoto(int beerId,[FromHeader(Name = "username")] string username, IFormFile file)
         {
             var beer = _beerService.GetBeerById(beerId);
             if (beer == null) return NotFound("Brak piwa o danym id");
@@ -92,15 +96,28 @@ namespace Piwerko.Api.Controllers
         }
 
         [HttpPost("add")]
-        public IActionResult Add([FromBody] BeerModel data)
+        public IActionResult Add([FromBody] BeerModel data, IFormFile file)
         {
+            
             User user = _userService.GetUserById(data.user_id);
 
             if (user == null) return BadRequest("Brak usera o danym id");
-            Beer beer = data.GetBeer();//isConfirmed = Tru -> juz ustawione
-            beer.isConfirmed = false;
+            Beer beer = data.GetBeer();
             beer.added_by = user.username;
-            
+
+            if (beer.photo_URL == null)
+            {
+                if (file == null)
+                {
+                    beer.photo_URL = _photoSettings.DefaultBeerPhotoUrl;
+                }
+                else
+                {
+                    var res = _photoService.SavePhotoToDB(file);
+                    if (res.Result.IsError) return BadRequest(res.Result.Errors);
+                    beer.photo_URL = res.Result.SuccessResult.value;
+                }
+            }
             var result = _beerService.Add(beer);
             if (result == null) return BadRequest("blad przy dodawaniu piwa");
             return Ok(result);

@@ -41,7 +41,6 @@ namespace Piwerko.Api.Services
 
         public Brewery Add(Brewery brewery)
         {
-            brewery.photo_URL = "https://gallery.yopriceville.com/var/resizes/Free-Clipart-Pictures/Oktoberfest-Clipart-PNG/Oktoberfest_Beer_Barrel_Mug_and_Wheat_PNG_Clipart_Image.png?m=1507172104";
             _breweryRepository.Add(brewery);
             _breweryRepository.Save();
 

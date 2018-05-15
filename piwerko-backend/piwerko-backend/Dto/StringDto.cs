@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Piwerko.Api.Models
+namespace Piwerko.Api.Dto
 {
-    public class PhotoDto
+    public class StringDto : BaseDto
     {
-        public string PhotoUrl { get; set; }
+        public string value { get; set; }
     }
 }

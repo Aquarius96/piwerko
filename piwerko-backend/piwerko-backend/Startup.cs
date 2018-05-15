@@ -40,6 +40,8 @@ namespace Piwerko.Api
             services.AddScoped<ICommentRepository, CommentRepository>();
             services.AddScoped<ICommentService, CommentService>();
 
+            services.AddScoped<IPhotoService, PhotoService>();
+
 
             services.AddMvc();
         }
