@@ -1,4 +1,5 @@
-﻿using Piwerko.Api.Models.Communication;
+﻿using Piwerko.Api.Dto;
+using Piwerko.Api.Models.Communication;
 using Piwerko.Api.Models.DB;
 using System.Collections.Generic;
 
@@ -7,7 +8,7 @@ namespace Piwerko.Api.Interfaces
     public interface IUserService
     {
         int LogIn(LoginModel user_);
-        User Register(RegisterModel user);
+        ResultDto<User> Register(RegisterModel user);
         User GetUserById(int userId);
         void Update(User user_, bool hashuj);
         IEnumerable<User> GetAll();

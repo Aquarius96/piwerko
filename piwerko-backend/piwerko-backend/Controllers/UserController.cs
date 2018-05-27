@@ -111,6 +111,7 @@ namespace Piwerko.Api.Controllers
         [HttpPost("signin")]
         public IActionResult SignIn([FromBody]LoginModel loginmodel) // email/username & haslo
         {
+            Console.WriteLine("SS" + loginmodel);
             var var = _userService.LogIn(loginmodel);
             if (var == -1) return BadRequest("Puste hasło"); //moze front bedzie sprawdzal moze nie
             else if (var == -2) return BadRequest("Błedny login/email");
@@ -195,15 +196,12 @@ namespace Piwerko.Api.Controllers
         [HttpPost("register")]
         public IActionResult Register([FromBody] RegisterModel user) //email & haslo
         {
-            try
-            {
-                _userService.Register(user);
-                return Ok("Wiadomosc wysłano na Twojego maila: "+user.email);
-            }
-            catch (AppException ex)
-            {
-                return BadRequest(ex.Message);
-            }
+
+            var result = _userService.Register(user);
+
+            if (result.IsError) return BadRequest(result.Errors);
+            return Ok("Wiadomosc wysłano na Twojego maila: " + user.email);
+
 
         }
     }

@@ -1,6 +1,8 @@
-﻿namespace Piwerko.Api.Models.DB
+﻿using Piwerko.Api.Dto;
+
+namespace Piwerko.Api.Models.DB
 {
-    public class User
+    public class User : BaseDto
     {
         public long id { get; set; }
         public string username { get; set; }

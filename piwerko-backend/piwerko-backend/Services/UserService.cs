@@ -1,4 +1,5 @@
-﻿using Piwerko.Api.Interfaces;
+﻿using Piwerko.Api.Dto;
+using Piwerko.Api.Interfaces;
 using Piwerko.Api.Models.Communication;
 using Piwerko.Api.Models.DB;
 using System;
@@ -120,13 +121,22 @@ namespace Piwerko.Api.Services
             return true;
         }
 
-        public User Register(RegisterModel _user)
+        public ResultDto<User> Register(RegisterModel _user)
         {
+            var result = new ResultDto<User>
+            {
+                Errors = new List<string>()
+            };
 
             if (_userRepository.EmailExist(_user.email))
-                throw new Exception("Email " + _user.email + " is already taken");
+                //throw new Exception("Email " + _user.email + " is already taken");
+                result.Errors.Add("Email " + _user.email + " is already taken");
 
-            var user = new User { email = _user.email };
+            if (_userRepository.LoginExist(_user.useraneme))
+                //throw new Exception("Username " + _user.email + " is already taken");
+                result.Errors.Add("Username " + _user.email + " is already taken");
+
+            var user = new User { email = _user.email, username = _user.useraneme, firstname = _user.firstname, phone = _user.phone, lastname = _user.lastname};
             user.ConfirmationCode = Guid.NewGuid().ToString();
             user.salt = getSalt();
             user.password = getHash(_user.password, user.salt);
@@ -140,7 +150,9 @@ namespace Piwerko.Api.Services
 
             SendActivationEmail(user);
 
-            return user;
+            result.SuccessResult = user;
+
+            return result;
         }
 
 

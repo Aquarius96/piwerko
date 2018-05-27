@@ -1,4 +1,6 @@
-﻿using Piwerko.Api.Interfaces;
+﻿using Microsoft.Extensions.Options;
+using Piwerko.Api.Helpers;
+using Piwerko.Api.Interfaces;
 using Piwerko.Api.Models.DB;
 using System;
 using System.Collections.Generic;
@@ -10,10 +12,12 @@ namespace Piwerko.Api.Services
     public class BreweryService : IBreweryService
     {
         private readonly IBreweryRepository _breweryRepository;
+        private readonly PhotoSettings _photoSettings;
 
-        public BreweryService(IBreweryRepository breweryRepository)
+        public BreweryService(IBreweryRepository breweryRepository, IOptions<PhotoSettings> options)
         {
             _breweryRepository = breweryRepository;
+            _photoSettings = options.Value;
         }
 
         public IEnumerable<Brewery> GetAll()
@@ -41,6 +45,7 @@ namespace Piwerko.Api.Services
 
         public Brewery Add(Brewery brewery)
         {
+            brewery.photo_URL = _photoSettings.DefaultBreweryPhotoUrl;
             _breweryRepository.Add(brewery);
             _breweryRepository.Save();
 

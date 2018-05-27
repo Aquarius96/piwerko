@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Options;
 using Piwerko.Api.Helpers;
 using Piwerko.Api.Interfaces;
 using Piwerko.Api.Models;
@@ -13,12 +14,14 @@ namespace Piwerko.Api.Services
 {
     public class BeerService : IBeerService
     {
+        private readonly PhotoSettings _photoSettings;
         private readonly IBeerRepository _beerRepository;
         private Similary similary;
 
-        public BeerService(IBeerRepository beerRepository)
+        public BeerService(IBeerRepository beerRepository, IOptions<PhotoSettings> options)
         {
             _beerRepository = beerRepository;
+            _photoSettings = options.Value;
             similary = new Similary();
         }
         
@@ -67,6 +70,7 @@ namespace Piwerko.Api.Services
 
         public Beer Add(Beer beer)
         {
+            beer.photo_URL = _photoSettings.DefaultBeerPhotoUrl;
             _beerRepository.Add(beer);
             _beerRepository.Save();
 
