@@ -116,6 +116,7 @@ namespace Piwerko.Api.Controllers
             if (user == null) return BadRequest("Brak usera o danym id");
             Beer beer = data.GetBeer();
             beer.added_by = user.username;
+            beer.isConfirmed = true;
             var result = _beerService.Add(beer);
             if (result == null) return BadRequest("blad przy dodawaniu piwa");
             return Ok(result);
