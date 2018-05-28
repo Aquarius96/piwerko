@@ -10,6 +10,8 @@ using Piwerko.Api.Helpers;
 using System.IO;
 using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.Hosting;
+using Newtonsoft.Json;
+using System.Collections.Generic;
 
 namespace Piwerko.Api.Controllers
 {
@@ -20,18 +22,21 @@ namespace Piwerko.Api.Controllers
     {
         private readonly IBeerService _beerService;
         private readonly IUserService _userService;
+        private readonly IRateService _rateService;
 
         private readonly IHostingEnvironment _host;
         private readonly PhotoSettings _photoSettings;
 
         private readonly IPhotoService _photoService;
 
-        public BeerController(IBeerService beerService, IUserService userService, IPhotoService photoService, IHostingEnvironment host, IOptions<PhotoSettings> options)
+        public BeerController(IBeerService beerService, IUserService userService, IPhotoService photoService, IHostingEnvironment host, IRateService rateService, IOptions<PhotoSettings> options)
         {
             _beerService = beerService;
             _userService = userService;
             _photoSettings = options.Value;
             _host = host;
+
+            _rateService = rateService;
 
             _photoService = photoService;
         }
@@ -66,6 +71,13 @@ namespace Piwerko.Api.Controllers
         public IActionResult GetAll()
         {
             var result = _beerService.GetAll();
+            var res = new List<dynamic>();
+            foreach (var var in result)
+            {
+                var rate = _rateService.GetById(Convert.ToInt32(var.id));
+                var json = new { Beer = var, Rate = rate };
+                res.Add(json);
+            }
             if (result == null) return BadRequest("Pusta lista");
             return Ok(result);
         }
@@ -115,7 +127,7 @@ namespace Piwerko.Api.Controllers
         {
             User user = _userService.GetUserById(data.user_id);
             if (user == null) return BadRequest("Brak usera o danym id");
-            Beer beer = data.GetBeer();//isConfirmed = Tru -> juz ustawione
+            Beer beer = data.GetBeer_Admin();//isConfirmed = Tru -> juz ustawione
 
             if (!user.isAdmin) return BadRequest("Podany user nie jest adminem");
             beer.added_by = user.username;

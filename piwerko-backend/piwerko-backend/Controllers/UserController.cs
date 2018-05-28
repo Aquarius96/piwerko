@@ -191,8 +191,6 @@ namespace Piwerko.Api.Controllers
 
         }
 
-
-
         [HttpPost("register")]
         public IActionResult Register([FromBody] RegisterModel user) //email & haslo
         {

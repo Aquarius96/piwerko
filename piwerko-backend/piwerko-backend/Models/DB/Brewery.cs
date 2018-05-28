@@ -6,7 +6,7 @@
         public string name { get; set; }
         public string city { get; set; }
         public string street { get; set; }
-        public int streetNumber { get; set; }
+        public string streetNumber { get; set; }
         public string description { get; set; }
         public string web_Url { get; set; }
         public string photo_URL { get; set; }
