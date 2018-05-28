@@ -24,7 +24,7 @@ namespace Piwerko.Api.Controllers
         public IActionResult GetBreweryConfirmed()
         {
             var result = _breweryService.GetAll();
-            if (result == null) return BadRequest("Pusta lista");
+            if (result == null) return NotFound("Pusta lista");
             return Ok(result);
         }
 
@@ -32,7 +32,7 @@ namespace Piwerko.Api.Controllers
         public IActionResult GetBreweryById(int breweryId)
         {
             var result = _breweryService.GetBreweryById(breweryId);
-            if (result == null) return BadRequest("Brak browaru o danym id");
+            if (result == null) return NotFound("Brak browaru o danym id");
             return Ok(result);
 
         }
@@ -41,7 +41,7 @@ namespace Piwerko.Api.Controllers
         public IActionResult GetBreweryByName(string breweryName)
         {
             var result = _breweryService.GetBreweryByName(breweryName);
-            if (result == null) return BadRequest("Brak browaru o danej nazwie");
+            if (result == null) return NotFound("Brak browaru o danej nazwie");
             return Ok(result);
         }
 
@@ -49,7 +49,7 @@ namespace Piwerko.Api.Controllers
         public IActionResult GetBreweryUnconfirmed()
         {
             var result = _breweryService.GetBreweryUnconfirmed();
-            if (result == null) return BadRequest("Brak niepotwierdzonych browarow");
+            if (result == null) return NotFound("Brak niepotwierdzonych browarow");
             return Ok(result);
         }
 
@@ -66,7 +66,7 @@ namespace Piwerko.Api.Controllers
         public IActionResult AddByAdmin([FromBody]BreweryModel data) //do zamiany na modele komunikacji
         {
             User user = _userService.GetUserById(data.user_id);
-            if (user == null) return BadRequest("Brak usera o danym id");
+            if (user == null) return NotFound("Brak usera o danym id");
             Brewery brewery = data.GetBrewery(); //isConfirmed = Tru -> juz ustawione
 
             if (!user.isAdmin) return BadRequest("nie jestes adminem ");
@@ -98,7 +98,7 @@ namespace Piwerko.Api.Controllers
         {
             int index = data["id"].ToObject<Int32>();
             if (_breweryService.Delete(index)) return Ok();
-            return BadRequest("brak browaru o danym id");
+            return NotFound("brak browaru o danym id");
         }
     }
 }

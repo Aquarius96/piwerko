@@ -62,12 +62,11 @@ namespace Piwerko.Api.Controllers
         public IActionResult GetSimilary(int id)
         {
             var result = _beerService.GetSimilary(id);
-            if (result == null) return BadRequest("Pusta lista");
+            if (result == null) return NotFound("Pusta lista");
             return Ok(result);
         }
 
-
-        [HttpGet("get/confirmed")]
+        [HttpGet("get/all")]
         public IActionResult GetAll()
         {
             var result = _beerService.GetAll();
@@ -78,15 +77,39 @@ namespace Piwerko.Api.Controllers
                 var json = new { Beer = var, Rate = rate };
                 res.Add(json);
             }
-            if (result == null) return BadRequest("Pusta lista");
-            return Ok(result);
+
+            var result2 = _beerService.GetBeerUnconfirmed();
+
+            foreach(var var in result2)
+            {
+                res.Add(var);
+            }
+
+            if (res == null) return NotFound("Pusta lista");
+            return Ok(res);
+        }
+
+
+        [HttpGet("get/confirmed")]
+        public IActionResult GetAllConfir()
+        {
+            var result = _beerService.GetAll();
+            if (result == null) return NotFound("Pusta lista");
+            var res = new List<dynamic>();
+            foreach (var var in result)
+            {
+                var rate = _rateService.GetById(Convert.ToInt32(var.id));
+                var json = new { Beer = var, Rate = rate };
+                res.Add(json);
+            }
+            return Ok(res);
         }
 
         [HttpGet("getbyid/{beerId}")]
         public IActionResult GetBeerById(int beerId)
         {
             var result = _beerService.GetBeerById(beerId);
-            if (result == null) return BadRequest("Brak piwa o danym id");
+            if (result == null) return NotFound("Brak piwa o danym id");
             return Ok(result);
 
         }
@@ -95,7 +118,7 @@ namespace Piwerko.Api.Controllers
         public IActionResult GetBeerByName(string beerName)
         {
             var result = _beerService.GetBeerByName(beerName);
-            if (result == null) return BadRequest("Brak piwa o danej nazwie");
+            if (result == null) return NotFound("Brak piwa o danej nazwie");
             return Ok(result);
         }
 
@@ -103,7 +126,7 @@ namespace Piwerko.Api.Controllers
         public IActionResult GetBeerUnconfirmed()
         {
             var result = _beerService.GetBeerUnconfirmed();
-            if (result == null) return BadRequest("Brak niepotwierdzonych piw");
+            if (result == null) return NotFound("Brak niepotwierdzonych piw");
             return Ok(result);
         }
 
@@ -113,7 +136,7 @@ namespace Piwerko.Api.Controllers
             
             User user = _userService.GetUserById(data.user_id);
 
-            if (user == null) return BadRequest("Brak usera o danym id");
+            if (user == null) return NotFound("Brak usera o danym id");
             Beer beer = data.GetBeer();
             beer.added_by = user.username;
             beer.isConfirmed = true;
@@ -127,7 +150,7 @@ namespace Piwerko.Api.Controllers
         
         {
             User user = _userService.GetUserById(data.user_id);
-            if (user == null) return BadRequest("Brak usera o danym id");
+            if (user == null) return NotFound("Brak usera o danym id");
             Beer beer = data.GetBeer_Admin();//isConfirmed = Tru -> juz ustawione
 
             if (!user.isAdmin) return BadRequest("Podany user nie jest adminem");
@@ -160,7 +183,7 @@ namespace Piwerko.Api.Controllers
         {
             int index = data["id"].ToObject<Int32>();
             if (_beerService.Delete(index)) return Ok("Pomyslnie usunieto.");
-            return BadRequest("brak piwa o danym id");
+            return NotFound("brak piwa o danym id");
         }
     }
 }

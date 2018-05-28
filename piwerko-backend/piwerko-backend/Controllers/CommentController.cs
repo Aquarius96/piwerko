@@ -43,7 +43,7 @@ namespace Piwerko.Api.Controllers
         {
             int index = data["id"].ToObject<Int32>();
             var result = _commentService.GetByBeerId(index);
-            if (result == null) return BadRequest("lista pusta");
+            if (result == null) return NotFound("lista pusta");
             return Ok(result);
         }
 

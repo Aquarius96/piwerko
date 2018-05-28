@@ -49,7 +49,7 @@ namespace Piwerko.Api.Controllers
         public IActionResult ClearData([FromBody] ClearDataModel clearData)
         {
             var user_ = _userService.GetUserById(Convert.ToInt32(clearData.id));
-            if (user_ == null) return BadRequest("Brak usera o danym id");
+            if (user_ == null) return NotFound("Brak usera o danym id");
             if (!_userService.CheckPasswd(clearData.id, user_.salt)) return BadRequest("Podano złe hasło");
 
             _rateService.ClearByUserId(Convert.ToInt32(user_.id));
@@ -62,7 +62,7 @@ namespace Piwerko.Api.Controllers
         public IActionResult ConfirmNewPwd([FromBody] PasswordModel pass_model)
         {
             var user_ = _userService.GetUserById(Convert.ToInt32(pass_model.id));
-            if (user_ == null) return BadRequest("Brak usera o danym id");
+            if (user_ == null) return NotFound("Brak usera o danym id");
             if (_userService.CheckPasswd(pass_model.id,user_.salt)) return BadRequest("Nowe hasło nie moze byc takie same jak stare...");
             
             user_.ConfirmationCode = null;
@@ -94,7 +94,7 @@ namespace Piwerko.Api.Controllers
         [HttpPost("checkpwd")]
         public IActionResult CheckPassword(PasswordModel passwordModel)
         {
-            return Ok(_userService.CheckPasswd(passwordModel.id, passwordModel.password));
+            return Accepted(_userService.CheckPasswd(passwordModel.id, passwordModel.password));
 
         }
 
@@ -104,14 +104,13 @@ namespace Piwerko.Api.Controllers
             int index = data["id"].ToObject<Int32>();
             var user = _userService.GetUserById(index);
 
-            if (user == null) return BadRequest("Brak usera o danym id");
+            if (user == null) return NotFound("Brak usera o danym id");
             return Ok(user.ConfirmationCode);
         }
 
         [HttpPost("signin")]
         public IActionResult SignIn([FromBody]LoginModel loginmodel) // email/username & haslo
         {
-            Console.WriteLine("SS" + loginmodel);
             var var = _userService.LogIn(loginmodel);
             if (var == -1) return BadRequest("Puste hasło"); //moze front bedzie sprawdzal moze nie
             else if (var == -2) return BadRequest("Błedny login/email");
@@ -197,7 +196,8 @@ namespace Piwerko.Api.Controllers
 
             var result = _userService.Register(user);
 
-            if (result.IsError) return BadRequest(result.Errors);
+            if (result.IsError)
+                return BadRequest(result.Errors);
             return Ok("Wiadomosc wysłano na Twojego maila: " + user.email);
 
 
