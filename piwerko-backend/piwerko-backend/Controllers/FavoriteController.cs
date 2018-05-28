@@ -39,7 +39,7 @@ namespace Piwerko.Api.Controllers
             return Accepted(_favoriteService.FindFavorite(id));
         }
 
-        [HttpPost("find")]
+        [HttpPost("del")]
         public IActionResult Del([FromBody]JObject data)
         {
             int _user_id = data["user_id"].ToObject<Int32>();
