@@ -33,8 +33,8 @@ namespace Piwerko.Api.Controllers
             return Ok(_beerService.GetBeerById(_beer_id));
         }
 
-        [HttpPost("find")]
-        public IActionResult Find([FromBody] int id)
+        [HttpGet("find/{id}")]
+        public IActionResult Find(int id)
         {
             return Accepted(_favoriteService.FindFavorite(id));
         }
