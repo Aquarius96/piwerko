@@ -99,7 +99,9 @@ namespace Piwerko.Api.Controllers
             foreach (var var in result)
             {
                 var rate = _rateService.GetById(Convert.ToInt32(var.id));
-                var json = new { Beer = var, Rate = rate };
+                Console.WriteLine(rate);
+                if (rate == null) rate = 0;
+                var json = new { Beer = var, rate };
                 res.Add(json);
             }
             return Ok(res);

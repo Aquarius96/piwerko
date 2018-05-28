@@ -28,6 +28,10 @@ namespace Piwerko.Api.Services
         {
             var all = _rateRepository.GetById(beerid).ToList();
 
+            if (all.Count == 0)
+            {
+                return 0;
+            }
             double suma = 0;
 
             foreach(var var in all)
@@ -37,7 +41,7 @@ namespace Piwerko.Api.Services
 
             var result = suma / all.Count;
 
-            return result;
+            return Math.Round(result, 2);
         }
 
         public double Getrate(int beerid, int userid)
