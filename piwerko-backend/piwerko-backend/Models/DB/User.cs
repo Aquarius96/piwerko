@@ -1,4 +1,6 @@
 ﻿using Piwerko.Api.Dto;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Piwerko.Api.Models.DB
 {
@@ -18,7 +20,7 @@ namespace Piwerko.Api.Models.DB
         public string salt { get; set; }
 
         public string ConfirmationCode { get; set; }
-
+        
 
     }
 }

@@ -41,6 +41,8 @@ namespace Piwerko.Api.Controllers
             _photoService = photoService;
         }
 
+
+
         [HttpPost]
         [Route("{beerId}/photo")]
         public async Task<IActionResult> UploadPhoto(int beerId,[FromHeader(Name = "username")] string username, IFormFile file)
@@ -113,6 +115,21 @@ namespace Piwerko.Api.Controllers
             var result = _beerService.GetBeerById(beerId);
             if (result == null) return NotFound("Brak piwa o danym id");
             return Ok(result);
+
+        }
+
+        [HttpPost("getsomebeers")]
+        public IActionResult GetSomeBeerById(int[] beerIds)
+        {
+            var res = new List<dynamic>();
+
+            foreach (var var in beerIds)
+            {
+                res.Add(_beerService.GetBeerById(var));
+            }
+
+            if (res == null) return NotFound("Brak piwa o danym id");
+            return Ok(res);
 
         }
 

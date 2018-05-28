@@ -55,5 +55,10 @@ namespace Piwerko.Api.Repo
                 _context.Rates.Remove(var);
             }
         }
+
+        public void Save()
+        {
+            _context.SaveChanges();
+        }
     }
 }

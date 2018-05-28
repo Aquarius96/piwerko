@@ -17,7 +17,7 @@ namespace Piwerko.Api.Controllers
         public BreweryController(IBreweryService breweryService, IUserService userService)
         {
             _breweryService = breweryService;
-            _userService = _userService;
+            _userService = userService;
         }
         
         [HttpGet("get/confirmed")]

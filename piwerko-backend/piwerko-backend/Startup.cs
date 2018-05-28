@@ -42,6 +42,9 @@ namespace Piwerko.Api
 
             services.AddScoped<IPhotoService, PhotoService>();
 
+            services.AddScoped<IFavoriteRepository, FavoriteRepository>();
+            services.AddScoped<IFavoriteService, FavoriteService>();
+
 
             services.AddMvc();
         }

@@ -42,7 +42,7 @@ namespace Piwerko.Api.Helpers
                 new Claim("email", user.email),
                 new Claim("avatar_URL", user.avatar_URL),
                 new Claim("isAdmin", user.isAdmin.ToString()),
-                new Claim("isConfirmed", user.isConfirmed.ToString()),
+                new Claim("isConfirmed", user.isConfirmed.ToString())
 
             };
 
@@ -83,7 +83,7 @@ namespace Piwerko.Api.Helpers
                 new Claim("phone", user.phone),
                 new Claim("avatar_URL", user.avatar_URL),
                 new Claim("isAdmin", user.isAdmin.ToString()),
-                new Claim("isConfirmed", user.isConfirmed.ToString()),
+                new Claim("isConfirmed", user.isConfirmed.ToString())
 
             };
 
