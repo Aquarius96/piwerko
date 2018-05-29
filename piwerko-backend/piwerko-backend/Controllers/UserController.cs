@@ -77,6 +77,7 @@ namespace Piwerko.Api.Controllers
             if (user.ConfirmationCode == null) return BadRequest("Uzytkownik nie prosil jeszcze o zmiane hasla");
             if (!user.ConfirmationCode.Equals(passwordModel.old_password)) return BadRequest("Wykryto probe oszukanstwa....");
             user.password = passwordModel.password;
+            user.ConfirmationCode = null;
             _userService.Update(user, true);
             return Ok("Pomyślnie zmieniono hasło");
 
