@@ -54,24 +54,11 @@ namespace Piwerko.Api.Controllers
 
             _rateService.ClearByUserId(Convert.ToInt32(user_.id));
             _commentService.ClearByUserId(Convert.ToInt32(user_.id));
+            // favorite service do zrobienia usuniecia danych 
 
             return Ok("Dane powinny być usunięte");
         }
-
-        [HttpPost("forgotpwd")] // fromt dostaje maila z id i key; pobiera ConfirmationCode dzieki id porownuje go z kluczem i zwraca id oraz nowe haslo
-        public IActionResult ConfirmNewPwd([FromBody] PasswordModel pass_model)
-        {
-            var user_ = _userService.GetUserById(Convert.ToInt32(pass_model.id));
-            if (user_ == null) return NotFound("Brak usera o danym id");
-            if (_userService.CheckPasswd(pass_model.id,user_.salt)) return BadRequest("Nowe hasło nie moze byc takie same jak stare...");
-            
-            user_.ConfirmationCode = null;
-            _userService.Update(user_,true);
-
-            return Ok(user_);
-        }
-
-
+        
         [HttpGet("forgotpwd/{email}")]
         public IActionResult SendForgotPassword(string email) //do dorobienia  jak bd front
         {
@@ -82,9 +69,12 @@ namespace Piwerko.Api.Controllers
         }
 
         [HttpPost("newpwd")]
-        public IActionResult NewPassword([FromBody]PasswordModel passwordModel)
+        public IActionResult NewPassword([FromBody]PasswordModel passwordModel) // od forgot password
         {
             var user = _userService.GetUserById(passwordModel.id);
+            if (user == null) return NotFound("Brak usera o danym id");
+            if (!user.isConfirmed) return BadRequest("Uzytkownik nie zostal jescze potweirzdony");
+            if (user.ConfirmationCode == null) return BadRequest("Uzytkownik nie prosil jeszcze o zmiane hasla");
             if (!user.ConfirmationCode.Equals(passwordModel.old_password)) return BadRequest("Wykryto probe oszukanstwa....");
             user.password = passwordModel.password;
             _userService.Update(user, true);
@@ -96,6 +86,7 @@ namespace Piwerko.Api.Controllers
         public IActionResult ChangePassword([FromBody]PasswordModel passwordModel)
         {
             var user = _userService.GetUserById(passwordModel.id);
+            if (user == null) return NotFound("Brak usera o danym id");
             if (passwordModel.password.Equals(passwordModel.old_password)) return BadRequest("nowe haslo nei moze byc takie same jak stare");
             if (!_userService.CheckPasswd(passwordModel.id, passwordModel.old_password)) return BadRequest("Niepoprawne stare haslo");
             user.password = passwordModel.password;
@@ -201,6 +192,8 @@ namespace Piwerko.Api.Controllers
             var key = data["key"].ToObject<string>();
 
             var user = _userService.GetUserById(id);
+            if (user == null) return NotFound("Brak usera o danym id");
+            if (user.isConfirmed) return BadRequest("Użytkownik już został potwierdzony");
             if (user.ConfirmationCode.Equals(key))
             {
                 user.isConfirmed = true;
