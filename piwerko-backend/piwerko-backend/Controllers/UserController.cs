@@ -29,7 +29,7 @@ namespace Piwerko.Api.Controllers
             jwt = new JWT();
         }
 
-
+        /*
         [AllowAnonymous]  //tymmczasowe sprawdzenia dla testow poki nie ma frontu
         [HttpGet("confirm/{userId}/{key}")]
         public IActionResult Confirmed(int userId, string key)
@@ -41,7 +41,7 @@ namespace Piwerko.Api.Controllers
             return Ok(user);
         }
 
-
+        */
 
         //===========================================================================================================================================
 
