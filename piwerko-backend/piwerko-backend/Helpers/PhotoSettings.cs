@@ -9,6 +9,8 @@ namespace Piwerko.Api.Helpers
         public string[] AcceptedFileTypes { get; set; }
         public string DefaultBeerPhotoUrl { get; set; }
         public string DefaultBreweryPhotoUrl { get; set; }
+        public string DirOfBeer { get; set; }
+        public string DirOfBrewery { get; set; }
 
         public bool IsSupported(string fileName)
         {

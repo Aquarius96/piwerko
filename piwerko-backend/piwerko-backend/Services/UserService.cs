@@ -159,7 +159,7 @@ namespace Piwerko.Api.Services
 
         private bool SendActivationEmail(User user)
         {
-            var callbackUrl = "http://localhost:8080/api/User/confirm/" + user.id + "/" + user.ConfirmationCode;
+            var callbackUrl = "http://localhost:3000/confirm/" + user.id + "/" + user.ConfirmationCode;
             try
             {
 

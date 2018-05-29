@@ -1,5 +1,7 @@
-﻿using Piwerko.Api.Models.DB;
+﻿using Microsoft.AspNetCore.Http;
+using Piwerko.Api.Models.DB;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Piwerko.Api.Interfaces
 {
@@ -12,5 +14,6 @@ namespace Piwerko.Api.Interfaces
         Brewery Add(Brewery brewery);
         void Update(Brewery brewery_);
         bool Delete(int id);
+        Task UploadPhoto(int breweryId, IFormFile file, string uploadsFolderPath);
     }
 }

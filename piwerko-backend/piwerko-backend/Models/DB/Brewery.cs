@@ -11,5 +11,6 @@
         public string web_Url { get; set; }
         public string photo_URL { get; set; }
         public bool isConfirmed { get; set; }
+        public string added_by { get; set; }
     }
 }

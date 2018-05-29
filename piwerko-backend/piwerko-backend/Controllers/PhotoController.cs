@@ -19,7 +19,7 @@ namespace Piwerko.Api.Controllers
         public IActionResult GetFile(string fileName)
         {
             if (fileName == null || fileName == "null")
-                return BadRequest();
+                return NotFound();
 
             var stream = _host.WebRootPath + "\\uploads\\" + fileName;
             var imageFileStream = System.IO.File.OpenRead(stream);

@@ -80,11 +80,24 @@ namespace Piwerko.Api.Controllers
             if (result) return Ok("Na wskazanego maila: " + email + " wysłano link do zresetowania hasła");
             return BadRequest("Zły email albo coś z połączeniem jest nie tak");
         }
-        
-        [HttpPost("changepwd")] 
-        public IActionResult ChangePassword(PasswordModel passwordModel)
+
+        [HttpPost("newpwd")]
+        public IActionResult NewPassword([FromBody]PasswordModel passwordModel)
         {
             var user = _userService.GetUserById(passwordModel.id);
+            if (!user.ConfirmationCode.Equals(passwordModel.old_password)) return BadRequest("Wykryto probe oszukanstwa....");
+            user.password = passwordModel.password;
+            _userService.Update(user, true);
+            return Ok("Pomyślnie zmieniono hasło");
+
+        }
+
+        [HttpPost("changepwd")] 
+        public IActionResult ChangePassword([FromBody]PasswordModel passwordModel)
+        {
+            var user = _userService.GetUserById(passwordModel.id);
+            if (passwordModel.password.Equals(passwordModel.old_password)) return BadRequest("nowe haslo nei moze byc takie same jak stare");
+            if (!_userService.CheckPasswd(passwordModel.id, passwordModel.old_password)) return BadRequest("Niepoprawne stare haslo");
             user.password = passwordModel.password;
             _userService.Update(user, true);
             return Ok("Pomyślnie zmieniono hasło");
@@ -92,7 +105,7 @@ namespace Piwerko.Api.Controllers
         }
 
         [HttpPost("checkpwd")]
-        public IActionResult CheckPassword(PasswordModel passwordModel)
+        public IActionResult CheckPassword([FromBody]PasswordModel passwordModel)
         {
             return Accepted(_userService.CheckPasswd(passwordModel.id, passwordModel.password));
 
@@ -144,7 +157,7 @@ namespace Piwerko.Api.Controllers
         }
 
         [HttpPost("update")]
-        public IActionResult Update(User user)
+        public IActionResult Update([FromBody]User user)
         {
             if (_userService.CheckLogin(user.username,Convert.ToInt32(user.id))) return BadRequest("Login zajęty");  
             if (_userService.CheckEmail(user.email, Convert.ToInt32(user.id))) return BadRequest("Email zajęty");
@@ -175,7 +188,7 @@ namespace Piwerko.Api.Controllers
 
         [AllowAnonymous]  //nie wiem co to robi ale ktos tam to mial i chyba potrzebne
         [HttpPost("confirm")]
-        public IActionResult ConfirmEmail(User user)
+        public IActionResult ConfirmEmail([FromBody]JObject data)
         {
             /*
              * wczesniej wyslany link do frontu zawierajacy id i ConfirmationCode 
@@ -184,9 +197,19 @@ namespace Piwerko.Api.Controllers
              * jesli nei to wyswietlasz zly link czy cos xd
              * po wykonanym zwraca mi usera do updtae
              */
-            if (_userService.LoginExist(user.username)) return BadRequest("Login zajęty");
-            _userService.Update(user,false);
-            return Ok(user);
+            var id = data["id"].ToObject<Int32>();
+            var key = data["key"].ToObject<string>();
+
+            var user = _userService.GetUserById(id);
+            if (user.ConfirmationCode.Equals(key))
+            {
+                user.isConfirmed = true;
+                user.ConfirmationCode = null;
+                _userService.Update(user, false);
+                return Ok("Potweirdzono uzytkowniak");
+            }
+            return BadRequest("Wykryto probe oszukanstwa... ");
+
 
         }
 

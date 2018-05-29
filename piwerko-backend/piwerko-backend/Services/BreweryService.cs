@@ -1,11 +1,14 @@
-﻿using Microsoft.Extensions.Options;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Options;
 using Piwerko.Api.Helpers;
 using Piwerko.Api.Interfaces;
 using Piwerko.Api.Models.DB;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Net;
 using System.Net.Mail;
+using System.Threading.Tasks;
 
 namespace Piwerko.Api.Services
 {
@@ -18,6 +21,24 @@ namespace Piwerko.Api.Services
         {
             _breweryRepository = breweryRepository;
             _photoSettings = options.Value;
+        }
+
+
+        public async Task UploadPhoto(int breweryId, IFormFile file, string uploadsFolderPath)
+        {
+            if (!Directory.Exists(uploadsFolderPath)) Directory.CreateDirectory(uploadsFolderPath);
+            var fileName = Guid.NewGuid() + Path.GetExtension(file.FileName);
+            var filePath = Path.Combine(uploadsFolderPath, fileName);
+            using (var stream = new FileStream(filePath, FileMode.Create))
+            {
+                await file.CopyToAsync(stream);
+            }
+
+            var brewery = _breweryRepository.GetBreweryById(breweryId);
+            brewery.photo_URL = @"http://localhost:8080/api/photo/" + $"{fileName}";
+            _breweryRepository.Update(brewery);
+
+
         }
 
         public IEnumerable<Brewery> GetAll()

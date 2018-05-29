@@ -41,21 +41,20 @@ namespace Piwerko.Api.Controllers
             _photoService = photoService;
         }
 
-
-
+        
         [HttpPost]
         [Route("{beerId}/photo")]
         public async Task<IActionResult> UploadPhoto(int beerId,[FromHeader(Name = "username")] string username, IFormFile file)
         {
             var beer = _beerService.GetBeerById(beerId);
             if (beer == null) return NotFound("Brak piwa o danym id");
-            if (_userService.isAdmin(username) || beer.added_by.Equals(username)) return BadRequest("Nie jesteś upowaznieony");
+            if (!_userService.isAdmin(username) && !beer.added_by.Equals(username)) return BadRequest("Nie jesteś upowaznieony");
             if (file == null) return BadRequest("Brak Pliku");
             if (file.Length == 0) return BadRequest("Pusty plik");
             if (file.Length > _photoSettings.MaxBytes) return BadRequest("Za duży plik");
             if (!_photoSettings.IsSupported(file.FileName)) return BadRequest("Nieprawidłowy typ");
 
-            var uploadsFolderPath = Path.Combine(_host.WebRootPath, "uploads");
+            var uploadsFolderPath = Path.Combine(_host.WebRootPath, _photoSettings.DirOfBeer);
             await _beerService.UploadPhoto(beerId, file, uploadsFolderPath);
             return Ok(_beerService.GetBeerById(beerId));
         }
@@ -158,7 +157,7 @@ namespace Piwerko.Api.Controllers
             if (user == null) return NotFound("Brak usera o danym id");
             Beer beer = data.GetBeer();
             beer.added_by = user.username;
-            beer.isConfirmed = true;
+            beer.isConfirmed = true; // do usuniecia po testach
             var result = _beerService.Add(beer);
             if (result == null) return BadRequest("blad przy dodawaniu piwa");
             return Ok(result);

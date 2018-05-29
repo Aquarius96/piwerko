@@ -1,6 +1,12 @@
 ﻿using System;
+using System.IO;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using Newtonsoft.Json.Linq;
+using Piwerko.Api.Helpers;
 using Piwerko.Api.Interfaces;
 using Piwerko.Api.Models.Communication;
 using Piwerko.Api.Models.DB;
@@ -14,12 +20,34 @@ namespace Piwerko.Api.Controllers
         private readonly IBreweryService _breweryService;
         private readonly IUserService _userService;
 
-        public BreweryController(IBreweryService breweryService, IUserService userService)
+        private readonly IHostingEnvironment _host;
+        private readonly PhotoSettings _photoSettings;
+
+        public BreweryController(IBreweryService breweryService, IUserService userService, IHostingEnvironment host, IOptions<PhotoSettings> options)
         {
             _breweryService = breweryService;
             _userService = userService;
+            _photoSettings = options.Value;
+            _host = host;
         }
-        
+
+        [HttpPost]
+        [Route("{breweryId}/photo")]
+        public async Task<IActionResult> UploadPhoto(int breweryId, [FromHeader(Name = "username")] string username, IFormFile file)
+        {
+            var brewery = _breweryService.GetBreweryById(breweryId);
+            if (brewery == null) return NotFound("Brak browaru o danym id");
+            if (!_userService.isAdmin(username) && !brewery.added_by.Equals(username)) return BadRequest("Nie jesteś upowaznieony");
+            if (file == null) return BadRequest("Brak Pliku");
+            if (file.Length == 0) return BadRequest("Pusty plik");
+            if (file.Length > _photoSettings.MaxBytes) return BadRequest("Za duży plik");
+            if (!_photoSettings.IsSupported(file.FileName)) return BadRequest("Nieprawidłowy typ");
+
+            var uploadsFolderPath = Path.Combine(_host.WebRootPath, _photoSettings.DirOfBrewery);
+            await _breweryService.UploadPhoto(breweryId, file, uploadsFolderPath);
+            return Ok(_breweryService.GetBreweryById(breweryId));
+        }
+
         [HttpGet("get/confirmed")]
         public IActionResult GetBreweryConfirmed()
         {
@@ -54,9 +82,10 @@ namespace Piwerko.Api.Controllers
         }
 
         [HttpPost("add")]
-        public IActionResult Add([FromBody] Brewery brewery)
+        public IActionResult Add([FromBody] Brewery brewery, [FromHeader(Name = "username")] string username)
         {
             brewery.isConfirmed = false;
+            brewery.added_by = username;
             var result = _breweryService.Add(brewery);
             if (result == null) return BadRequest("blad przy dodawaniu browaru");
             return Ok(result);
@@ -68,7 +97,7 @@ namespace Piwerko.Api.Controllers
             User user = _userService.GetUserById(data.user_id);
             if (user == null) return NotFound("Brak usera o danym id");
             Brewery brewery = data.GetBrewery(); //isConfirmed = Tru -> juz ustawione
-
+            brewery.added_by = user.username;
             if (!user.isAdmin) return BadRequest("nie jestes adminem ");
             var result = _breweryService.Add(brewery); 
             if (result == null) return BadRequest("blad przy dodawaniu browaru");
