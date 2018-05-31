@@ -35,7 +35,7 @@ namespace Piwerko.Api.Services
             }
 
             var brewery = _breweryRepository.GetBreweryById(breweryId);
-            brewery.photo_URL = @"http://localhost:8080/api/photo/" + $"{fileName}";
+            brewery.photo_URL = @"http://localhost:8080/api/photo/" + "breweries/" + $"{fileName}";
             _breweryRepository.Update(brewery);
 
 

@@ -133,11 +133,11 @@ namespace Piwerko.Api.Services
                 //throw new Exception("Email " + _user.email + " is already taken");
                 result.Errors.Add("Email " + _user.email + " is already taken");
 
-            if (_userRepository.LoginExist(_user.useraneme))
+            if (_userRepository.LoginExist(_user.username))
                 //throw new Exception("Username " + _user.email + " is already taken");
                 result.Errors.Add("Username " + _user.email + " is already taken");
 
-            var user = new User { email = _user.email, username = _user.useraneme, firstname = _user.firstname, phone = _user.phone, lastname = _user.lastname};
+            var user = new User { email = _user.email, username = _user.username, firstname = _user.firstname, phone = _user.phone, lastname = _user.lastname};
             user.ConfirmationCode = Guid.NewGuid().ToString();
             user.salt = getSalt();
             user.password = getHash(_user.password, user.salt);
