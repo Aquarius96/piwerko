@@ -147,14 +147,13 @@ namespace Piwerko.Api.Controllers
         }
 
         [HttpPost("add")]
-        public IActionResult Add([FromBody] Beer beer, [FromHeader(Name = "username")] string username)
+        public IActionResult Add([FromBody] BeerModel beer_, [FromHeader(Name = "username")] string username)
         {
-            Console.WriteLine("z hedera -> username = " + username);
-
             var user = _userService.GetUserByUsername(username);
+            if (user == null) return NotFound("Nie znaleziono uzytkownika");
+            var beer = beer_.GetBeer();
 
-            Console.WriteLine("po przeszukaniu -> username = " + user.username);
-
+            if (beer == null) return NotFound("Nie znaleziono piwa");
             beer.added_by = user.username;
             beer.isConfirmed = user.isAdmin;
             var result = _beerService.Add(beer);

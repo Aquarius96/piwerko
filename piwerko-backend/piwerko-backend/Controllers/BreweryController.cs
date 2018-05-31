@@ -84,13 +84,9 @@ namespace Piwerko.Api.Controllers
         [HttpPost("add")]
         public IActionResult Add([FromBody] Brewery brewery, [FromHeader(Name = "username")] string username)
         {
-            Console.WriteLine("z hedera -> username = " + username);
-
             var user = _userService.GetUserByUsername(username);
 
-            Console.WriteLine("po przeszukaniu -> username = " + user.username);
-
-
+            if (user == null) return NotFound("Nie znaleziono uzytkownika");
             brewery.isConfirmed = user.isAdmin;
             brewery.added_by = username;
             var result = _breweryService.Add(brewery);
