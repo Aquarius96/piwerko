@@ -1,7 +1,9 @@
-﻿using Piwerko.Api.Dto;
+﻿using Microsoft.AspNetCore.Http;
+using Piwerko.Api.Dto;
 using Piwerko.Api.Models.Communication;
 using Piwerko.Api.Models.DB;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Piwerko.Api.Interfaces
 {
@@ -23,5 +25,6 @@ namespace Piwerko.Api.Interfaces
         bool isAdmin(string username);
         string getHash(string passwd, string salt);
         User GetUserByUsername(string username);
+        Task<User> UploadPhoto(int user_id, IFormFile file, string uploadsFolderPath);
     }
 }

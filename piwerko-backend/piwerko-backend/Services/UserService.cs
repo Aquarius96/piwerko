@@ -1,23 +1,30 @@
-﻿using Piwerko.Api.Dto;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Options;
+using Piwerko.Api.Dto;
+using Piwerko.Api.Helpers;
 using Piwerko.Api.Interfaces;
 using Piwerko.Api.Models.Communication;
 using Piwerko.Api.Models.DB;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Net;
 using System.Net.Mail;
 using System.Security.Cryptography;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Piwerko.Api.Services
 {
     public class UserService : IUserService
     {
         private readonly IUserRepository _userRepository;
+        private readonly PhotoSettings _photoSettings;
 
-        public UserService(IUserRepository userRepository)
+        public UserService(IUserRepository userRepository, IOptions<PhotoSettings> options)
         {
             _userRepository = userRepository;
+            _photoSettings = options.Value;
         }
 
         public IEnumerable<User> GetAll()
@@ -156,7 +163,22 @@ namespace Piwerko.Api.Services
             return result;
         }
 
+        public async Task<User> UploadPhoto(int user_id, IFormFile file, string uploadsFolderPath)
+        {
+            if (!Directory.Exists(uploadsFolderPath)) Directory.CreateDirectory(uploadsFolderPath);
+            var fileName = Guid.NewGuid() + Path.GetExtension(file.FileName);
+            var filePath = Path.Combine(uploadsFolderPath, fileName);
+            using (var stream = new FileStream(filePath, FileMode.Create))
+            {
+                await file.CopyToAsync(stream);
+            }
 
+            var user = _userRepository.GetUserById(user_id);
+            user.avatar_URL = @"http://localhost:8080/api/photo/" + _photoSettings.DirOfAvatar + "/" + $"{fileName}";
+            _userRepository.UpdateUser(user);
+            return user;
+
+        }
 
         private bool SendActivationEmail(User user)
         {

@@ -11,6 +11,7 @@ namespace Piwerko.Api.Helpers
         public string DefaultBreweryPhotoUrl { get; set; }
         public string DirOfBeer { get; set; }
         public string DirOfBrewery { get; set; }
+        public string DirOfAvatar { get; set; }
 
         public bool IsSupported(string fileName)
         {

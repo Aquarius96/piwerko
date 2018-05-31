@@ -1,5 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using Newtonsoft.Json.Linq;
 using Piwerko.Api.Dto;
 using Piwerko.Api.Helpers;
@@ -8,7 +11,9 @@ using Piwerko.Api.Models.Communication;
 using Piwerko.Api.Models.DB;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Piwerko.Api.Controllers
 {
@@ -21,11 +26,17 @@ namespace Piwerko.Api.Controllers
         private readonly IRateService _rateService;
         private readonly ICommentService _commentService;
 
-        public UserController(IUserService userService, IRateService rateService, ICommentService commentService)
+
+        private readonly IHostingEnvironment _host;
+        private readonly PhotoSettings _photoSettings;
+
+        public UserController(IUserService userService, IRateService rateService, ICommentService commentService, IHostingEnvironment host, IOptions<PhotoSettings> options)
         {
             _rateService = rateService;
             _commentService = commentService;
             _userService = userService;
+            _photoSettings = options.Value;
+            _host = host;
             jwt = new JWT();
         }
 
@@ -59,8 +70,24 @@ namespace Piwerko.Api.Controllers
             return Ok("Dane powinny być usunięte");
         }
 
+        [HttpPost]
+        [Route("avatar")]
+        public async Task<IActionResult> UploadPhoto([FromHeader(Name = "username")] string username, IFormFile file)
+        {
+            var user = _userService.GetUserByUsername(username);
+
+            if (file == null) return BadRequest("Brak Pliku");
+            if (file.Length == 0) return BadRequest("Pusty plik");
+            if (file.Length > _photoSettings.MaxBytes) return BadRequest("Za duży plik");
+            if (!_photoSettings.IsSupported(file.FileName)) return BadRequest("Nieprawidłowy typ");
+
+            var uploadsFolderPath = Path.Combine(_host.WebRootPath, _photoSettings.DirOfAvatar);
+            var user_ = await _userService.UploadPhoto(Convert.ToInt32( user.id), file, uploadsFolderPath);
+            return Ok(jwt.BuildFullUserToken(user_)); // zwroc token
+        }
+
         [HttpGet("forgotpwd/{email}")]
-        public IActionResult SendForgotPassword(string email) //do dorobienia  jak bd front
+        public IActionResult SendForgotPassword(string email)
         {
             var result = _userService.ForgotPassword(email);
 
