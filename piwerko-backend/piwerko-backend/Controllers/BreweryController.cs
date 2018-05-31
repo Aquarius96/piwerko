@@ -88,7 +88,7 @@ namespace Piwerko.Api.Controllers
 
             if (user == null) return NotFound("Nie znaleziono uzytkownika");
             brewery.isConfirmed = user.isAdmin;
-            brewery.added_by = username;
+            brewery.added_by = user.username;
             var result = _breweryService.Add(brewery);
             if (result == null) return BadRequest("Blad przy dodawaniu browaru");
             return Ok(result);
