@@ -37,7 +37,7 @@ namespace Piwerko.Api.Controllers
             var user = _userService.GetUserById(userId);
             user.isConfirmed = true;
             user.ConfirmationCode = null;
-            _userService.Update(user,false);
+            _userService.Update(user, false);
             return Ok(user);
         }
 
@@ -45,7 +45,7 @@ namespace Piwerko.Api.Controllers
 
         //===========================================================================================================================================
 
-        [HttpPost("cleardata")] 
+        [HttpPost("cleardata")]
         public IActionResult ClearData([FromBody] ClearDataModel clearData)
         {
             var user_ = _userService.GetUserById(Convert.ToInt32(clearData.id));
@@ -58,7 +58,7 @@ namespace Piwerko.Api.Controllers
 
             return Ok("Dane powinny być usunięte");
         }
-        
+
         [HttpGet("forgotpwd/{email}")]
         public IActionResult SendForgotPassword(string email) //do dorobienia  jak bd front
         {
@@ -82,7 +82,7 @@ namespace Piwerko.Api.Controllers
 
         }
 
-        [HttpPost("changepwd")] 
+        [HttpPost("changepwd")]
         public IActionResult ChangePassword([FromBody]PasswordModel passwordModel)
         {
             var user = _userService.GetUserById(passwordModel.id);
@@ -92,7 +92,7 @@ namespace Piwerko.Api.Controllers
             user.password = passwordModel.password;
             _userService.Update(user, true);
             return Ok("Pomyślnie zmieniono hasło");
-            
+
         }
 
         [HttpPost("checkpwd")]
@@ -150,9 +150,9 @@ namespace Piwerko.Api.Controllers
         [HttpPost("update")]
         public IActionResult Update([FromBody]User user)
         {
-            if (_userService.CheckLogin(user.username,Convert.ToInt32(user.id))) return BadRequest("Login zajęty");  
+            if (_userService.CheckLogin(user.username, Convert.ToInt32(user.id))) return BadRequest("Login zajęty");
             if (_userService.CheckEmail(user.email, Convert.ToInt32(user.id))) return BadRequest("Email zajęty");
-            _userService.Update(user,true);
+            _userService.Update(user, true);
             return Ok(user);
         }
 
@@ -171,11 +171,11 @@ namespace Piwerko.Api.Controllers
         [HttpGet("token/{userId}")]
         public string GetById(int userId)
         {
-            var user =  _userService.GetUserById(userId);
+            var user = _userService.GetUserById(userId);
             if (user.isConfirmed) return jwt.BuildFullUserToken(user);
             else return jwt.BuildUserNotFullToken(user);
         }
-        
+
 
         [AllowAnonymous]  //nie wiem co to robi ale ktos tam to mial i chyba potrzebne
         [HttpPost("confirm")]
