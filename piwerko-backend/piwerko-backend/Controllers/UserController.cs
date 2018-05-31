@@ -29,7 +29,7 @@ namespace Piwerko.Api.Controllers
             jwt = new JWT();
         }
 
-
+        /*
         [AllowAnonymous]  //tymmczasowe sprawdzenia dla testow poki nie ma frontu
         [HttpGet("confirm/{userId}/{key}")]
         public IActionResult Confirmed(int userId, string key)
@@ -41,7 +41,7 @@ namespace Piwerko.Api.Controllers
             return Ok(user);
         }
 
-
+        */
 
         //===========================================================================================================================================
 
@@ -77,6 +77,7 @@ namespace Piwerko.Api.Controllers
             if (user.ConfirmationCode == null) return BadRequest("Uzytkownik nie prosil jeszcze o zmiane hasla");
             if (!user.ConfirmationCode.Equals(passwordModel.old_password)) return BadRequest("Wykryto probe oszukanstwa....");
             user.password = passwordModel.password;
+            user.ConfirmationCode = null;
             _userService.Update(user, true);
             return Ok("Pomyślnie zmieniono hasło");
 
