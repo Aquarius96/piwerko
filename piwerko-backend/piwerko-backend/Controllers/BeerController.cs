@@ -153,7 +153,7 @@ namespace Piwerko.Api.Controllers
 
             var user = _userService.GetUserByUsername(username);
 
-            Console.WriteLine("po przeszukaniu -> username = " + username);
+            Console.WriteLine("po przeszukaniu -> username = " + user.username);
 
             beer.added_by = user.username;
             beer.isConfirmed = user.isAdmin;
