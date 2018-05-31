@@ -32,7 +32,7 @@ namespace Piwerko.Api.Controllers
         }
 
         [HttpPost]
-        [Route("{breweryId}/photo")]
+        [Route("addphoto/{breweryId}")]
         public async Task<IActionResult> UploadPhoto(int breweryId, [FromHeader(Name = "username")] string username, IFormFile file)
         {
             var brewery = _breweryService.GetBreweryById(breweryId);

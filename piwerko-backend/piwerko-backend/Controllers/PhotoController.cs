@@ -15,29 +15,15 @@ namespace Piwerko.Api.Controllers
 
         //GET api/file/id
         [HttpGet]
-        [Route("api/photo/beers/{fileName}")]
-        public IActionResult GetBeer(string fileName)
+        [Route("api/photo/{dir}/{fileName}")]
+        public IActionResult GetBeer(string fileName, string dir)
         {
             if (fileName == null || fileName == "null")
                 return NotFound();
 
-            var stream = _host.WebRootPath + "\\beers\\" + fileName;
+            var stream = _host.WebRootPath + "\\" + dir + "\\" + fileName;
             var imageFileStream = System.IO.File.OpenRead(stream);
             return File(imageFileStream, "image/jpeg");
         }
-
-        //GET api/file/id
-        [HttpGet]
-        [Route("api/photo/breweries/{fileName}")]
-        public IActionResult GetBrewery(string fileName)
-        {
-            if (fileName == null || fileName == "null")
-                return NotFound();
-
-            var stream = _host.WebRootPath + "\\breweries\\" + fileName;
-            var imageFileStream = System.IO.File.OpenRead(stream);
-            return File(imageFileStream, "image/jpeg");
-        }
-
     }
 }
