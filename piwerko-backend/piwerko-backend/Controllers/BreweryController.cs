@@ -84,13 +84,21 @@ namespace Piwerko.Api.Controllers
         [HttpPost("add")]
         public IActionResult Add([FromBody] Brewery brewery, [FromHeader(Name = "username")] string username)
         {
-            brewery.isConfirmed = false;
+            Console.WriteLine("z hedera -> username = " + username);
+
+            var user = _userService.GetUserByUsername(username);
+
+            Console.WriteLine("po przeszukaniu -> username = " + username);
+
+
+            brewery.isConfirmed = user.isAdmin;
             brewery.added_by = username;
             var result = _breweryService.Add(brewery);
-            if (result == null) return BadRequest("blad przy dodawaniu browaru");
+            if (result == null) return BadRequest("Blad przy dodawaniu browaru");
             return Ok(result);
         }
 
+        /*
         [HttpPost("addbyadmin")]
         public IActionResult AddByAdmin([FromBody]BreweryModel data) //do zamiany na modele komunikacji
         {
@@ -103,6 +111,7 @@ namespace Piwerko.Api.Controllers
             if (result == null) return BadRequest("blad przy dodawaniu browaru");
             return Ok(result);
         }
+        */
             
         [HttpPost("confirm")]
         public IActionResult Confirm([FromBody]JObject data)

@@ -100,8 +100,6 @@ namespace Piwerko.Api.Controllers
             foreach (var var in result)
             {
                 var rate = _rateService.GetById(Convert.ToInt32(var.id));
-                Console.WriteLine(rate);
-                if (rate == null) rate = 0;
                 var json = new { Beer = var, rate };
                 res.Add(json);
             }
@@ -149,9 +147,20 @@ namespace Piwerko.Api.Controllers
         }
 
         [HttpPost("add")]
-        public IActionResult Add([FromBody] BeerModel data)
+        public IActionResult Add([FromBody] Beer beer, [FromHeader(Name = "username")] string username)
         {
-            
+            Console.WriteLine("z hedera -> username = " + username);
+
+            var user = _userService.GetUserByUsername(username);
+
+            Console.WriteLine("po przeszukaniu -> username = " + username);
+
+            beer.added_by = user.username;
+            beer.isConfirmed = user.isAdmin;
+            var result = _beerService.Add(beer);
+            if (result == null) return BadRequest("blad przy dodawaniu piwa");
+            return Ok(result);
+            /*
             User user = _userService.GetUserById(data.user_id);
 
             if (user == null) return NotFound("Brak usera o danym id");
@@ -161,8 +170,9 @@ namespace Piwerko.Api.Controllers
             var result = _beerService.Add(beer);
             if (result == null) return BadRequest("blad przy dodawaniu piwa");
             return Ok(result);
+            */
         }
-
+        /*
         [HttpPost("addbyadmin")]
         public IActionResult AddByAdmin([FromBody]BeerModel data) 
         
@@ -177,7 +187,7 @@ namespace Piwerko.Api.Controllers
             if (result == null) return BadRequest("blad przy dodawaniu piwa");
             return Ok(result);
         }
-        
+        */
         [HttpPost("confirm")]
         public IActionResult Confirm([FromBody]JObject data)
         {
