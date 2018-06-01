@@ -24,14 +24,28 @@ namespace Piwerko.Api.Controllers
 
         [HttpPut("update")]
         public IActionResult Update([FromBody] Comment comment)
-        {
-            var result = _commentService.Update(comment);
-            if (result == null) return BadRequest("Blad w polaczeniu");
-            return Ok(result);
-        }
+        /*
+                   public string content { get; set; }
+                    public int userId { get; set; }
+                    public int beerId { get; set; }
+                    public int breweryId { get; set; }
+                    public string DateTime { get; set; }
+    */
+    {
+        var result = _commentService.Update(comment);
+        if (result == null) return BadRequest("Blad w polaczeniu");
+        return Ok(result);
+    }
 
-        [HttpPost("add")]
-        public IActionResult Add([FromBody] Comment comment)
+    [HttpPost("add")]
+    public IActionResult Add([FromBody] Comment comment) 
+    /*
+                public string content { get; set; }
+                public int userId { get; set; }
+                public int beerId { get; set; }
+                public int breweryId { get; set; }
+                public string DateTime { get; set; }
+    */
         {
             var result = _commentService.Add(comment);
             if (result == null) return BadRequest("Blad w polaczeniu");
@@ -39,7 +53,7 @@ namespace Piwerko.Api.Controllers
         }
 
         [HttpPost("get")]
-        public IActionResult GetByBeerId([FromBody]JObject data) //id
+        public IActionResult GetByBeerId([FromBody]JObject data) //id piwa
         {
             int index = data["id"].ToObject<Int32>();
             var result = _commentService.GetByBeerId(index);
@@ -48,7 +62,7 @@ namespace Piwerko.Api.Controllers
         }
 
         [HttpPost("delete")]
-        public IActionResult DeleteById([FromBody]JObject data) //id
+        public IActionResult DeleteById([FromBody]JObject data) //id komentarza
         {
             int index = data["id"].ToObject<Int32>();
             if (_commentService.Delete(index)) return Ok("Usunieto");
