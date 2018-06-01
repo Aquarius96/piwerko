@@ -11,7 +11,7 @@ namespace Piwerko.Api.Interfaces
         bool Add(double value_, int beerid, int userid);
         bool Update(double value_, int beerid, int userid);
         double GetById(int id);
-        double Getrate(int beerid, int userid);
+        Rate Getrate(int beerid, int userid);
         void ClearByUserId(int user_id);
     }
 }

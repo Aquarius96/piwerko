@@ -44,10 +44,10 @@ namespace Piwerko.Api.Services
             return Math.Round(result, 2);
         }
 
-        public double Getrate(int beerid, int userid)
+        public Rate Getrate(int beerid, int userid)
         {
             var rate = _rateRepository.GetRate(beerid, userid);
-            return rate.value;
+            return rate;
         }
 
         public void ClearByUserId(int user_id)

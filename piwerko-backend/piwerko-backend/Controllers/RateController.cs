@@ -20,13 +20,26 @@ namespace Piwerko.Api.Controllers
             _rateService = rateService;
         }
 
+        [HttpPost("test")]
+        public IActionResult test([FromBody] Rate rate)
+        {
+            var rate_ = _rateService.Getrate(rate.beerId, rate.userId);
+            if (rate_ == null)
+            {
+                if (_rateService.Add(rate.value, rate.beerId, rate.userId)) return Ok(_rateService.GetById(rate.beerId));
+                return BadRequest("Blad w polaczeniu");
+            }
+            if (_rateService.Update(rate.value, rate.beerId, rate.userId)) return Ok(_rateService.GetById(rate.beerId));
+            return BadRequest("Blad w polaczeniu");
+        }
+
         [HttpGet("getbeer/{beerId}")]
         public double GetAvg(int beerId)
         {
             return _rateService.GetById(beerId);
         }
 
-        [HttpPut("update")]
+        [HttpPost("update")]
         public IActionResult Update([FromBody] Rate rate)
         {
             if (_rateService.Update(rate.value, rate.beerId, rate.userId)) return Ok(_rateService.GetById(rate.beerId));
@@ -41,9 +54,12 @@ namespace Piwerko.Api.Controllers
         }
 
         [HttpPost("getrate")]
-        public double GetSinglerate([FromBody] Rate rate)
+        public IActionResult GetSinglerate([FromBody] Rate rate)
         {
-            return _rateService.Getrate(rate.beerId, rate.userId);
+            var rate_ = _rateService.Getrate(rate.beerId, rate.userId);
+            if (rate_ == null) return NotFound("nie ma czegos takiego");
+            return Ok(rate_.value);
+
         }
     }
 }
