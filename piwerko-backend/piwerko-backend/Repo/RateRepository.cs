@@ -18,7 +18,12 @@ namespace Piwerko.Api.Repo
         public bool Add(double value_,int beerid,int userid)
         {
             var rate = new Rate { value = value_, beerId = beerid, userId = userid };
+            Console.WriteLine("dodaje");
+            Console.WriteLine(rate.value);
+            Console.WriteLine(rate.beerId);
+            Console.WriteLine(rate.userId);
             _context.Rates.Add(rate);
+            _context.SaveChanges();
             return true;
         }
         public  bool Update(double newvalue, int beerid, int userid)

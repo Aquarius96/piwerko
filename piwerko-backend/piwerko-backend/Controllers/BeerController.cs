@@ -111,8 +111,9 @@ namespace Piwerko.Api.Controllers
         {
             var result = _beerService.GetBeerById(beerId);
             if (result == null) return NotFound("Brak piwa o danym id");
-            return Ok(result);
-
+            var rate = _rateService.GetById(Convert.ToInt32(result.id));
+            var json = new { Beer = result, rate };
+            return Ok(json);
         }
 
         [HttpPost("getsomebeers")]

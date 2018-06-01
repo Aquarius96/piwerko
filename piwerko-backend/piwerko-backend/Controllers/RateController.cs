@@ -24,8 +24,10 @@ namespace Piwerko.Api.Controllers
         public IActionResult test([FromBody] Rate rate)
         {
             var rate_ = _rateService.Getrate(rate.beerId, rate.userId);
+           
             if (rate_ == null)
             {
+                Console.WriteLine("pierwszy if");
                 if (_rateService.Add(rate.value, rate.beerId, rate.userId)) return Ok(_rateService.GetById(rate.beerId));
                 return BadRequest("Blad w polaczeniu");
             }
