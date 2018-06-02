@@ -12,6 +12,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.Hosting;
 using Newtonsoft.Json;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Piwerko.Api.Controllers
 {
@@ -41,7 +42,15 @@ namespace Piwerko.Api.Controllers
             _photoService = photoService;
         }
 
-        
+        [HttpGet("getbybreweryid/{Id}")]
+        public IActionResult GetBeerByBreweryId(int Id)
+        {
+            var result = _beerService.GetAll().Where(x=>x.breweryId==Id);
+            if (result == null) return NotFound("lista pusta");
+            return Ok(result);
+            
+        }
+
         [HttpPost]
         [Route("addphoto/{beerId}")]
         public async Task<IActionResult> UploadPhoto(int beerId,[FromHeader(Name = "username")] string username, IFormFile file)
