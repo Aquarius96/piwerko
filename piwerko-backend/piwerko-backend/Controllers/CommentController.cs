@@ -52,11 +52,11 @@ namespace Piwerko.Api.Controllers
             return Ok(result);
         }
 
-        [HttpPost("get")]
-        public IActionResult GetByBeerId([FromBody]JObject data) //id piwa
+        [HttpGet("get/{beerId}")]
+        public IActionResult GetByBeerId(int beerId) //id piwa
         {
-            int index = data["id"].ToObject<Int32>();
-            var result = _commentService.GetByBeerId(index);
+            Console.WriteLine("beer id is " + beerId);
+            var result = _commentService.GetByBeerId(beerId);
             if (result == null) return NotFound("lista pusta");
             return Ok(result);
         }

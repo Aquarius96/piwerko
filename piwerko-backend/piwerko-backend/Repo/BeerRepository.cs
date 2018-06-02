@@ -30,6 +30,7 @@ namespace Piwerko.Api.Repo
 
         public IEnumerable<Beer> GetSimilary(int alco, int temp, int ibu, Beer beer)
         {
+            Console.WriteLine("temp " + temp);
             var result = _context.Beers.Where(x => Math.Abs(x.alcohol - beer.alcohol) <= 5 && Math.Abs(x.ibu - beer.ibu) <= 5 && Math.Abs(x.servingTemp - temp) <= 5);
             return result;
         }
