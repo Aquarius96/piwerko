@@ -30,7 +30,13 @@ namespace Piwerko.Api.Helpers
 
         public int CompareTo(object obj)
         {
-            return points.CompareTo(obj);
+            if (obj == null) return 1;
+
+            Similary otherSimilary = obj as Similary;
+            if (otherSimilary != null)
+                return this.points.CompareTo(otherSimilary.points);
+            else
+                throw new ArgumentException("Object is not a Similary");
         }
 
         private double SetSimilaryPoints(Beer b1,Beer b2)

@@ -18,7 +18,6 @@ namespace Piwerko.Api.Helpers
         {
             try
             {
-
                 using (SmtpClient client = new SmtpClient())
                 {
                     var credential = new NetworkCredential

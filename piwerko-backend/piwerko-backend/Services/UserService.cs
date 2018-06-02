@@ -131,6 +131,7 @@ namespace Piwerko.Api.Services
 
         public ResultDto<User> Register(RegisterModel _user)
         {
+            bool flaga = false;
             var result = new ResultDto<User>
             {
                 Errors = new List<string>()
@@ -144,6 +145,8 @@ namespace Piwerko.Api.Services
                 //throw new Exception("Username " + _user.email + " is already taken");
                 result.Errors.Add("Username " + _user.email + " is already taken");
 
+            if (result.IsError) return result;
+
             var user = new User { email = _user.email, username = _user.username, firstname = _user.firstname, phone = _user.phone, lastname = _user.lastname};
             user.ConfirmationCode = Guid.NewGuid().ToString();
             user.salt = getSalt();
@@ -155,11 +158,17 @@ namespace Piwerko.Api.Services
 
             _userRepository.CreateUser(user);
             _userRepository.Save();
+            
 
-            SendActivationEmail(user);
+            for (int i = 0; i < 3; i++)
+            {
+                if (flaga = SendActivationEmail(user)) break;
+                Console.WriteLine("proba wyslania maila " + (i + 1) + ") zakonczona niepowodzeniem");
+            }
 
             result.SuccessResult = user;
 
+            if (!flaga) result.Errors.Add("user dodany do bazy danych ale nie wyslano maila z przyczyn nie znanych");
             return result;
         }
 
@@ -208,10 +217,13 @@ namespace Piwerko.Api.Services
                     message.IsBodyHtml = true;
 
                     client.Send(message);
+
+                    Console.WriteLine("wyslano maila");
                 }
             }
-            catch
+            catch(Exception e)
             {
+                Console.WriteLine("activation mail erro: " + e);
                 return false;
             }
             return true;
