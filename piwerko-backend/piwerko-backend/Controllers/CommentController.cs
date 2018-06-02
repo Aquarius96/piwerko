@@ -15,10 +15,14 @@ namespace Piwerko.Api.Controllers
     public class CommentController : Controller
     {
         private readonly ICommentService _commentService;
+        private readonly IUserService _userService;
+        private readonly IRateService _rateService;
 
-        public CommentController(ICommentService commentService)
+        public CommentController(ICommentService commentService, IUserService userService, IRateService rateService)
         {
             _commentService = commentService;
+            _userService = userService;
+            _rateService = rateService;
         }
 
 
@@ -52,13 +56,19 @@ namespace Piwerko.Api.Controllers
             return Ok(result);
         }
 
-        [HttpGet("get/{beerId}")]
-        public IActionResult GetByBeerId(int beerId) //id piwa
+        [HttpPost("get")]
+        public IActionResult GetByBeerId([FromBody]JObject data) //id piwa
         {
-            Console.WriteLine("beer id is " + beerId);
-            var result = _commentService.GetByBeerId(beerId);
-            if (result == null) return NotFound("lista pusta");
-            return Ok(result);
+            var list = new List<dynamic>();
+            int index = data["id"].ToObject<Int32>();
+            var comments = _commentService.GetByBeerId(index);
+            if (comments == null) return NotFound("lista pusta");
+            foreach (var var in comments)
+            {
+                var json = new { Comment = var, _userService.GetUserById(var.userId).avatar_URL, Rate = _rateService.Getrate(index, var.userId).value };
+                list.Add(json);
+            }
+            return Ok(list);
         }
 
         [HttpPost("delete")]
