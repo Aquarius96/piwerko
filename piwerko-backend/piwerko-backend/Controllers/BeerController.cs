@@ -68,7 +68,7 @@ namespace Piwerko.Api.Controllers
             return Ok(_beerService.GetBeerById(beerId));
         }
 
-        [HttpPost("get/similary/{id}")]
+        [HttpGet("get/similary/{id}")]
         public IActionResult GetSimilary(int id)
         {
             var result = _beerService.GetSimilary(id);

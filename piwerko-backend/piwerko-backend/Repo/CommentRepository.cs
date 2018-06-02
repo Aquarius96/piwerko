@@ -32,7 +32,7 @@ namespace Piwerko.Api.Repo
 
         public IEnumerable<Comment> GetByBeerId(int BeerId)
         {
-            var comment = _context.Comments.Where(x => x.id == BeerId);
+            var comment = _context.Comments.Where(x => x.beerId == BeerId);
 
             return comment;
         }
