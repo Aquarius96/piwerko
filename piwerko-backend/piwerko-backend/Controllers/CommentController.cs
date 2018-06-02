@@ -56,17 +56,16 @@ namespace Piwerko.Api.Controllers
             return Ok(result);
         }
 
-        [HttpPost("get")]
-        public IActionResult GetByBeerId([FromBody]JObject data) //id piwa
+        [HttpGet("get/{beerId}")]
+        public IActionResult GetByBeerId(int beerId) //id piwa
         {
-            var list = new List<dynamic>();
-            int index = data["id"].ToObject<Int32>();
-            var comments = _commentService.GetByBeerId(index);
+            var list = new List<dynamic>();            
+            var comments = _commentService.GetByBeerId(beerId);
             if (comments == null) return NotFound("lista pusta");
             foreach (var var in comments)
             {
                 var user = _userService.GetUserById(var.userId);
-                var json = new { Comment = var, user.avatar_URL, user.username, Rate = _rateService.Getrate(index, var.userId).value };
+                var json = new { Comment = var, user.avatar_URL, user.username, Rate = _rateService.Getrate(beerId, var.userId).value };
                 list.Add(json);
             }
             return Ok(list);
