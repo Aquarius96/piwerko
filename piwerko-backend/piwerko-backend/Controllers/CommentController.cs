@@ -65,7 +65,8 @@ namespace Piwerko.Api.Controllers
             if (comments == null) return NotFound("lista pusta");
             foreach (var var in comments)
             {
-                var json = new { Comment = var, _userService.GetUserById(var.userId).avatar_URL, Rate = _rateService.Getrate(index, var.userId).value };
+                var user = _userService.GetUserById(var.userId);
+                var json = new { Comment = var, user.avatar_URL, user.username, Rate = _rateService.Getrate(index, var.userId).value };
                 list.Add(json);
             }
             return Ok(list);
