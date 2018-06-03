@@ -37,6 +37,10 @@ namespace Piwerko.Api.Repo
             return comment;
         }
         
+        public Comment GetById(int id)
+        {
+            return _context.Comments.Where(x => x.id == id).FirstOrDefault();
+        }
         public void Add(Comment comment)
         {
             _context.Comments.Add(comment);

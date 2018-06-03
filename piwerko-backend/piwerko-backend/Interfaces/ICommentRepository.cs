@@ -14,5 +14,6 @@ namespace Piwerko.Api.Interfaces
         void Update(Comment Comment);
         void Save();
         void ClearByUserId(int user_id);
+        Comment GetById(int id);
     }
 }

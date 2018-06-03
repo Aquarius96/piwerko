@@ -73,9 +73,13 @@ namespace Piwerko.Api.Controllers
         }
 
         [HttpPost("delete")]
-        public IActionResult DeleteById([FromBody]JObject data) //id komentarza
+        public IActionResult DeleteById([FromBody]JObject data, [FromHeader(Name = "user_id")] string user_id) //id komentarza
         {
+            var user = _userService.GetUserById(Convert.ToInt32(user_id));
+            if (user == null) return BadRequest("brak uzytkownika");
             int index = data["id"].ToObject<Int32>();
+            var coment = _commentService.GetById(index);
+            if (!user.isAdmin && coment.userId != user.id) BadRequest("nie jestes upowaznieony");
             if (_commentService.Delete(index)) return Ok("Usunieto");
             return BadRequest("Ups cos poszlo nie tak");
         }

@@ -32,6 +32,10 @@ namespace Piwerko.Api.Services
             return _commentRepository.GetByBeerId(beerid).ToList();
         }
 
+        public Comment GetById(int id)
+        {
+            return _commentRepository.GetById(id);
+        }
         public bool Delete(int id)
         {
             return _commentRepository.Delete(id);
