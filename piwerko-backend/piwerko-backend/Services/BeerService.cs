@@ -27,7 +27,6 @@ namespace Piwerko.Api.Services
         
         public IEnumerable<Beer> GetSimilary(int beerId)
         {
-            Console.WriteLine("sim " + beerId);
             var list = _beerRepository.GetSimilary(similary.alco, similary.temp, similary.ibu, GetBeerById(beerId));
             var points = new List<Similary>();
             foreach (var var in list)

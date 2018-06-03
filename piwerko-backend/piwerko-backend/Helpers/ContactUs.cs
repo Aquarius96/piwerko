@@ -22,7 +22,7 @@ namespace Piwerko.Api.Helpers
                 {
                     var credential = new NetworkCredential
                     {
-                        UserName = "piwerkobuissnes@gmail.com",
+                        UserName = "bizznessowe.piwo@gmail.com",
                         Password = "zaq1@WSX"
                     };
                     client.Credentials = credential;
@@ -34,7 +34,7 @@ namespace Piwerko.Api.Helpers
                     var message = new MailMessage();
 
                     message.To.Add(new MailAddress("piwerko.business@gmail.com"));
-                    message.From = new MailAddress("piwerkobuissnes@gmail.com");
+                    message.From = new MailAddress("bizznessowe.piwo@gmail.com");
                     message.Subject = this.username + ": " + this.subject;
                     message.Body = "<h4>"+this.username + " napisał:</h4><h3>" + this.subject+"</h3>"+this.body+"<br> <br>";
                     message.Body += "<br>Odpisz mu na: " + this.email;

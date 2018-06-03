@@ -101,7 +101,7 @@ namespace Piwerko.Api.Services
                 {
                     var credential = new NetworkCredential
                     {
-                        UserName = "piwerko.business@gmail.com",
+                        UserName = "bizznessowe.piwo@gmail.com",
                         Password = "zaq1@WSX"
                     };
                     client.Credentials = credential;
@@ -113,7 +113,7 @@ namespace Piwerko.Api.Services
                     var message = new MailMessage();
 
                     message.To.Add(new MailAddress(user.email));
-                    message.From = new MailAddress("piwerko.business@gmail.com");
+                    message.From = new MailAddress("bizznessowe.piwo@gmail.com");
                     message.Body = "W celu zakonczenia procesu zmiany hasla prosimy o klikniecie w ten link: <a href=\"" + callbackUrl + "\">Link</a> <br> Klucz : " + user.ConfirmationCode + "<br />UserId : " + user.id;
                     message.Subject = "Przywracanie hasla";
 
@@ -199,7 +199,7 @@ namespace Piwerko.Api.Services
                 {
                     var credential = new NetworkCredential
                     {
-                        UserName = "piwerko.business@gmail.com",
+                        UserName = "bizznessowe.piwo@gmail.com",
                         Password = "zaq1@WSX"
                     };
                     client.Credentials = credential;
@@ -211,7 +211,7 @@ namespace Piwerko.Api.Services
                     var message = new MailMessage();
 
                     message.To.Add(new MailAddress(user.email));
-                    message.From = new MailAddress("piwerko.business@gmail.com");
+                    message.From = new MailAddress("bizznessowe.piwo@gmail.com");
                     message.Subject = user.username + " witamy w Piwerku!";
                     message.Body = "W celu zakonczenia procesu rejestracji prosimy o potwierdzenie maila klikajac w ten link: <a href=\"" + callbackUrl + "\">Link aktywacyjny</a> <br> Klucz : " + user.ConfirmationCode + "<br />UserId : " + user.id; 
                     message.IsBodyHtml = true;
