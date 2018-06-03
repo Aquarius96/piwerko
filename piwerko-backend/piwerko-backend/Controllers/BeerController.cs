@@ -51,6 +51,22 @@ namespace Piwerko.Api.Controllers
             
         }
 
+        [HttpGet("top/{count}")]
+        public IActionResult GetAllConfir(int count)
+        {
+            var result = _beerService.GetAll();
+            if (result == null) return NotFound("Pusta lista");
+            var res = new List<dynamic>();
+            foreach (var var in result)
+            {
+                var rate = _rateService.GetById(Convert.ToInt32(var.id));
+                var json = new { Beer = var, rate };
+                res.Add(json);
+            }
+            var sorted = res.OrderByDescending(p => p.rate);
+            return Ok(sorted.Take(count));
+        }
+
         [HttpPost]
         [Route("addphoto/{beerId}")]
         public async Task<IActionResult> UploadPhoto(int beerId,[FromHeader(Name = "username")] string username, IFormFile file)
