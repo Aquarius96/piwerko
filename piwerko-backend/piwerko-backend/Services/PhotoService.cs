@@ -21,7 +21,7 @@ namespace Piwerko.Api.Services
             _photoSettings = options.Value;
             _host = host;
         }
-        public async Task<ResultDto<StringDto>> SavePhotoToDB(IFormFile file)
+        public async Task<ResultDto<StringDto>> SavePhotoToDB(string path, IFormFile file)
         {
             var result = new ResultDto<StringDto>
             {
@@ -34,7 +34,7 @@ namespace Piwerko.Api.Services
             if (file.Length > _photoSettings.MaxBytes) result.Errors.Add("Za duży plik");
             if (!_photoSettings.IsSupported(file.FileName)) result.Errors.Add("Nieprawidłowy typ pliku");
 
-            var uploadsFolderPath = Path.Combine(_host.WebRootPath, "uploads");
+            var uploadsFolderPath = Path.Combine(_host.WebRootPath, path);
             var nazwa = await UploadPhoto(file, uploadsFolderPath);
             result.SuccessResult.value = nazwa;
             return result;

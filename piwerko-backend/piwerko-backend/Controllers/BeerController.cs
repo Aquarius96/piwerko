@@ -141,20 +141,6 @@ namespace Piwerko.Api.Controllers
             return Ok(json);
         }
 
-        [HttpPost("getsomebeers")]
-        public IActionResult GetSomeBeerById(int[] beerIds)
-        {
-            var res = new List<dynamic>();
-
-            foreach (var var in beerIds)
-            {
-                res.Add(_beerService.GetBeerById(var));
-            }
-
-            if (res == null) return NotFound("Brak piwa o danym id");
-            return Ok(res);
-
-        }
 
         [HttpGet("getbyname/{beerName}")]
         public IActionResult GetBeerByName(string beerName)
@@ -211,8 +197,9 @@ namespace Piwerko.Api.Controllers
         }
         */
         [HttpPost("confirm")]
-        public IActionResult Confirm([FromBody]JObject data)
+        public IActionResult Confirm([FromBody]JObject data, [FromHeader(Name = "user_id")] int user_id)
         {
+            if (!_userService.isAdmin(user_id)) return BadRequest("nie jestes adminem");
             int beerId = data["id"].ToObject<Int32>();
             var beer = _beerService.GetBeerById(beerId);
             beer.isConfirmed = true;
@@ -229,8 +216,9 @@ namespace Piwerko.Api.Controllers
         }
 
         [HttpPost("delete")]
-        public IActionResult Delete([FromBody]JObject data)
+        public IActionResult Delete([FromBody]JObject data, [FromHeader(Name = "user_id")] int user_id)
         {
+            if (!_userService.isAdmin(user_id)) return BadRequest("nie jestes adminem");
             int index = data["id"].ToObject<Int32>();
             if (_beerService.Delete(index)) return Ok("Pomyslnie usunieto.");
             return NotFound("brak piwa o danym id");

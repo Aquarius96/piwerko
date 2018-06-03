@@ -9,6 +9,6 @@ namespace Piwerko.Api.Interfaces
 {
     public interface IPhotoService
     {
-        Task<ResultDto<StringDto>> SavePhotoToDB(IFormFile file);
+        Task<ResultDto<StringDto>> SavePhotoToDB(string path, IFormFile file);
     }
 }
