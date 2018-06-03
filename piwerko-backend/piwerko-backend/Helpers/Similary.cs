@@ -41,14 +41,14 @@ namespace Piwerko.Api.Helpers
 
         private double SetSimilaryPoints(Beer b1,Beer b2)
         {
-            double alco, temp, ibu;
+            double alco_, temp_, ibu_;
 
-            alco = (b1.alcohol - b2.alcohol) * 100;
-            temp = (b1.servingTemp - b2.servingTemp) * 100;
-            ibu = (b1.ibu - b2.ibu) * 100;
+            alco_ = (b1.alcohol - b2.alcohol) * 175;
+            temp_ = (b1.servingTemp - b2.servingTemp) * 80;
+            ibu_ = (b1.ibu - b2.ibu) * 110;
 
 
-            return (alco + temp + ibu)/3;
+            return (alco_ + temp_ + ibu_)/3;
         }
     }
 }
