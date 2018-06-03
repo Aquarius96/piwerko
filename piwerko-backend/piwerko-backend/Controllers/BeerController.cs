@@ -128,7 +128,7 @@ namespace Piwerko.Api.Controllers
             {
                 var rate = _rateService.GetById(Convert.ToInt32(var.id));
                 var bro =_breweryService.GetBreweryById(var.breweryId);
-                var json = new { Beer = var, rate ,bro.name};
+                var json = new { Beer = var, rate , String = bro.name};
                 res.Add(json);
             }
             return Ok(res);
@@ -141,7 +141,7 @@ namespace Piwerko.Api.Controllers
             if (result == null) return NotFound("Brak piwa o danym id");
             var rate = _rateService.GetById(Convert.ToInt32(result.id));
             var bro = _breweryService.GetBreweryById(result.breweryId);
-            var json = new { Beer = result, rate , bro.name};
+            var json = new { Beer = result, rate , String = bro.name};
             return Ok(json);
         }
 
