@@ -128,9 +128,10 @@ namespace Piwerko.Api.Controllers
         }
 
         [HttpPost("delete")]
-        public IActionResult Delete([FromBody]JObject data, [FromHeader(Name = "user_id")] int user_id)
+        public IActionResult Delete([FromBody]JObject data, [FromHeader(Name = "user_id")] string user_id)
         {
-            if (!_userService.isAdmin(user_id)) return BadRequest("nie jestes adminem");
+            int userid = Convert.ToInt32(user_id);
+            if (!_userService.isAdmin(userid)) return BadRequest("nie jestes adminem");
             int index = data["id"].ToObject<Int32>();
             if (_breweryService.Delete(index)) return Ok();
             return NotFound("brak browaru o danym id");
