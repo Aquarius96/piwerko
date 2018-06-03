@@ -164,7 +164,7 @@ namespace Piwerko.Api.Controllers
             foreach (var var in result)
             {
                 var bro = _breweryService.GetBreweryById(var.breweryId);
-                var json = new { Beer = var, bro.name};
+                var json = new { Beer = var, String = bro.name};
                 res.Add(json);
             }
 

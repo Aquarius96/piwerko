@@ -47,6 +47,7 @@ namespace Piwerko.Api.Controllers
         {
             switch (type)
             {
+                /*
                 case "beer":
                     var beer = _beerService.GetBeerById(Id);
                     if (beer == null) return NotFound("Brak piwa o danym id");
@@ -63,8 +64,9 @@ namespace Piwerko.Api.Controllers
                     var user = _userService.GetUserById(Id);
                     if (user == null) return NotFound("Brak userna o tym nicku");
                     if (!_userService.isAdmin(username) && user.username != username) return BadRequest("Nie jesteś upowaznieony");
-                    user.avatar_URL = @"http://localhost:8080/api/photo/" + _photoSettings.DirOfAvatar + "/" + _photoService.SavePhotoToDB(_photoSettings.DirOfAvatar, file);
+                    user.avatar_URL = @"http://localhost:8080/api/photo/" + _photoSettings.DirOfAvatar + "/" + _photoService.SavePhotoToDB(_photoSettings.DirOfAvatar, file).Result.IsError;
                     break;
+                   */
                 default:
                     return BadRequest("zly adres strony czy cos");
             }
