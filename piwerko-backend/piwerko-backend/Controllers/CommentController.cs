@@ -68,7 +68,8 @@ namespace Piwerko.Api.Controllers
                 var json = new { Comment = var, user.avatar_URL, user.username, Rate = _rateService.Getrate(beerId, var.userId).value };
                 list.Add(json);
             }
-            return Ok(list);
+            var r = list.OrderByDescending(p => p.Comment.DateTime);
+            return Ok(r);
         }
 
         [HttpPost("delete")]
