@@ -46,7 +46,7 @@ namespace Piwerko.Api.Controllers
             int _beer_id = data["id_beer"].ToObject<Int32>();
 
             _favoriteService.Delete(_user_id, _beer_id);
-            return Accepted();
+            return Ok("powinno byc juz usunieta");
         }
 
 
