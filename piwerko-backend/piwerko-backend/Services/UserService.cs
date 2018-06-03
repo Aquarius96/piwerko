@@ -40,12 +40,14 @@ namespace Piwerko.Api.Services
         public bool isAdmin(int id)
         {
             var user = GetUserById(id);
+            if (user == null) return false;
             return user.isAdmin;
         }
 
         public bool isAdmin(string username)
         {
             var user = _userRepository.GetUser(username);
+            if (user == null) return false;
             return user.isAdmin;
         }
         public User GetUserByUsername(string username)
