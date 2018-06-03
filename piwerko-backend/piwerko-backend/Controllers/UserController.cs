@@ -75,7 +75,7 @@ namespace Piwerko.Api.Controllers
         public async Task<IActionResult> UploadPhoto([FromHeader(Name = "username")] string username, IFormFile file)
         {
             var user = _userService.GetUserByUsername(username);
-
+            if (user == null) return NotFound("Brak userna o tym nicku");
             if (file == null) return BadRequest("Brak Pliku");
             if (file.Length == 0) return BadRequest("Pusty plik");
             if (file.Length > _photoSettings.MaxBytes) return BadRequest("Za duży plik");

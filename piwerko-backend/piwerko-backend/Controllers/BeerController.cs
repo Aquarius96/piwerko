@@ -21,6 +21,7 @@ namespace Piwerko.Api.Controllers
 
     public class BeerController : Controller
     {
+        private readonly IBreweryService _breweryService;
         private readonly IBeerService _beerService;
         private readonly IUserService _userService;
         private readonly IRateService _rateService;
@@ -30,9 +31,10 @@ namespace Piwerko.Api.Controllers
 
         private readonly IPhotoService _photoService;
 
-        public BeerController(IBeerService beerService, IUserService userService, IPhotoService photoService, IHostingEnvironment host, IRateService rateService, IOptions<PhotoSettings> options)
+        public BeerController(IBreweryService breweryService, IBeerService beerService, IUserService userService, IPhotoService photoService, IHostingEnvironment host, IRateService rateService, IOptions<PhotoSettings> options)
         {
             _beerService = beerService;
+            _breweryService = breweryService;
             _userService = userService;
             _photoSettings = options.Value;
             _host = host;
@@ -125,7 +127,8 @@ namespace Piwerko.Api.Controllers
             foreach (var var in result)
             {
                 var rate = _rateService.GetById(Convert.ToInt32(var.id));
-                var json = new { Beer = var, rate };
+                var bro =_breweryService.GetBreweryById(var.breweryId);
+                var json = new { Beer = var, rate ,bro.name};
                 res.Add(json);
             }
             return Ok(res);
@@ -137,7 +140,8 @@ namespace Piwerko.Api.Controllers
             var result = _beerService.GetBeerById(beerId);
             if (result == null) return NotFound("Brak piwa o danym id");
             var rate = _rateService.GetById(Convert.ToInt32(result.id));
-            var json = new { Beer = result, rate };
+            var bro = _breweryService.GetBreweryById(result.breweryId);
+            var json = new { Beer = result, rate , bro.name};
             return Ok(json);
         }
 
@@ -155,6 +159,15 @@ namespace Piwerko.Api.Controllers
         {
             var result = _beerService.GetBeerUnconfirmed();
             if (result == null) return NotFound("Brak niepotwierdzonych piw");
+            var res = new List<dynamic>();
+
+            foreach (var var in result)
+            {
+                var bro = _breweryService.GetBreweryById(var.breweryId);
+                var json = new { Beer = var, bro.name};
+                res.Add(json);
+            }
+
             return Ok(result);
         }
 
