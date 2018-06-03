@@ -65,7 +65,7 @@ namespace Piwerko.Api.Controllers
             foreach (var var in comments)
             {
                 var user = _userService.GetUserById(var.userId);
-                var json = new { Comment = var, user.avatar_URL, user.username, Rate = _rateService.Getrate(beerId, var.userId).value };
+                var json = new { Comment = var, user.avatar_URL, user.username, Rate = _rateService.Getrate(beerId, var.userId) };
                 list.Add(json);
             }
             var r = list.OrderByDescending(p => p.Comment.DateTime);
